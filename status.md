@@ -44,6 +44,14 @@ Evaluation of the current site through an interviewer's eyes, framed by three po
 7. **Add proof links.** A GitHub profile for the coding work, and testimonials or a one-line quote from a PI/professor if obtainable.
 8. **Small polish items:** meta description + Open Graph tags for link previews, a favicon, alt text on all images when added.
 
+## Next session — Mary's requested changes (queued July 6, 2026)
+
+1. **Title bars → organic.** Remove the little gradient bars under section headings, or replace them with something organic/hand-drawn (e.g., a sketched squiggle or brushstroke line matching the hero's ribbon style). They currently read too geometric for the new aesthetic.
+2. **Convert Mary's own doodles into site graphics.** She will upload photos/scans of her hand drawings. Workflow: she provides image files → clean up (crop, remove background, possibly vectorize or keep as transparent PNGs) → use as hero visual, section separators, or accents. Ask her for the files at session start.
+3. **Bigger text.** Increase base body text size sitewide (EB Garamond runs small — consider bumping body to ~1.15–1.25rem and rechecking heading scale against it).
+4. **Reformat the front page (Home).** Layout adjustments to hero + About — get her specific direction at session start on what "adjusted formatting" means before changing layout. Flag mobile implications per working rules.
+5. **Add personal details and pictures.** More personality in the About section plus real photos in the existing `.card-media` slots and hero/portrait slots. Ask her for the content and image files — do not invent details.
+
 ## Remaining to-do
 
 - Publication tab: add the actual publication title, author list, and DOI/link (currently bracketed placeholders).

@@ -1,6 +1,6 @@
 # CLAUDE.md — instructions for AI sessions on this repo
 
-This is Mary Clayton Soto's personal portfolio: a single-file site (`index.html`) published via GitHub Pages at https://maryclaytonsoto.github.io. Read `index.html` and `status.md` in full before making changes — status.md holds project state, the hiring-manager review, and remaining to-dos.
+This is Mary Clayton Soto's personal portfolio: a single-file site (`index.html`) published via GitHub Pages at https://maryclaytonsoto.github.io. Read `index.html` and `status.md` in full before making changes — status.md holds project state, the hiring-manager review, remaining to-dos, and a "Next session" queue of changes Mary has already requested. Start there: it includes organic section separators, converting her uploaded doodles into graphics, larger text, front-page reformatting, and adding personal details/photos.
 
 ## Architecture
 
