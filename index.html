@@ -24,9 +24,13 @@
       --text: #f5efe2;         /* cream body text */
       --text-muted: #b9b2a1;   /* muted cream */
       --heading: #fdfaf3;      /* near-white headings */
-      --grad-a: linear-gradient(135deg, var(--teal), var(--pink));
+      --seafoam: #2a9d8f;      /* green-blue */
+      /* Cool-only and warm-only gradients — teal never blends into pink
+         (that midpoint reads as purple). Multi-color strips use hard
+         color-block stops instead of blends for the same reason. */
+      --grad-a: linear-gradient(135deg, var(--teal), var(--seafoam));
       --grad-b: linear-gradient(135deg, var(--pink), var(--coral), var(--orange));
-      --grad-c: linear-gradient(135deg, var(--orange), var(--teal));
+      --grad-c: linear-gradient(135deg, var(--orange) 0 50%, var(--teal) 50% 100%);
       --radius: 14px;
       --maxw: 960px;
     }
@@ -58,7 +62,7 @@
     /* thin gradient strip across the top of the header */
     .header-accent {
       height: 5px;
-      background: linear-gradient(90deg, var(--teal), var(--pink), var(--coral), var(--orange));
+      background: linear-gradient(90deg, var(--teal) 0 25%, var(--pink) 25% 50%, var(--coral) 50% 75%, var(--orange) 75% 100%);
     }
 
     .nav-wrap {
@@ -76,12 +80,6 @@
       font-size: 1.05rem;
       letter-spacing: 0.04em;
       text-decoration: none;
-    }
-    .site-name span {
-      background: var(--grad-a);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
     }
 
     nav ul {
@@ -186,6 +184,40 @@
       font-weight: 600;
     }
 
+    /* Media slot — replace the placeholder div with an <img> or a
+       file link (<a href="files/xyz.pdf">) when ready, or delete it */
+    .card-media {
+      border: 2px dashed rgba(245, 239, 226, 0.25);
+      border-radius: 10px;
+      min-height: 130px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--text-muted);
+      font-style: italic;
+      font-size: 0.9rem;
+      padding: 0.75rem;
+      margin-top: 1rem;
+    }
+    .card img {
+      width: 100%;
+      border-radius: 10px;
+      display: block;
+      margin-top: 1rem;
+    }
+
+    /* Small external link under a card title (company/org site) */
+    .org-link {
+      display: inline-block;
+      font-family: "Lora", Georgia, serif;
+      font-size: 0.85rem;
+      color: var(--teal);
+      text-decoration: none;
+      margin-bottom: 0.5rem;
+    }
+    .org-link:hover { text-decoration: underline; color: var(--seafoam); }
+
     .tag {
       display: inline-block;
       font-size: 0.75rem;
@@ -227,12 +259,20 @@
       z-index: 1;
       margin-top: 0.5rem;
     }
-    .hero .gradient-text {
-      background: linear-gradient(90deg, var(--teal), var(--pink), var(--coral), var(--orange));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+    /* Academics line — deliberately contrasts with the name:
+       smaller, italic, body serif, muted color, colored separators */
+    .hero .subhead {
+      display: block;
+      font-family: "Lora", Georgia, serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 1.25rem;
+      letter-spacing: 0.03em;
+      color: var(--text-muted);
+      margin-top: 0.75rem;
     }
+    .hero .subhead .sep-a { color: var(--pink); font-style: normal; }
+    .hero .subhead .sep-b { color: var(--orange); font-style: normal; }
 
     /* Contact/Resume layout */
     .two-col {
@@ -262,7 +302,7 @@
     }
     footer .footer-accent {
       height: 4px;
-      background: linear-gradient(90deg, var(--orange), var(--pink), var(--teal));
+      background: linear-gradient(90deg, var(--orange) 0 33%, var(--pink) 33% 66%, var(--teal) 66% 100%);
       margin-bottom: 1.5rem;
     }
 
@@ -280,7 +320,7 @@
         background: var(--ink);
         display: none;
         border-bottom: 4px solid;
-        border-image: linear-gradient(90deg, var(--teal), var(--pink), var(--coral), var(--orange)) 1;
+        border-image: linear-gradient(90deg, var(--teal) 0 25%, var(--pink) 25% 50%, var(--coral) 50% 75%, var(--orange) 75% 100%) 1;
       }
       nav.open { display: block; }
 
@@ -301,6 +341,7 @@
       }
 
       .hero h1 { font-size: 1.7rem; }
+      .hero .subhead { font-size: 1.05rem; }
       .two-col { grid-template-columns: 1fr; }
       .section-title { font-size: 1.6rem; }
     }
@@ -312,7 +353,7 @@
   <header>
     <div class="header-accent"></div>
     <div class="nav-wrap">
-      <a href="#home" class="site-name" data-tab-link="home">Mary Clayton <span>Soto</span></a>
+      <a href="#home" class="site-name" data-tab-link="home">Mary Clayton Soto</a>
       <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
       <nav id="site-nav">
         <ul>
@@ -331,7 +372,7 @@
     <!-- ==================== HOME ==================== -->
     <section id="home" class="tab-panel active">
       <div class="hero">
-        <h1>Mary Clayton Soto<br /><span class="gradient-text">Biomedical Engineering &middot; Mathematics &middot; Visual Arts</span></h1>
+        <h1>Mary Clayton Soto<span class="subhead">Biomedical Engineering <span class="sep-a">&middot;</span> Mathematics <span class="sep-b">&middot;</span> Visual Arts</span></h1>
         <p class="tagline">Duke University, Pratt School of Engineering &middot; Class of 2028</p>
       </div>
 
@@ -350,25 +391,33 @@
       <div class="card card-a">
         <span class="tag tag-teal">Medical Device Design</span>
         <h3>Rollator Oxygen-Canister Mount</h3>
+        <a class="org-link" href="#">[Project link — optional, or delete] &#8599;</a>
         <p>Designed and prototyped a device to secure an oxygen canister to Duke Hospital rollators, improving patient mobility, safety, and clinical workflow efficiency. Conducted user-centered design analysis within hospital constraints and evaluated safety factors to ensure reliable performance in a clinical environment. (Aug 2024 – May 2025)</p>
+        <div class="card-media">[Photo, diagram, or file goes here — optional]</div>
       </div>
 
       <div class="card card-b">
         <span class="tag tag-pink">Robotics &amp; Embedded Systems</span>
         <h3>Autonomous Arduino Robot</h3>
+        <a class="org-link" href="#">[Project link — optional, or delete] &#8599;</a>
         <p>Built and programmed an Arduino-based robot using TI path sensors and IR thermal sensing, integrating multiple hardware components and developing control logic for autonomous navigation and wireless communication. (Jan – May 2025)</p>
+        <div class="card-media">[Photo or video still goes here — optional]</div>
       </div>
 
       <div class="card card-c">
         <span class="tag tag-orange">Molecular Biology</span>
         <h3>Yeast Genomic Library</h3>
+        <a class="org-link" href="#">[Project link — optional, or delete] &#8599;</a>
         <p>Executed a recombinant DNA workflow including yeast genomic DNA isolation, plasmid cloning, bacterial transformation, and validation via PCR, gel electrophoresis, Sanger sequencing, and bioinformatic analysis. (Aug – Dec 2025)</p>
+        <div class="card-media">[Gel image, figure, or lab report goes here — optional]</div>
       </div>
 
       <div class="card card-a">
         <span class="tag tag-teal">Data Science</span>
         <h3>Green Space &amp; Urban Temperature Analysis</h3>
+        <a class="org-link" href="#">[Project link — optional, or delete] &#8599;</a>
         <p>Developed a Python-based analysis workflow to extract pixel data from environmental maps, compute quadrant-level metrics, and perform regression modeling to assess relationships between green space, land use, and urban temperature. (Aug – Dec 2024)</p>
+        <div class="card-media">[Map visualization or notebook link goes here — optional]</div>
       </div>
     </section>
 
@@ -380,19 +429,25 @@
       <div class="card card-a">
         <span class="tag tag-teal">Mar 2025 – Present</span>
         <h3>Team Member — Bass Connections, Developing Surgical Education Models</h3>
+        <a class="org-link" href="https://bassconnections.duke.edu">bassconnections.duke.edu &#8599;</a>
         <p>Collaborate with Duke's SEAL Lab to design surgical education models that improve efficiency, accessibility, and consistency in clinical training. Design and iterate hydrogel organ models using MRI-derived DICOM scans, 3D Slicer segmentation, and Fusion 360 molds, tuning materials to replicate human tissue mechanics. Contribute to a computer-vision knot-tying assessment system that quantifies performance for objective surgical skill evaluation.</p>
+        <div class="card-media">[Photo of hydrogel model or team goes here — optional]</div>
       </div>
 
       <div class="card card-b">
         <span class="tag tag-pink">May 2026 – Present</span>
         <h3>Research Coordinator — Tallahassee Research Institute</h3>
+        <a class="org-link" href="#">[Company website link goes here — optional] &#8599;</a>
         <p>Manage clinical research workflows and patient data for cardiovascular studies involving novel medical devices and research protocols. Compile and analyze patient data into structured reports, translating complex findings into actionable insights for data-driven biomedical research.</p>
+        <div class="card-media">[Photo or file goes here — optional]</div>
       </div>
 
       <div class="card card-c">
         <span class="tag tag-orange">May – Aug 2025</span>
         <h3>Research Assistant — FSU Microparticle Lab</h3>
+        <a class="org-link" href="#">[Lab website link goes here — optional] &#8599;</a>
         <p>Developed a MATLAB pipeline to segment and classify fluorescence cell images, analyzing ~20,000 cells and generating a standardized dataset supporting a manuscript published in <em>ACS Applied Materials &amp; Interfaces</em>. Improved classification accuracy by optimizing convolution-based segmentation and thresholding across heterogeneous fluorescence channels.</p>
+        <div class="card-media">[Segmentation figure goes here — optional]</div>
       </div>
 
       <div class="card card-a">
@@ -410,7 +465,9 @@
       <div class="card card-c">
         <span class="tag tag-orange">Jan – May 2024</span>
         <h3>Intern — Victor Tech</h3>
+        <a class="org-link" href="#">[Company website link goes here — optional] &#8599;</a>
         <p>Designed and fabricated custom prosthetics using 3D printing, iterating on form and functionality to meet individual clinical needs.</p>
+        <div class="card-media">[Prosthetic photo goes here — optional]</div>
       </div>
     </section>
 

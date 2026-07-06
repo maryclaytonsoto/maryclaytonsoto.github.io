@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Font Samples — Mary Clayton Soto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Spectral:ital,wght@0,400;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --teal: #00b3a4;
+      --pink: #ff4f87;
+      --coral: #ff6f61;
+      --orange: #e85d04;
+      --navy: #0d1b2e;
+      --card: #14243c;
+      --text: #f5efe2;
+      --muted: #b9b2a1;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--navy);
+      color: var(--text);
+      font-family: Georgia, serif;
+      line-height: 1.6;
+      padding: 2.5rem 1.25rem 4rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .intro { color: var(--muted); margin-bottom: 2.5rem; font-size: 0.95rem; }
+    .intro strong { color: var(--text); }
+    .sample {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+      border-top: 5px solid var(--teal);
+    }
+    .sample:nth-child(odd) { border-top-color: var(--pink); }
+    .label {
+      font-family: -apple-system, Helvetica, sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 1rem;
+    }
+    .label span { color: var(--muted); font-weight: 400; text-transform: none; letter-spacing: 0; }
+    .name { font-size: 2.1rem; font-weight: 600; color: #fdfaf3; line-height: 1.2; }
+    .sub { font-style: italic; font-size: 1.1rem; color: var(--muted); margin: 0.4rem 0 0.9rem; }
+    .body-sample { font-size: 1rem; color: var(--text); }
+
+    .f-fraunces  .name, .f-fraunces  .sub, .f-fraunces  .body-sample { font-family: "Fraunces", serif; }
+    .f-playfair  .name, .f-playfair  .sub, .f-playfair  .body-sample { font-family: "Playfair Display", serif; }
+    .f-cormorant .name, .f-cormorant .sub, .f-cormorant .body-sample { font-family: "Cormorant Garamond", serif; }
+    .f-ebgaramond.sample .name, .f-ebgaramond .sub, .f-ebgaramond .body-sample { font-family: "EB Garamond", serif; }
+    .f-baskerville .name, .f-baskerville .sub, .f-baskerville .body-sample { font-family: "Libre Baskerville", serif; }
+    .f-spectral  .name, .f-spectral  .sub, .f-spectral  .body-sample { font-family: "Spectral", serif; }
+    .f-newsreader .name, .f-newsreader .sub, .f-newsreader .body-sample { font-family: "Newsreader", serif; }
+    .f-crimson   .name, .f-crimson   .sub, .f-crimson   .body-sample { font-family: "Crimson Pro", serif; }
+    .f-literata  .name, .f-literata  .sub, .f-literata  .body-sample { font-family: "Literata", serif; }
+    .f-dmserif   .name, .f-dmserif   .sub, .f-dmserif   .body-sample { font-family: "DM Serif Display", serif; }
+
+    /* Cormorant and Crimson run small — bump for fair comparison */
+    .f-cormorant .name { font-size: 2.4rem; }
+    .f-cormorant .body-sample, .f-crimson .body-sample { font-size: 1.1rem; }
+  </style>
+</head>
+<body>
+  <h1 style="font-family: Georgia, serif; margin-bottom: 0.5rem;">Font Samples</h1>
+  <p class="intro">All free Google Fonts, shown on the site's navy background. Each card shows a heading, the academics line, and body text in the same font. Current site setup is <strong>Fraunces</strong> (headings) + <strong>Lora</strong> (body) — Fraunces is the round one. The others below are sharper. Mix and match: pick one for headings, one for body. Tell Claude the winner and it swaps in one edit.</p>
+
+  <div class="sample f-playfair">
+    <div class="label">Playfair Display <span>— high contrast, sharp thin serifs, dramatic and editorial</span></div>
+    <div class="name">Mary Clayton Soto</div>
+    <div class="sub">Biomedical Engineering &middot; Mathematics &middot; Visual Arts</div>
+    <p class="body-sample">I'm drawn to the places these fields overlap — medical device design, patent law, and the intersection of art and science.</p>
+  </div>
+
+  <div class="sample f-spectral">
+    <div class="label">Spectral <span>— crisp and angular, contemporary, made for screens</span></div>
+    <div class="name">Mary Clayton Soto</div>
+    <div class="sub">Biomedical Engineering &middot; Mathematics &middot; Visual Arts</div>
+    <p class="body-sample">I'm drawn to the places these fields overlap — medical device design, patent law, and the intersection of art and science.</p>
+  </div>
+
+  <div class="sample f-newsreader">
+    <div class="label">Newsreader <span>— elegant newspaper serif, refined but not stiff</span></div>
+    <div class="name">Mary Clayton Soto</div>
+    <div class="sub">Biomedical Engineering &middot; Mathematics &middot; Visual Arts</div>
+    <p class="body-sample">I'm drawn to the places these fields overlap — medical device design, patent law, and the intersection of art and science.</p>
+  </div>
+
+  <div class="sample f-cormorant">
+    <div class="label">Cormorant Garamond <span>— delicate, fine-tipped, the most "art gallery" of the set</span></div>
+    <div class="name">Mary Clayton Soto</div>
+    <div class="sub">Biomedical Engineering &middot; Mathematics &middot; Visual Arts</div>
+    <p class="body-sample">I'm drawn to the places these fields overlap — medical device design, patent law, and the intersection of art and science.</p>
+  </div>
+
+  <div class="sample f-ebgaramond">
+    <div class="label">EB Garamond <span>— the classic book serif, timeless and understated</span></div>
+    <div class="name">Mary Clayton Soto</div>
+    <div class="sub">Biomedical Engineering &middot; Mathematics &middot; Visual Arts</div>
+    <p class="body-sample">I'm drawn to the places these fields overlap — medical device design, patent law, and the intersection of art and science.</p>
+  </div>
+
+  <div class="sample f-baskerville">
+    <div class="label">Libre Baskerville <span>— traditional and crisp, wide letterforms, very readable</span></div>
+    <div class="name">Mary Clayton Soto</div>
+    <div class="sub">Biomedical Engineering &middot; Mathematics &middot; Visual Arts</div>
+    <p class="body-sample">I'm drawn to the places these fields overlap — medical device design, patent law, and the intersection of art and science.</p>
+  </div>
+
+  <div class="sample f-crimson">
+    <div class="label">Crimson Pro <span>— warm old-style serif, softer than Baskerville but not round</span></div>
+    <div class="name">Mary Clayton Soto</div>
+    <div class="sub">Biomedical Engineering &middot; Mathematics &middot; Visual Arts</div>
+    <p class="body-sample">I'm drawn to the places these fields overlap — medical device design, patent law, and the intersection of art and science.</p>
+  </div>
+
+  <div class="sample f-literata">
+    <div class="label">Literata <span>— modern e-book serif, sturdy and even, great for body text</span></div>
+    <div class="name">Mary Clayton Soto</div>
+    <div class="sub">Biomedical Engineering &middot; Mathematics &middot; Visual Arts</div>
+    <p class="body-sample">I'm drawn to the places these fields overlap — medical device design, patent law, and the intersection of art and science.</p>
+  </div>
+
+  <div class="sample f-dmserif">
+    <div class="label">DM Serif Display <span>— bold didone display, headings only (no lighter weights)</span></div>
+    <div class="name">Mary Clayton Soto</div>
+    <div class="sub">Biomedical Engineering &middot; Mathematics &middot; Visual Arts</div>
+    <p class="body-sample">I'm drawn to the places these fields overlap — medical device design, patent law, and the intersection of art and science.</p>
+  </div>
+
+  <div class="sample f-fraunces">
+    <div class="label">Fraunces <span>— current heading font, for comparison (the round one)</span></div>
+    <div class="name">Mary Clayton Soto</div>
+    <div class="sub">Biomedical Engineering &middot; Mathematics &middot; Visual Arts</div>
+    <p class="body-sample">I'm drawn to the places these fields overlap — medical device design, patent law, and the intersection of art and science.</p>
+  </div>
+</body>
+</html>
