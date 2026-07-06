@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>[Your Name] — Portfolio</title>
+  <style>
+    /* ============================================================
+       DESIGN TOKENS
+       Bold gradient accents (teal / magenta / deep orange)
+       against a clean cream content background.
+       ============================================================ */
+    :root {
+      --teal: #00b3a4;
+      --magenta: #d6218f;
+      --orange: #e85d04;
+      --ink: #121212;          /* near-black */
+      --cream: #faf6ef;        /* neutral content background */
+      --paper: #ffffff;        /* card background */
+      --text: #2a2a2a;
+      --text-muted: #6b6b6b;
+      --grad-a: linear-gradient(135deg, var(--teal), var(--magenta));
+      --grad-b: linear-gradient(135deg, var(--magenta), var(--orange));
+      --grad-c: linear-gradient(135deg, var(--orange), var(--teal));
+      --radius: 14px;
+      --maxw: 960px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Avenir Next", "Segoe UI", -apple-system, Helvetica, Arial, sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ============================================================
+       HEADER + NAVIGATION
+       ============================================================ */
+    header {
+      background: var(--ink);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    /* thin gradient strip across the top of the header */
+    .header-accent {
+      height: 5px;
+      background: linear-gradient(90deg, var(--teal), var(--magenta), var(--orange));
+    }
+
+    .nav-wrap {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.9rem 1.25rem;
+    }
+
+    .site-name {
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+    }
+    .site-name span {
+      background: var(--grad-a);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 0.25rem;
+    }
+
+    nav a {
+      display: block;
+      color: #d8d8d8;
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 600;
+      padding: 0.5rem 0.9rem;
+      border-radius: 999px;
+      transition: color 0.2s, background 0.2s;
+    }
+
+    nav a:hover { color: #fff; }
+
+    nav a.active {
+      color: #fff;
+      background: var(--grad-a);
+    }
+
+    /* Hamburger button — hidden on desktop */
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: 2px solid #555;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 1.3rem;
+      line-height: 1;
+      padding: 0.35rem 0.6rem;
+      cursor: pointer;
+    }
+
+    /* ============================================================
+       TAB PANELS
+       ============================================================ */
+    main {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 4rem;
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeIn 0.25s ease; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* Section headings with gradient underline bar */
+    .section-title {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 0.35rem;
+    }
+    .title-bar {
+      width: 72px;
+      height: 6px;
+      border-radius: 3px;
+      margin-bottom: 1.75rem;
+    }
+    .bar-a { background: var(--grad-a); }
+    .bar-b { background: var(--grad-b); }
+    .bar-c { background: var(--grad-c); }
+
+    /* Placeholder styling — makes it obvious what is placeholder */
+    .placeholder {
+      color: var(--text-muted);
+      font-style: italic;
+      border: 2px dashed #cfc8bb;
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    /* Cards */
+    .card {
+      background: var(--paper);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      border-top: 6px solid;
+      border-image-slice: 1;
+    }
+    .card-a { border-image-source: var(--grad-a); }
+    .card-b { border-image-source: var(--grad-b); }
+    .card-c { border-image-source: var(--grad-c); }
+
+    .card h3 {
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+      font-size: 1.15rem;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      font-style: normal;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #fff;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      margin-bottom: 0.75rem;
+    }
+    .tag-teal    { background: var(--teal); }
+    .tag-magenta { background: var(--magenta); }
+    .tag-orange  { background: var(--orange); }
+
+    /* HOME hero block */
+    .hero {
+      background: var(--ink);
+      border-radius: var(--radius);
+      padding: 3rem 2rem;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -60px;
+      top: -60px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: var(--grad-b);
+      opacity: 0.85;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      right: 90px;
+      bottom: -80px;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: var(--grad-c);
+      opacity: 0.7;
+    }
+    .hero h1 {
+      color: #fff;
+      font-size: 2.4rem;
+      font-weight: 800;
+      position: relative;
+      z-index: 1;
+    }
+    .hero p.tagline {
+      color: #cfcfcf;
+      font-size: 1.05rem;
+      max-width: 34ch;
+      position: relative;
+      z-index: 1;
+      margin-top: 0.5rem;
+    }
+    .hero .gradient-text {
+      background: linear-gradient(90deg, var(--teal), var(--magenta), var(--orange));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    /* Contact/Resume layout */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    .btn {
+      display: inline-block;
+      color: #fff;
+      font-weight: 700;
+      font-style: normal;
+      text-decoration: none;
+      padding: 0.7rem 1.4rem;
+      border-radius: 999px;
+      background: var(--grad-b);
+      margin-top: 0.75rem;
+    }
+
+    footer {
+      background: var(--ink);
+      color: #8a8a8a;
+      text-align: center;
+      font-size: 0.85rem;
+      padding: 1.5rem 1rem;
+    }
+    footer .footer-accent {
+      height: 4px;
+      background: linear-gradient(90deg, var(--orange), var(--magenta), var(--teal));
+      margin-bottom: 1.5rem;
+    }
+
+    /* ============================================================
+       MOBILE — nav collapses to hamburger menu
+       ============================================================ */
+    @media (max-width: 700px) {
+      .menu-toggle { display: block; }
+
+      nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--ink);
+        display: none;
+        border-bottom: 4px solid;
+        border-image: linear-gradient(90deg, var(--teal), var(--magenta), var(--orange)) 1;
+      }
+      nav.open { display: block; }
+
+      nav ul {
+        flex-direction: column;
+        gap: 0;
+        padding: 0.5rem 0 1rem;
+      }
+      nav a {
+        border-radius: 0;
+        padding: 0.85rem 1.5rem;
+        font-size: 1rem;
+      }
+      nav a.active {
+        background: none;
+        border-left: 5px solid var(--magenta);
+        color: var(--teal);
+      }
+
+      .hero h1 { font-size: 1.7rem; }
+      .two-col { grid-template-columns: 1fr; }
+      .section-title { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== HEADER / NAV ==================== -->
+  <header>
+    <div class="header-accent"></div>
+    <div class="nav-wrap">
+      <a href="#home" class="site-name" data-tab-link="home">[Your <span>Name</span>]</a>
+      <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+      <nav id="site-nav">
+        <ul>
+          <li><a href="#home" data-tab-link="home" class="active">Home</a></li>
+          <li><a href="#projects" data-tab-link="projects">Projects</a></li>
+          <li><a href="#experience" data-tab-link="experience">Experience</a></li>
+          <li><a href="#publication" data-tab-link="publication">Publication</a></li>
+          <li><a href="#contact" data-tab-link="contact">Contact / Resume</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ==================== HOME ==================== -->
+    <section id="home" class="tab-panel active">
+      <div class="hero">
+        <h1>[Your Name]<br /><span class="gradient-text">[Short headline, e.g., "Engineering at the edge of biology, law, and art"]</span></h1>
+        <p class="tagline">[One-sentence tagline goes here]</p>
+      </div>
+
+      <h2 class="section-title">About</h2>
+      <div class="title-bar bar-a"></div>
+      <p class="placeholder">[Bio paragraph goes here — who you are, Duke BME '29, interests in biomedical engineering, patent law, and the art–science intersection]</p>
+      <br />
+      <p class="placeholder">[Optional second paragraph — what you're working on now, what you're looking for]</p>
+    </section>
+
+    <!-- ==================== PROJECTS ==================== -->
+    <section id="projects" class="tab-panel">
+      <h2 class="section-title">Projects</h2>
+      <div class="title-bar bar-b"></div>
+
+      <div class="card card-a">
+        <span class="tag tag-teal">[Category, e.g., BME]</span>
+        <h3>[Project 1 title]</h3>
+        <p class="placeholder">[Project 1 description — what it is, your role, tools/skills used, outcome. Link or image placeholder here.]</p>
+      </div>
+
+      <div class="card card-b">
+        <span class="tag tag-magenta">[Category, e.g., Art × Science]</span>
+        <h3>[Project 2 title]</h3>
+        <p class="placeholder">[Project 2 description]</p>
+      </div>
+
+      <div class="card card-c">
+        <span class="tag tag-orange">[Category]</span>
+        <h3>[Project 3 title]</h3>
+        <p class="placeholder">[Project 3 description — duplicate this card block for more projects]</p>
+      </div>
+    </section>
+
+    <!-- ==================== EXPERIENCE ==================== -->
+    <section id="experience" class="tab-panel">
+      <h2 class="section-title">Experience</h2>
+      <div class="title-bar bar-c"></div>
+
+      <div class="card card-a">
+        <span class="tag tag-teal">[Dates, e.g., Summer 2026]</span>
+        <h3>[Position title — Organization]</h3>
+        <p class="placeholder">[Description of role and responsibilities — 2–3 bullet-style lines]</p>
+      </div>
+
+      <div class="card card-b">
+        <span class="tag tag-magenta">[Dates]</span>
+        <h3>[Position title — Organization]</h3>
+        <p class="placeholder">[Description — research lab, club leadership, internship, etc. Duplicate this card for each entry.]</p>
+      </div>
+    </section>
+
+    <!-- ==================== PUBLICATION ==================== -->
+    <section id="publication" class="tab-panel">
+      <h2 class="section-title">Publication</h2>
+      <div class="title-bar bar-a"></div>
+
+      <div class="card card-c">
+        <span class="tag tag-orange">[Year / Journal or Venue]</span>
+        <h3>[Publication title]</h3>
+        <p class="placeholder">[Author list, journal/conference name, brief abstract or one-line summary, DOI or link placeholder]</p>
+      </div>
+
+      <p class="placeholder">[Optional: posters, preprints, or writing — duplicate the card above for each item]</p>
+    </section>
+
+    <!-- ==================== CONTACT / RESUME ==================== -->
+    <section id="contact" class="tab-panel">
+      <h2 class="section-title">Contact / Resume</h2>
+      <div class="title-bar bar-b"></div>
+
+      <div class="two-col">
+        <div class="card card-a">
+          <h3>Get in touch</h3>
+          <p class="placeholder">[Email address goes here]<br />[LinkedIn URL goes here]<br />[Other links — GitHub, Instagram/art portfolio, etc.]</p>
+        </div>
+
+        <div class="card card-b">
+          <h3>Resume</h3>
+          <p class="placeholder">[One-line note, e.g., "Download my current resume below"]</p>
+          <a href="#" class="btn">[Resume PDF link goes here]</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="footer-accent"></div>
+    <p>&copy; 2026 [Your Name] &middot; [Optional footer note]</p>
+  </footer>
+
+  <script>
+    // ---------- Tab navigation ----------
+    const links = document.querySelectorAll("[data-tab-link]");
+    const panels = document.querySelectorAll(".tab-panel");
+    const nav = document.getElementById("site-nav");
+    const toggle = document.querySelector(".menu-toggle");
+
+    function showTab(id) {
+      panels.forEach(p => p.classList.toggle("active", p.id === id));
+      links.forEach(l => {
+        if (l.closest("nav")) l.classList.toggle("active", l.dataset.tabLink === id);
+      });
+      nav.classList.remove("open");           // close mobile menu after choosing
+      toggle.setAttribute("aria-expanded", "false");
+      window.scrollTo({ top: 0 });
+    }
+
+    links.forEach(link => {
+      link.addEventListener("click", e => {
+        e.preventDefault();
+        const id = link.dataset.tabLink;
+        history.replaceState(null, "", "#" + id);
+        showTab(id);
+      });
+    });
+
+    // Open correct tab if page loads with a #hash (e.g., shared link)
+    const initial = location.hash.replace("#", "");
+    if (initial && document.getElementById(initial)) showTab(initial);
+
+    // ---------- Mobile menu toggle ----------
+    toggle.addEventListener("click", () => {
+      const open = nav.classList.toggle("open");
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+  </script>
+</body>
+</html>
