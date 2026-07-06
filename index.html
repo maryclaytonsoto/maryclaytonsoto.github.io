@@ -15,7 +15,8 @@
        ============================================================ */
     :root {
       --teal: #00b3a4;
-      --magenta: #d6218f;
+      --pink: #ff4f87;         /* warm pink — no purple cast */
+      --coral: #ff6f61;        /* orangey pink */
       --orange: #e85d04;
       --ink: #060e1f;          /* deepest navy — header, hero, footer */
       --cream: #0d1b2e;        /* page background (dark navy) */
@@ -23,8 +24,8 @@
       --text: #f5efe2;         /* cream body text */
       --text-muted: #b9b2a1;   /* muted cream */
       --heading: #fdfaf3;      /* near-white headings */
-      --grad-a: linear-gradient(135deg, var(--teal), var(--magenta));
-      --grad-b: linear-gradient(135deg, var(--magenta), var(--orange));
+      --grad-a: linear-gradient(135deg, var(--teal), var(--pink));
+      --grad-b: linear-gradient(135deg, var(--pink), var(--coral), var(--orange));
       --grad-c: linear-gradient(135deg, var(--orange), var(--teal));
       --radius: 14px;
       --maxw: 960px;
@@ -57,7 +58,7 @@
     /* thin gradient strip across the top of the header */
     .header-accent {
       height: 5px;
-      background: linear-gradient(90deg, var(--teal), var(--magenta), var(--orange));
+      background: linear-gradient(90deg, var(--teal), var(--pink), var(--coral), var(--orange));
     }
 
     .nav-wrap {
@@ -197,7 +198,7 @@
       margin-bottom: 0.75rem;
     }
     .tag-teal    { background: var(--teal); }
-    .tag-magenta { background: var(--magenta); }
+    .tag-pink { background: var(--pink); }
     .tag-orange  { background: var(--orange); }
 
     /* HOME hero block */
@@ -248,7 +249,7 @@
       margin-top: 0.5rem;
     }
     .hero .gradient-text {
-      background: linear-gradient(90deg, var(--teal), var(--magenta), var(--orange));
+      background: linear-gradient(90deg, var(--teal), var(--pink), var(--coral), var(--orange));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -282,7 +283,7 @@
     }
     footer .footer-accent {
       height: 4px;
-      background: linear-gradient(90deg, var(--orange), var(--magenta), var(--teal));
+      background: linear-gradient(90deg, var(--orange), var(--pink), var(--teal));
       margin-bottom: 1.5rem;
     }
 
@@ -300,7 +301,7 @@
         background: var(--ink);
         display: none;
         border-bottom: 4px solid;
-        border-image: linear-gradient(90deg, var(--teal), var(--magenta), var(--orange)) 1;
+        border-image: linear-gradient(90deg, var(--teal), var(--pink), var(--coral), var(--orange)) 1;
       }
       nav.open { display: block; }
 
@@ -316,7 +317,7 @@
       }
       nav a.active {
         background: none;
-        border-left: 5px solid var(--magenta);
+        border-left: 5px solid var(--pink);
         color: var(--teal);
       }
 
@@ -374,7 +375,7 @@
       </div>
 
       <div class="card card-b">
-        <span class="tag tag-magenta">[Category, e.g., Art × Science]</span>
+        <span class="tag tag-pink">[Category, e.g., Art × Science]</span>
         <h3>[Project 2 title]</h3>
         <p class="placeholder">[Project 2 description]</p>
       </div>
@@ -398,7 +399,7 @@
       </div>
 
       <div class="card card-b">
-        <span class="tag tag-magenta">[Dates]</span>
+        <span class="tag tag-pink">[Dates]</span>
         <h3>[Position title — Organization]</h3>
         <p class="placeholder">[Description — research lab, club leadership, internship, etc. Duplicate this card for each entry.]</p>
       </div>
