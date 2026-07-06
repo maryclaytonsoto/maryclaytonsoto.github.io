@@ -11,7 +11,7 @@ A single-file personal portfolio site (`index.html`) for Mary Clayton Soto, Duke
 - Five-tab structure: Home, Projects, Experience, Publication, Contact/Resume. Tabs are JS-driven (show/hide panels), navigable by URL hash, and collapse to a hamburger menu below 700px.
 - Real content filled in from Mary's resume (July 6, 2026): bio, 4 projects, 6 experience entries, publication contribution, and contact info. Remaining placeholders: publication title, author list/DOI, and the resume PDF link.
 - Original design: gradient color-blocking accents (teal #00b3a4, pink #ff4f87, coral #ff6f61, deep orange #e85d04 (magenta removed — read as purple)) against a near-black header and cream content background.
-- Current revision (in progress): dark navy background overall, cream/white text, serif typography (Fraunces for headings, Lora for body — matching the soft serif reference provided), with teal/pink/coral/orange accent pops.
+- Current revision (in progress): dark navy background overall, cream/white text, serif typography (Cormorant Garamond for headings, EB Garamond for body), with teal/pink/coral/orange accent pops.
 
 ## Working rules for revisions
 
