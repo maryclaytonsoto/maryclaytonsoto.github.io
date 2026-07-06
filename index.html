@@ -26,7 +26,7 @@
       --bg: #0d1b2e;           /* dark navy */
       --text: #f5efe2;         /* cream */
       --text-muted: #b9b2a1;   /* muted cream */
-      --c1: #00b3a4;           /* teal (green-blue) */
+      --c1: #f9a03f;           /* sunset gold */
       --c2: #ff4f87;           /* warm pink */
       --c3: #ff6f61;           /* coral (orangey pink) */
       --c4: #e85d04;           /* deep orange */
@@ -230,6 +230,20 @@
 
     .portrait-slot { max-width: 320px; }
 
+    /* Art gallery grid */
+    .art-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+    .art-grid .card-media { min-height: 220px; margin-top: 0; }
+    .art-caption {
+      color: var(--text-muted);
+      font-style: italic;
+      font-size: 0.95rem;
+      margin-top: 0.6rem;
+    }
+
     /* Small external link under a card title (company/org site) */
     .org-link {
       display: inline-block;
@@ -388,6 +402,7 @@
       .hero-visual { flex: none; width: 120px; }
       .hero-photo { width: 140px; height: 140px; }
       .two-col { grid-template-columns: 1fr; }
+      .art-grid { grid-template-columns: 1fr; }
       .section-title { font-size: 1.6rem; }
     }
   </style>
@@ -406,6 +421,7 @@
           <li><a href="#projects" data-tab-link="projects">Projects</a></li>
           <li><a href="#experience" data-tab-link="experience">Experience</a></li>
           <li><a href="#publication" data-tab-link="publication">Publication</a></li>
+          <li><a href="#art" data-tab-link="art">Art</a></li>
           <li><a href="#contact" data-tab-link="contact">Contact / Resume</a></li>
         </ul>
       </nav>
@@ -547,6 +563,33 @@
       </div>
     </section>
 
+    <!-- ==================== ART (toggleable — see SHOW_ART_TAB in the script) ==================== -->
+    <section id="art" class="tab-panel">
+      <h2 class="section-title">Art</h2>
+      <div class="title-bar bar-c"></div>
+
+      <p class="placeholder">[Short intro — your mediums, your relationship to art, and how it connects to your engineering work]</p>
+      <br />
+      <div class="art-grid">
+        <div class="card card-a">
+          <div class="card-media">[Artwork image goes here]</div>
+          <p class="art-caption">[Title, medium, year]</p>
+        </div>
+        <div class="card card-b">
+          <div class="card-media">[Artwork image goes here]</div>
+          <p class="art-caption">[Title, medium, year]</p>
+        </div>
+        <div class="card card-c">
+          <div class="card-media">[Artwork image goes here]</div>
+          <p class="art-caption">[Title, medium, year]</p>
+        </div>
+        <div class="card card-a">
+          <div class="card-media">[Artwork image goes here — duplicate these cards for more pieces]</div>
+          <p class="art-caption">[Title, medium, year]</p>
+        </div>
+      </div>
+    </section>
+
     <!-- ==================== CONTACT / RESUME ==================== -->
     <section id="contact" class="tab-panel">
       <h2 class="section-title">Contact / Resume</h2>
@@ -576,6 +619,15 @@
   </footer>
 
   <script>
+    // ---------- Art tab visibility ----------
+    // Set to false to hide the Art tab from the public site
+    // (the section stays in the code, it just won't render).
+    const SHOW_ART_TAB = true;
+    if (!SHOW_ART_TAB) {
+      document.querySelector('nav [data-tab-link="art"]').closest("li").remove();
+      document.getElementById("art").remove();
+    }
+
     // ---------- Tab navigation ----------
     const links = document.querySelectorAll("[data-tab-link]");
     const panels = document.querySelectorAll(".tab-panel");
