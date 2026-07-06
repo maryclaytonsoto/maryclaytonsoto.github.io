@@ -13,24 +13,45 @@
        Bold gradient accents (teal / pink / coral / deep orange)
        against a dark navy background with cream/white text.
        ============================================================ */
+    /* ============================================================
+       THEME — recolor the whole site by editing ONLY this block:
+         --bg          page background
+         --text        main text color
+         --text-muted  secondary/accent text color
+         --c1 to --c4  3–4 design colors (tags, gradients, accents)
+                       (only have 3? set --c4 to the same hex as --c3)
+       Everything below "Derived tokens" adjusts automatically.
+       ============================================================ */
     :root {
-      --teal: #00b3a4;
-      --pink: #ff4f87;         /* warm pink — no purple cast */
-      --coral: #ff6f61;        /* orangey pink */
-      --orange: #e85d04;
-      --ink: #060e1f;          /* deepest navy — header, hero, footer */
-      --cream: #0d1b2e;        /* page background (dark navy) */
-      --paper: #14243c;        /* card background (lighter navy) */
-      --text: #f5efe2;         /* cream body text */
+      --bg: #0d1b2e;           /* dark navy */
+      --text: #f5efe2;         /* cream */
       --text-muted: #b9b2a1;   /* muted cream */
-      --heading: #fdfaf3;      /* near-white headings */
-      --seafoam: #2a9d8f;      /* green-blue */
-      /* Cool-only and warm-only gradients — teal never blends into pink
-         (that midpoint reads as purple). Multi-color strips use hard
-         color-block stops instead of blends for the same reason. */
-      --grad-a: linear-gradient(135deg, var(--teal), var(--seafoam));
-      --grad-b: linear-gradient(135deg, var(--pink), var(--coral), var(--orange));
-      --grad-c: linear-gradient(135deg, var(--orange) 0 50%, var(--teal) 50% 100%);
+      --c1: #00b3a4;           /* teal (green-blue) */
+      --c2: #ff4f87;           /* warm pink */
+      --c3: #ff6f61;           /* coral (orangey pink) */
+      --c4: #e85d04;           /* deep orange */
+    }
+
+    /* ---------- Derived tokens — no need to edit ---------- */
+    :root {
+      --teal: var(--c1);
+      --pink: var(--c2);
+      --coral: var(--c3);
+      --orange: var(--c4);
+      --cream: var(--bg);                                       /* page background */
+      --ink: color-mix(in srgb, var(--bg) 55%, black);          /* header/hero/footer */
+      --paper: color-mix(in srgb, var(--bg) 91%, white);        /* cards */
+      --heading: color-mix(in srgb, var(--text) 60%, white);    /* headings pop brighter */
+      --line: color-mix(in srgb, var(--text) 25%, transparent); /* dashed borders */
+      --edge: color-mix(in srgb, var(--bg) 80%, white);         /* subtle solid borders */
+      --seafoam: color-mix(in srgb, var(--c1) 75%, white);
+      /* Gradient bars: colors blend briefly at their edges (soft
+         color-blocking), so cool and warm colors never produce a
+         long purple midtone. */
+      --grad-a: linear-gradient(135deg, var(--c1), var(--seafoam));
+      --grad-b: linear-gradient(135deg, var(--c2), var(--c3), var(--c4));
+      --grad-c: linear-gradient(135deg, var(--c4) 0 42%, var(--c1) 58% 100%);
+      --grad-strip: linear-gradient(90deg, var(--c1) 0 20%, var(--c2) 32% 47%, var(--c3) 58% 72%, var(--c4) 83% 100%);
       --radius: 14px;
       --maxw: 960px;
     }
@@ -62,7 +83,7 @@
     /* thin gradient strip across the top of the header */
     .header-accent {
       height: 5px;
-      background: linear-gradient(90deg, var(--teal) 0 25%, var(--pink) 25% 50%, var(--coral) 50% 75%, var(--orange) 75% 100%);
+      background: var(--grad-strip);
     }
 
     .nav-wrap {
@@ -75,7 +96,7 @@
     }
 
     .site-name {
-      color: #fff;
+      color: var(--heading);
       font-weight: 600;
       font-size: 1.25rem;
       letter-spacing: 0.04em;
@@ -90,7 +111,7 @@
 
     nav a {
       display: block;
-      color: #d8d8d8;
+      color: var(--text-muted);
       text-decoration: none;
       font-size: 1.08rem;
       font-weight: 600;
@@ -99,7 +120,7 @@
       transition: color 0.2s, background 0.2s;
     }
 
-    nav a:hover { color: #fff; }
+    nav a:hover { color: var(--heading); }
 
     nav a.active {
       color: #fff;
@@ -110,7 +131,7 @@
     .menu-toggle {
       display: none;
       background: none;
-      border: 2px solid #33456b;
+      border: 2px solid var(--edge);
       border-radius: 8px;
       color: #fff;
       font-size: 1.3rem;
@@ -157,7 +178,7 @@
     .placeholder {
       color: var(--text-muted);
       font-style: italic;
-      border: 2px dashed rgba(245, 239, 226, 0.3);
+      border: 2px dashed var(--line);
       border-radius: var(--radius);
       padding: 1rem 1.25rem;
       background: rgba(255, 255, 255, 0.04);
@@ -187,7 +208,7 @@
     /* Media slot — replace the placeholder div with an <img> or a
        file link (<a href="files/xyz.pdf">) when ready, or delete it */
     .card-media {
-      border: 2px dashed rgba(245, 239, 226, 0.25);
+      border: 2px dashed var(--line);
       border-radius: 10px;
       min-height: 130px;
       display: flex;
@@ -206,6 +227,8 @@
       display: block;
       margin-top: 1rem;
     }
+
+    .portrait-slot { max-width: 320px; }
 
     /* Small external link under a card title (company/org site) */
     .org-link {
@@ -237,12 +260,31 @@
     /* HOME hero block */
     .hero {
       background: var(--ink);
-      border: 1px solid #1d2f4d;
+      border: 1px solid var(--edge);
       border-radius: var(--radius);
       padding: 3rem 2rem;
       margin-bottom: 2rem;
       position: relative;
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    /* Hero graphic — swap the <svg> for a photo anytime:
+       <img class="hero-photo" src="photos/your-photo.jpg" alt="Mary Clayton Soto" /> */
+    .hero-visual {
+      flex: 0 0 190px;
+    }
+    .hero-visual svg { width: 100%; height: auto; display: block; }
+    .hero-photo {
+      width: 190px;
+      height: 190px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid var(--c2);
+      display: block;
     }
     .hero h1 {
       color: var(--heading);
@@ -252,7 +294,7 @@
       z-index: 1;
     }
     .hero p.tagline {
-      color: #cfcfcf;
+      color: var(--text-muted);
       font-size: 1.05rem;
       max-width: 34ch;
       position: relative;
@@ -302,7 +344,7 @@
     }
     footer .footer-accent {
       height: 4px;
-      background: linear-gradient(90deg, var(--orange) 0 33%, var(--pink) 33% 66%, var(--teal) 66% 100%);
+      background: var(--grad-strip);
       margin-bottom: 1.5rem;
     }
 
@@ -320,7 +362,7 @@
         background: var(--ink);
         display: none;
         border-bottom: 4px solid;
-        border-image: linear-gradient(90deg, var(--teal) 0 25%, var(--pink) 25% 50%, var(--coral) 50% 75%, var(--orange) 75% 100%) 1;
+        border-image: var(--grad-strip) 1;
       }
       nav.open { display: block; }
 
@@ -342,6 +384,9 @@
 
       .hero h1 { font-size: 2rem; }
       .hero .subhead { font-size: 1.1rem; }
+      .hero { flex-direction: column-reverse; align-items: flex-start; gap: 1.25rem; }
+      .hero-visual { flex: none; width: 120px; }
+      .hero-photo { width: 140px; height: 140px; }
       .two-col { grid-template-columns: 1fr; }
       .section-title { font-size: 1.6rem; }
     }
@@ -372,8 +417,24 @@
     <!-- ==================== HOME ==================== -->
     <section id="home" class="tab-panel active">
       <div class="hero">
-        <h1>Mary Clayton Soto<span class="subhead">Biomedical Engineering <span class="sep-a">&middot;</span> Mathematics <span class="sep-b">&middot;</span> Visual Arts</span></h1>
-        <p class="tagline">Duke University, Pratt School of Engineering &middot; Class of 2028</p>
+        <div class="hero-text">
+          <h1>Mary Clayton Soto<span class="subhead">Biomedical Engineering <span class="sep-a">&middot;</span> Mathematics <span class="sep-b">&middot;</span> Visual Arts</span></h1>
+          <p class="tagline">Duke University, Pratt School of Engineering &middot; Class of 2028</p>
+        </div>
+        <!-- To use a photo instead of the graphic, replace the whole
+             .hero-visual div with:
+             <img class="hero-photo" src="photos/your-photo.jpg" alt="Mary Clayton Soto" /> -->
+        <div class="hero-visual" aria-hidden="true">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="100" r="88" fill="none" stroke="var(--c1)" stroke-width="2.5" stroke-dasharray="4 8" opacity="0.9" />
+            <circle cx="100" cy="100" r="66" fill="none" stroke="var(--c2)" stroke-width="3" stroke-dasharray="230 185" stroke-linecap="round" transform="rotate(-50 100 100)" />
+            <circle cx="100" cy="100" r="47" fill="none" stroke="var(--c3)" stroke-width="3" stroke-dasharray="160 135" stroke-linecap="round" transform="rotate(115 100 100)" />
+            <circle cx="100" cy="100" r="29" fill="none" stroke="var(--c4)" stroke-width="3.5" stroke-dasharray="105 78" stroke-linecap="round" transform="rotate(25 100 100)" />
+            <circle cx="100" cy="100" r="7" fill="var(--c2)" />
+            <circle cx="100" cy="12" r="5" fill="var(--c1)" />
+            <circle cx="153" cy="147" r="5" fill="var(--c4)" />
+          </svg>
+        </div>
       </div>
 
       <h2 class="section-title">About</h2>
@@ -381,6 +442,8 @@
       <p>I'm a biomedical engineering and mathematics double major at Duke University's Pratt School of Engineering, with a minor in visual arts. I'm drawn to the places these fields overlap — medical device design, patent law, and the intersection of art and science.</p>
       <br />
       <p>Right now, I'm designing surgical education models with Duke's SEAL Lab through Bass Connections, coordinating cardiovascular device research at the Tallahassee Research Institute, teaching Python to first-year engineers as an EGR105 TA, and serving as Vice President of Professional Development for Theta Tau.</p>
+      <br />
+      <div class="card-media portrait-slot">[Portrait or personal photo goes here — optional]</div>
     </section>
 
     <!-- ==================== PROJECTS ==================== -->
