@@ -30,3 +30,4 @@ Fonts: Cormorant Garamond (headings/nav) + EB Garamond (body) via Google Fonts. 
 - Commit with short descriptive messages. Mary runs `git push` herself (requires her credentials). Remind her to push after committing.
 - After edits, verify: all tabs navigable, `@media (max-width: 700px)` intact, no cool-into-pink gradient blends, no hard-coded hexes outside the theme block.
 - Update status.md when project state changes meaningfully.
+- `aesthetic.md` is the portable spec of Mary's visual style. Whenever the site's look changes (palette, fonts, illustration style, layout patterns), update the matching CURRENT STYLE subsection and add a dated changelog line there.
