@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>[Your Name] — Portfolio</title>
+  <title>Mary Clayton Soto — Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
@@ -72,7 +72,7 @@
 
     .site-name {
       color: #fff;
-      font-weight: 700;
+      font-weight: 600;
       font-size: 1.05rem;
       letter-spacing: 0.04em;
       text-decoration: none;
@@ -105,7 +105,7 @@
 
     nav a.active {
       color: #fff;
-      background: var(--grad-a);
+      background: var(--grad-b);
     }
 
     /* Hamburger button — hidden on desktop */
@@ -141,7 +141,7 @@
     /* Section headings with gradient underline bar */
     .section-title {
       font-size: 2rem;
-      font-weight: 700;
+      font-weight: 600;
       color: var(--heading);
       margin-bottom: 0.35rem;
     }
@@ -183,6 +183,7 @@
       color: var(--heading);
       margin-bottom: 0.5rem;
       font-size: 1.15rem;
+      font-weight: 600;
     }
 
     .tag {
@@ -211,32 +212,10 @@
       position: relative;
       overflow: hidden;
     }
-    .hero::after {
-      content: "";
-      position: absolute;
-      right: -60px;
-      top: -60px;
-      width: 220px;
-      height: 220px;
-      border-radius: 50%;
-      background: var(--grad-b);
-      opacity: 0.85;
-    }
-    .hero::before {
-      content: "";
-      position: absolute;
-      right: 90px;
-      bottom: -80px;
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      background: var(--grad-c);
-      opacity: 0.7;
-    }
     .hero h1 {
       color: var(--heading);
       font-size: 2.4rem;
-      font-weight: 700;
+      font-weight: 600;
       position: relative;
       z-index: 1;
     }
@@ -333,7 +312,7 @@
   <header>
     <div class="header-accent"></div>
     <div class="nav-wrap">
-      <a href="#home" class="site-name" data-tab-link="home">[Your <span>Name</span>]</a>
+      <a href="#home" class="site-name" data-tab-link="home">Mary Clayton <span>Soto</span></a>
       <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
       <nav id="site-nav">
         <ul>
@@ -352,15 +331,15 @@
     <!-- ==================== HOME ==================== -->
     <section id="home" class="tab-panel active">
       <div class="hero">
-        <h1>[Your Name]<br /><span class="gradient-text">[Short headline, e.g., "Engineering at the edge of biology, law, and art"]</span></h1>
-        <p class="tagline">[One-sentence tagline goes here]</p>
+        <h1>Mary Clayton Soto<br /><span class="gradient-text">Biomedical Engineering &middot; Mathematics &middot; Visual Arts</span></h1>
+        <p class="tagline">Duke University, Pratt School of Engineering &middot; Class of 2028</p>
       </div>
 
       <h2 class="section-title">About</h2>
       <div class="title-bar bar-a"></div>
-      <p class="placeholder">[Bio paragraph goes here — who you are, Duke BME '29, interests in biomedical engineering, patent law, and the art–science intersection]</p>
+      <p>I'm a biomedical engineering and mathematics double major at Duke University's Pratt School of Engineering, with a minor in visual arts. I'm drawn to the places these fields overlap — medical device design, patent law, and the intersection of art and science.</p>
       <br />
-      <p class="placeholder">[Optional second paragraph — what you're working on now, what you're looking for]</p>
+      <p>Right now, I'm designing surgical education models with Duke's SEAL Lab through Bass Connections, coordinating cardiovascular device research at the Tallahassee Research Institute, teaching Python to first-year engineers as an EGR105 TA, and serving as Vice President of Professional Development for Theta Tau.</p>
     </section>
 
     <!-- ==================== PROJECTS ==================== -->
@@ -369,21 +348,27 @@
       <div class="title-bar bar-b"></div>
 
       <div class="card card-a">
-        <span class="tag tag-teal">[Category, e.g., BME]</span>
-        <h3>[Project 1 title]</h3>
-        <p class="placeholder">[Project 1 description — what it is, your role, tools/skills used, outcome. Link or image placeholder here.]</p>
+        <span class="tag tag-teal">Medical Device Design</span>
+        <h3>Rollator Oxygen-Canister Mount</h3>
+        <p>Designed and prototyped a device to secure an oxygen canister to Duke Hospital rollators, improving patient mobility, safety, and clinical workflow efficiency. Conducted user-centered design analysis within hospital constraints and evaluated safety factors to ensure reliable performance in a clinical environment. (Aug 2024 – May 2025)</p>
       </div>
 
       <div class="card card-b">
-        <span class="tag tag-pink">[Category, e.g., Art × Science]</span>
-        <h3>[Project 2 title]</h3>
-        <p class="placeholder">[Project 2 description]</p>
+        <span class="tag tag-pink">Robotics &amp; Embedded Systems</span>
+        <h3>Autonomous Arduino Robot</h3>
+        <p>Built and programmed an Arduino-based robot using TI path sensors and IR thermal sensing, integrating multiple hardware components and developing control logic for autonomous navigation and wireless communication. (Jan – May 2025)</p>
       </div>
 
       <div class="card card-c">
-        <span class="tag tag-orange">[Category]</span>
-        <h3>[Project 3 title]</h3>
-        <p class="placeholder">[Project 3 description — duplicate this card block for more projects]</p>
+        <span class="tag tag-orange">Molecular Biology</span>
+        <h3>Yeast Genomic Library</h3>
+        <p>Executed a recombinant DNA workflow including yeast genomic DNA isolation, plasmid cloning, bacterial transformation, and validation via PCR, gel electrophoresis, Sanger sequencing, and bioinformatic analysis. (Aug – Dec 2025)</p>
+      </div>
+
+      <div class="card card-a">
+        <span class="tag tag-teal">Data Science</span>
+        <h3>Green Space &amp; Urban Temperature Analysis</h3>
+        <p>Developed a Python-based analysis workflow to extract pixel data from environmental maps, compute quadrant-level metrics, and perform regression modeling to assess relationships between green space, land use, and urban temperature. (Aug – Dec 2024)</p>
       </div>
     </section>
 
@@ -393,15 +378,39 @@
       <div class="title-bar bar-c"></div>
 
       <div class="card card-a">
-        <span class="tag tag-teal">[Dates, e.g., Summer 2026]</span>
-        <h3>[Position title — Organization]</h3>
-        <p class="placeholder">[Description of role and responsibilities — 2–3 bullet-style lines]</p>
+        <span class="tag tag-teal">Mar 2025 – Present</span>
+        <h3>Team Member — Bass Connections, Developing Surgical Education Models</h3>
+        <p>Collaborate with Duke's SEAL Lab to design surgical education models that improve efficiency, accessibility, and consistency in clinical training. Design and iterate hydrogel organ models using MRI-derived DICOM scans, 3D Slicer segmentation, and Fusion 360 molds, tuning materials to replicate human tissue mechanics. Contribute to a computer-vision knot-tying assessment system that quantifies performance for objective surgical skill evaluation.</p>
       </div>
 
       <div class="card card-b">
-        <span class="tag tag-pink">[Dates]</span>
-        <h3>[Position title — Organization]</h3>
-        <p class="placeholder">[Description — research lab, club leadership, internship, etc. Duplicate this card for each entry.]</p>
+        <span class="tag tag-pink">May 2026 – Present</span>
+        <h3>Research Coordinator — Tallahassee Research Institute</h3>
+        <p>Manage clinical research workflows and patient data for cardiovascular studies involving novel medical devices and research protocols. Compile and analyze patient data into structured reports, translating complex findings into actionable insights for data-driven biomedical research.</p>
+      </div>
+
+      <div class="card card-c">
+        <span class="tag tag-orange">May – Aug 2025</span>
+        <h3>Research Assistant — FSU Microparticle Lab</h3>
+        <p>Developed a MATLAB pipeline to segment and classify fluorescence cell images, analyzing ~20,000 cells and generating a standardized dataset supporting a manuscript published in <em>ACS Applied Materials &amp; Interfaces</em>. Improved classification accuracy by optimizing convolution-based segmentation and thresholding across heterogeneous fluorescence channels.</p>
+      </div>
+
+      <div class="card card-a">
+        <span class="tag tag-teal">Aug 2025 – Present</span>
+        <h3>Teaching Assistant — EGR105: Coding for Engineers, Duke University</h3>
+        <p>Mentor first-year engineering students in Python algorithm design, reinforcing debugging workflows and Git-based version control. Teach NumPy and Matplotlib for data analysis and visualization, emphasizing efficient data handling and interpretation.</p>
+      </div>
+
+      <div class="card card-b">
+        <span class="tag tag-pink">Aug 2025 – Present</span>
+        <h3>Vice President of Professional Development — Theta Tau</h3>
+        <p>Execute events highlighting engineering research and innovation, expanding members' professional opportunities and skills. Created a centralized member resource database for academic planning, networking, and career development.</p>
+      </div>
+
+      <div class="card card-c">
+        <span class="tag tag-orange">Jan – May 2024</span>
+        <h3>Intern — Victor Tech</h3>
+        <p>Designed and fabricated custom prosthetics using 3D printing, iterating on form and functionality to meet individual clinical needs.</p>
       </div>
     </section>
 
@@ -411,12 +420,11 @@
       <div class="title-bar bar-a"></div>
 
       <div class="card card-c">
-        <span class="tag tag-orange">[Year / Journal or Venue]</span>
-        <h3>[Publication title]</h3>
-        <p class="placeholder">[Author list, journal/conference name, brief abstract or one-line summary, DOI or link placeholder]</p>
+        <span class="tag tag-orange">2025 &middot; ACS Applied Materials &amp; Interfaces</span>
+        <h3>[Publication title goes here]</h3>
+        <p>Contributed image analysis to a manuscript published in <em>ACS Applied Materials &amp; Interfaces</em> — developed the MATLAB segmentation and classification pipeline that produced a standardized dataset of ~20,000 fluorescence cell images.</p>
+        <p class="placeholder">[Author list and DOI/link go here]</p>
       </div>
-
-      <p class="placeholder">[Optional: posters, preprints, or writing — duplicate the card above for each item]</p>
     </section>
 
     <!-- ==================== CONTACT / RESUME ==================== -->
@@ -427,12 +435,14 @@
       <div class="two-col">
         <div class="card card-a">
           <h3>Get in touch</h3>
-          <p class="placeholder">[Email address goes here]<br />[LinkedIn URL goes here]<br />[Other links — GitHub, Instagram/art portfolio, etc.]</p>
+          <p><a href="mailto:mary.soto@duke.edu" style="color: var(--teal);">mary.soto@duke.edu</a><br />
+          <a href="https://linkedin.com/in/maryclaytonsoto" style="color: var(--pink);">linkedin.com/in/maryclaytonsoto</a><br />
+          Tallahassee, FL &middot; Durham, NC</p>
         </div>
 
         <div class="card card-b">
           <h3>Resume</h3>
-          <p class="placeholder">[One-line note, e.g., "Download my current resume below"]</p>
+          <p>Download my current resume below.</p>
           <a href="#" class="btn">[Resume PDF link goes here]</a>
         </div>
       </div>
@@ -442,7 +452,7 @@
 
   <footer>
     <div class="footer-accent"></div>
-    <p>&copy; 2026 [Your Name] &middot; [Optional footer note]</p>
+    <p>&copy; 2026 Mary Clayton Soto</p>
   </footer>
 
   <script>

@@ -9,7 +9,7 @@ A single-file personal portfolio site (`index.html`) for Mary Clayton Soto, Duke
 ## What has been provided so far
 
 - Five-tab structure: Home, Projects, Experience, Publication, Contact/Resume. Tabs are JS-driven (show/hide panels), navigable by URL hash, and collapse to a hamburger menu below 700px.
-- Skeleton only: all content is bracketed placeholder text (e.g., "[Bio paragraph goes here]"). No real bio, project, resume, or contact details exist yet — none should be invented.
+- Real content filled in from Mary's resume (July 6, 2026): bio, 4 projects, 6 experience entries, publication contribution, and contact info. Remaining placeholders: publication title, author list/DOI, and the resume PDF link.
 - Original design: gradient color-blocking accents (teal #00b3a4, pink #ff4f87, coral #ff6f61, deep orange #e85d04 (magenta removed — read as purple)) against a near-black header and cream content background.
 - Current revision (in progress): dark navy background overall, cream/white text, serif typography (Fraunces for headings, Lora for body — matching the soft serif reference provided), with teal/pink/coral/orange accent pops.
 
@@ -28,6 +28,8 @@ Styling lives entirely in CSS custom properties in `:root` at the top of `index.
 
 ## Remaining to-do
 
-- Replace all bracketed placeholders with real content (needs: bio, project details, experience entries, publication info, email/LinkedIn, resume PDF).
-- Add the resume PDF file to the repo and link it from the Contact/Resume tab.
+- Publication tab: add the actual publication title, author list, and DOI/link (currently bracketed placeholders).
+- Add the resume PDF file to the repo and link it from the Contact/Resume tab button.
+- Decide whether to list phone number publicly (intentionally omitted from the site for privacy; it's on the resume).
+- Skills and Education details (GPA, coursework, Maclay salutatorian, activities) are not on the site — add if desired.
 - Push to GitHub to publish.
