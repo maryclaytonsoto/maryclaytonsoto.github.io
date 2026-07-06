@@ -11,7 +11,7 @@ This is Mary Clayton Soto's personal portfolio: a single-file site (`index.html`
 
 ## Theming — the only way to change colors
 
-One block at the top of the CSS defines the whole scheme: `--bg`, `--text`, `--text-muted`, `--c1`–`--c4`. Everything else derives via `color-mix()`. Never hard-code hex colors anywhere else. Current theme: dark navy bg, cream text, sunset palette (gold, warm pink, coral, deep orange).
+One block at the top of the CSS defines the whole scheme: `--bg`, `--text`, `--text-muted`, `--c1`–`--c4`. Everything else derives via `color-mix()` — the derived mixes are currently tuned for a LIGHT background (see the note in the CSS if switching back to dark). Never hard-code hex colors anywhere else; the only exceptions are `--taupe`/`--rose` in the derived block, used solely inside the hero sketch. Current theme: warm cream bg, charcoal text, earthy accents (terracotta), with the bright pink→coral→orange ombre as the signature gradient. The hero visual is a hand-drawn SVG (architectural guides + flowing ombre ribbon); `design-options.html` holds the four explored directions.
 
 **Gradient rule:** never blend a cool color directly into pink — the midpoint renders purple, which Mary hates. Multi-color gradients use short blend zones between stops (see `--grad-strip`). The current palette is all-warm so it's safe, but the rule applies if a cool color ever returns.
 

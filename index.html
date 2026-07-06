@@ -10,8 +10,9 @@
   <style>
     /* ============================================================
        DESIGN TOKENS
-       Bold gradient accents (teal / pink / coral / deep orange)
-       against a dark navy background with cream/white text.
+       Warm cream background, charcoal text, earthy accents, with a
+       bright pink → coral → orange ombre as the signature gradient.
+       Hand-drawn hero sketch (architectural lines + flowing ribbon).
        ============================================================ */
     /* ============================================================
        THEME — recolor the whole site by editing ONLY this block:
@@ -23,32 +24,38 @@
        Everything below "Derived tokens" adjusts automatically.
        ============================================================ */
     :root {
-      --bg: #0d1b2e;           /* dark navy */
-      --text: #f5efe2;         /* cream */
-      --text-muted: #b9b2a1;   /* muted cream */
-      --c1: #f9a03f;           /* sunset gold */
-      --c2: #ff4f87;           /* warm pink */
-      --c3: #ff6f61;           /* coral (orangey pink) */
-      --c4: #e85d04;           /* deep orange */
+      --bg: #f5f0e8;           /* warm off-white / cream */
+      --text: #3a3a38;         /* dark charcoal */
+      --text-muted: #8b6d54;   /* earthy brown */
+      --c1: #c9845f;           /* terracotta / burnt sienna */
+      --c2: #ff4f87;           /* bright warm pink (ombre) */
+      --c3: #ff6f61;           /* bright coral (ombre) */
+      --c4: #e85d04;           /* deep orange (ombre) */
     }
 
-    /* ---------- Derived tokens — no need to edit ---------- */
+    /* ---------- Derived tokens — no need to edit ----------
+       NOTE: mixes below are tuned for a LIGHT background. If the
+       theme ever goes dark again, flip the black/white mix targets
+       for --ink, --paper, --heading, and --edge. */
     :root {
-      --teal: var(--c1);
+      --teal: var(--c1);   /* legacy alias names — c1 was teal originally */
       --pink: var(--c2);
       --coral: var(--c3);
       --orange: var(--c4);
       --cream: var(--bg);                                       /* page background */
-      --ink: color-mix(in srgb, var(--bg) 55%, black);          /* header/hero/footer */
-      --paper: color-mix(in srgb, var(--bg) 91%, white);        /* cards */
-      --heading: color-mix(in srgb, var(--text) 60%, white);    /* headings pop brighter */
-      --line: color-mix(in srgb, var(--text) 25%, transparent); /* dashed borders */
-      --edge: color-mix(in srgb, var(--bg) 80%, white);         /* subtle solid borders */
-      --seafoam: color-mix(in srgb, var(--c1) 75%, white);
+      --ink: color-mix(in srgb, var(--bg) 90%, black);          /* header/hero/footer band */
+      --paper: color-mix(in srgb, var(--bg) 50%, white);        /* cards */
+      --heading: color-mix(in srgb, var(--text) 85%, black);    /* headings darkest */
+      --line: color-mix(in srgb, var(--text) 30%, transparent); /* dashed borders */
+      --edge: color-mix(in srgb, var(--bg) 88%, black);         /* subtle solid borders */
+      --c1-light: color-mix(in srgb, var(--c1) 75%, white);
+      /* muted sketch colors — used only inside the hero illustration */
+      --taupe: #a89080;
+      --rose: #b8797a;
       /* Gradient bars: colors blend briefly at their edges (soft
          color-blocking), so cool and warm colors never produce a
          long purple midtone. */
-      --grad-a: linear-gradient(135deg, var(--c1), var(--seafoam));
+      --grad-a: linear-gradient(135deg, var(--c1), var(--c1-light));
       --grad-b: linear-gradient(135deg, var(--c2), var(--c3), var(--c4));
       --grad-c: linear-gradient(135deg, var(--c4) 0 42%, var(--c1) 58% 100%);
       --grad-strip: linear-gradient(90deg, var(--c1) 0 20%, var(--c2) 32% 47%, var(--c3) 58% 72%, var(--c4) 83% 100%);
@@ -133,7 +140,7 @@
       background: none;
       border: 2px solid var(--edge);
       border-radius: 8px;
-      color: #fff;
+      color: var(--heading);
       font-size: 1.3rem;
       line-height: 1;
       padding: 0.35rem 0.6rem;
@@ -181,7 +188,7 @@
       border: 2px dashed var(--line);
       border-radius: var(--radius);
       padding: 1rem 1.25rem;
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(58, 58, 56, 0.035);
     }
 
     /* Cards */
@@ -190,7 +197,7 @@
       border-radius: var(--radius);
       padding: 1.5rem;
       margin-bottom: 1.25rem;
-      box-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 2px 12px rgba(58, 58, 56, 0.10);
       border-top: 6px solid;
       border-image-slice: 1;
     }
@@ -253,7 +260,7 @@
       text-decoration: none;
       margin-bottom: 0.5rem;
     }
-    .org-link:hover { text-decoration: underline; color: var(--seafoam); }
+    .org-link:hover { text-decoration: underline; color: var(--c4); }
 
     .tag {
       display: inline-block;
@@ -303,7 +310,7 @@
     .hero h1 {
       color: var(--heading);
       font-size: 2.9rem;
-      font-weight: 600;
+      font-weight: 700;
       position: relative;
       z-index: 1;
     }
@@ -316,19 +323,18 @@
       margin-top: 0.5rem;
     }
     /* Academics line — deliberately contrasts with the name:
-       smaller, italic, body serif, muted color, colored separators */
+       smaller, body serif (no italics), muted color, colored separators */
     .hero .subhead {
       display: block;
       font-family: "EB Garamond", Georgia, serif;
-      font-style: italic;
       font-weight: 400;
       font-size: 1.25rem;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.04em;
       color: var(--text-muted);
       margin-top: 0.75rem;
     }
-    .hero .subhead .sep-a { color: var(--pink); font-style: normal; }
-    .hero .subhead .sep-b { color: var(--orange); font-style: normal; }
+    .hero .subhead .sep-a { color: var(--pink); }
+    .hero .subhead .sep-b { color: var(--orange); }
 
     /* Contact/Resume layout */
     .two-col {
@@ -441,14 +447,34 @@
              .hero-visual div with:
              <img class="hero-photo" src="photos/your-photo.jpg" alt="Mary Clayton Soto" /> -->
         <div class="hero-visual" aria-hidden="true">
-          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="100" cy="100" r="88" fill="none" stroke="var(--c1)" stroke-width="2.5" stroke-dasharray="4 8" opacity="0.9" />
-            <circle cx="100" cy="100" r="66" fill="none" stroke="var(--c2)" stroke-width="3" stroke-dasharray="230 185" stroke-linecap="round" transform="rotate(-50 100 100)" />
-            <circle cx="100" cy="100" r="47" fill="none" stroke="var(--c3)" stroke-width="3" stroke-dasharray="160 135" stroke-linecap="round" transform="rotate(115 100 100)" />
-            <circle cx="100" cy="100" r="29" fill="none" stroke="var(--c4)" stroke-width="3.5" stroke-dasharray="105 78" stroke-linecap="round" transform="rotate(25 100 100)" />
-            <circle cx="100" cy="100" r="7" fill="var(--c2)" />
-            <circle cx="100" cy="12" r="5" fill="var(--c1)" />
-            <circle cx="153" cy="147" r="5" fill="var(--c4)" />
+          <!-- Hand-drawn blend of architectural construction lines and
+               a flowing ombre ribbon (design options A + B) -->
+          <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <defs>
+              <linearGradient id="heroOmbre" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="var(--c2)" />
+                <stop offset="0.5" stop-color="var(--c3)" />
+                <stop offset="1" stop-color="var(--c4)" />
+              </linearGradient>
+            </defs>
+            <!-- construction guides (A) -->
+            <path d="M12,206 C82,168 158,124 230,84" stroke="var(--taupe)" stroke-width="1.2" stroke-dasharray="5 7" opacity="0.9" />
+            <path d="M14,60 C84,44 156,40 228,48" stroke="var(--taupe)" stroke-width="1.1" stroke-dasharray="4 8" opacity="0.7" />
+            <path d="M196,16 C198,84 197,160 199,224" stroke="var(--taupe)" stroke-width="1" stroke-dasharray="3 8" opacity="0.6" />
+            <!-- sketched corner frame (A) -->
+            <path d="M30,24 C30,44 31,66 30,86 M30,24 C52,25 74,24 94,25" stroke="var(--text)" stroke-width="2" />
+            <path d="M35,30 C35,46 36,62 35,78" stroke="var(--taupe)" stroke-width="1" opacity="0.8" />
+            <!-- measurement ticks (A) -->
+            <path d="M32,228 L128,224 M32,222 L32,234 M128,218 L128,230" stroke="var(--text-muted)" stroke-width="1.4" />
+            <!-- flowing waves (B) -->
+            <path d="M6,118 C52,94 88,138 132,112 C172,88 206,120 236,102" stroke="var(--rose)" stroke-width="2" />
+            <!-- ombre feature ribbon (B) -->
+            <path d="M4,158 C56,126 94,180 140,148 C182,118 214,158 238,138" stroke="url(#heroOmbre)" stroke-width="6" />
+            <path d="M14,192 C60,172 98,204 146,182 C184,166 212,188 232,178" stroke="var(--c1)" stroke-width="2" />
+            <!-- accents -->
+            <circle cx="94" cy="25" r="3" fill="var(--c1)" />
+            <circle cx="140" cy="148" r="3.5" fill="var(--c2)" />
+            <circle cx="199" cy="160" r="2.5" fill="var(--c4)" />
           </svg>
         </div>
       </div>
