@@ -1,6 +1,10 @@
 # Project Status — Personal Portfolio Website
 
-Last updated: July 6, 2026
+Last updated: July 6, 2026 (end of session 1)
+
+## Session 1 summary
+
+Built from scratch to a complete, content-filled site in one session: skeleton with tab navigation → dark navy serif redesign → resume content filled in → cream "Sketchbook Sunset" redesign (see `aesthetic.md`) with hand-drawn A+B hero sketch chosen from `design-options.html`. Repo docs established: `CLAUDE.md` (working rules), `aesthetic.md` (living style spec), `handoff-prompt.md` (session starter — kept current, points here). Site is committed locally; Mary pushes to GitHub Pages herself. Next session starts with the queue below.
 
 ## What this project is
 
@@ -45,6 +49,8 @@ Evaluation of the current site through an interviewer's eyes, framed by three po
 8. **Small polish items:** meta description + Open Graph tags for link previews, a favicon, alt text on all images when added.
 
 ## Next session — Mary's requested changes (queued July 6, 2026)
+
+Work these in order, then move to the hiring-manager review items. Housekeeping: mark items done here as they land, and update `aesthetic.md` (CURRENT STYLE + changelog) whenever the look changes.
 
 1. **Title bars → organic.** Remove the little gradient bars under section headings, or replace them with something organic/hand-drawn (e.g., a sketched squiggle or brushstroke line matching the hero's ribbon style). They currently read too geometric for the new aesthetic.
 2. **Convert Mary's own doodles into site graphics.** She will upload photos/scans of her hand drawings. Workflow: she provides image files → clean up (crop, remove background, possibly vectorize or keep as transparent PNGs) → use as hero visual, section separators, or accents. Ask her for the files at session start.
