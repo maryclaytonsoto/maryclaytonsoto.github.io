@@ -64,10 +64,16 @@ Work these in order, then move to the hiring-manager review items. Housekeeping:
 4. **Reformat the front page (Home).** Layout adjustments to hero + About — get her specific direction at session start on what "adjusted formatting" means before changing layout. Flag mobile implications per working rules.
 5. **Add personal details and pictures.** More personality in the About section plus real photos in the existing `.card-media` slots and hero/portrait slots. Ask her for the content and image files — do not invent details.
 
+## Session 3 summary (July 8, 2026)
+
+Content fill from `Portfolio/PortfolioInfo.md` and the Portfolio image folder (no style change). Nav reorganized: Publication renamed "Research" and moved to lead (Home · Research · Experience · Projects · Art · Contact) — done by reordering nav links only, panels left in source order since tabs show one at a time. Projects trimmed to Rollator + Arduino (Yeast Genomic Library and Green Space removed per Mary's note) with real optimized photos. Publication filled with real title + DOI (acsami.5c25569) and a second entry for the BME 271 final project as a continuation (links the PDF). Art filled: gallery intro, Boundless + Owl, and a High School Collection (Holding Rainbow, Iridescent Fabric, Tiny Flame). About gained a third paragraph and a 2-up headshot + Duke portrait pair (reuses existing gallery pattern). Contact gained GitHub + gmail and a working resume PDF link. Images optimized (EXIF-rotated, ≤1600px) into `images/`; PDFs into `files/`. Meta description added. `_cand/` scratch folder is gitignored.
+
+Placeholders remaining (marked `.note` in the Publication tab): full author list; BME 271 description + code repo link — Mary to supply.
+
 ## Remaining to-do
 
-- Publication tab: add the actual publication title, author list, and DOI/link (currently bracketed placeholders).
-- Add the resume PDF file to the repo and link it from the Contact/Resume tab button.
-- Decide whether to list phone number publicly (intentionally omitted from the site for privacy; it's on the resume).
+- Publication: add full author list and the BME 271 project description + repository link (marked as notes in the tab).
+- Decide whether to list phone number publicly (still intentionally omitted; it's on the resume).
+- Consider the hiring-manager review items still open: "my role" phrasing on team projects, measurable impact numbers, a "what I'm seeking next" line in the hero, favicon/OG tags.
 - Skills and Education details (GPA, coursework, Maclay salutatorian, activities) are not on the site — add if desired.
 - Push to GitHub to publish.
