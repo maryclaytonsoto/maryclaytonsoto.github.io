@@ -1,6 +1,10 @@
 # Project Status — Personal Portfolio Website
 
-Last updated: July 6, 2026 (end of session 1)
+Last updated: July 8, 2026 (end of session 2)
+
+## Session 2 summary (July 8, 2026)
+
+Full restyle to v4 "Editorial Gallery" per the web-design-system skill, at Mary's direction (keep palette, revise everything else; her choices: serif+sans split, near-square corners, all-light staging, subtle reveals only). Palette, tab structure/behavior, big-name hero, and SHOW_ART_TAB all preserved. Changes: Inter adopted for body/UI (EB Garamond retired from body), 2px radii, flat hairline entry rows, pill nav replaced with quiet text links + ombre underline active state, gradient bars/dashed placeholders removed, ink-filled button, scroll reveals with prefers-reduced-motion support. aesthetic.md updated (CURRENT STYLE + changelog). Queue effects: item 1 (gradient bars) resolved by removal; item 3 (bigger text) resolved via Inter body sizing; item 4 (front page reformat) done as part of the restyle. Items 2 and 5 (Mary's doodles, personal details/photos) still open — need her files.
 
 ## Session 1 summary
 

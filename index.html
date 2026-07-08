@@ -6,410 +6,454 @@
   <title>Mary Clayton Soto — Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     /* ============================================================
-       DESIGN TOKENS
-       Warm cream background, charcoal text, earthy accents, with a
-       bright pink → coral → orange ombre as the signature gradient.
-       Hand-drawn hero sketch (architectural lines + flowing ribbon).
-       ============================================================ */
-    /* ============================================================
-       THEME — recolor the whole site by editing ONLY this block:
-         --bg          page background
-         --text        main text color
-         --text-muted  secondary/accent text color
-         --c1 to --c4  3–4 design colors (tags, gradients, accents)
-                       (only have 3? set --c4 to the same hex as --c3)
-       Everything below "Derived tokens" adjusts automatically.
+       DESIGN TOKENS — web-design-system, "Sketchbook Sunset" palette
+       Palette KEPT exactly (see redesign-keep.md). Everything else
+       follows the editorial system: serif display + neutral sans
+       body, near-square radii, flat surfaces, hairlines + whitespace,
+       ombre rationed to two signature moments (hero rule, active tab).
+       Expression color = the ombre. Action color = warm near-black.
        ============================================================ */
     :root {
-      --bg: #f5f0e8;           /* warm off-white / cream */
-      --text: #3a3a38;         /* dark charcoal */
-      --text-muted: #8b6d54;   /* earthy brown */
-      --c1: #c9845f;           /* terracotta / burnt sienna */
-      --c2: #ff4f87;           /* bright warm pink (ombre) */
-      --c3: #ff6f61;           /* bright coral (ombre) */
-      --c4: #e85d04;           /* deep orange (ombre) */
-    }
+      /* --- Kept palette --- */
+      --bg:        #f5f0e8;   /* warm cream canvas */
+      --paper:     #faf7f1;   /* slightly lifted warm surface */
+      --ink:       #2f2f2d;   /* warm near-black, headings + actions */
+      --text:      #3a3a38;   /* charcoal body text */
+      --muted:     #8b6d54;   /* earthy brown, secondary */
+      --terracotta:#c9845f;   /* quiet warm accent */
+      /* ombre — the single expressive accent */
+      --pink:   #ff4f87;
+      --coral:  #ff6f61;
+      --orange: #e85d04;
 
-    /* ---------- Derived tokens — no need to edit ----------
-       NOTE: mixes below are tuned for a LIGHT background. If the
-       theme ever goes dark again, flip the black/white mix targets
-       for --ink, --paper, --heading, and --edge. */
-    :root {
-      --teal: var(--c1);   /* legacy alias names — c1 was teal originally */
-      --pink: var(--c2);
-      --coral: var(--c3);
-      --orange: var(--c4);
-      --cream: var(--bg);                                       /* page background */
-      --ink: color-mix(in srgb, var(--bg) 90%, black);          /* header/hero/footer band */
-      --paper: color-mix(in srgb, var(--bg) 50%, white);        /* cards */
-      --heading: color-mix(in srgb, var(--text) 85%, black);    /* headings darkest */
-      --line: color-mix(in srgb, var(--text) 30%, transparent); /* dashed borders */
-      --edge: color-mix(in srgb, var(--bg) 88%, black);         /* subtle solid borders */
-      --c1-light: color-mix(in srgb, var(--c1) 75%, white);
-      /* muted sketch colors — used only inside the hero illustration */
-      --taupe: #a89080;
-      --rose: #b8797a;
-      /* Gradient bars: colors blend briefly at their edges (soft
-         color-blocking), so cool and warm colors never produce a
-         long purple midtone. */
-      --grad-a: linear-gradient(135deg, var(--c1), var(--c1-light));
-      --grad-b: linear-gradient(135deg, var(--c2), var(--c3), var(--c4));
-      --grad-c: linear-gradient(135deg, var(--c4) 0 42%, var(--c1) 58% 100%);
-      --grad-strip: linear-gradient(90deg, var(--c1) 0 20%, var(--c2) 32% 47%, var(--c3) 58% 72%, var(--c4) 83% 100%);
-      --radius: 14px;
-      --maxw: 960px;
+      /* --- Derived, warm-tinted neutrals --- */
+      --line:      color-mix(in srgb, var(--ink) 14%, transparent);
+      --line-soft: color-mix(in srgb, var(--ink) 7%, transparent);
+      --ink-subtle: color-mix(in srgb, var(--muted) 80%, var(--bg));
+      --ombre:  linear-gradient(90deg, var(--pink), var(--coral) 55%, var(--orange));
+
+      /* --- Type slots: serif display + neutral sans body --- */
+      --display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+      --body:    "Inter", "Helvetica Neue", Arial, sans-serif;
+
+      /* --- Near-square radius personality, held everywhere --- */
+      --r-card: 2px;
+      --r-ctrl: 2px;
+
+      --maxw: 1160px;
+      --ease: cubic-bezier(.4,0,.2,1);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    html { scroll-behavior: smooth; }
+
     body {
-      font-family: "EB Garamond", Georgia, "Times New Roman", serif;
-      background: var(--cream);
+      font-family: var(--body);
+      background: var(--bg);
       color: var(--text);
       line-height: 1.6;
+      font-size: 16px;
+      letter-spacing: -0.011em;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
 
-    /* Display serif for headings and navigation */
-    h1, h2, h3, .site-name, nav a {
-      font-family: "Cormorant Garamond", Georgia, serif;
+    ::selection { background: color-mix(in srgb, var(--coral) 25%, transparent); }
+
+    /* small letterspaced label */
+    .eyebrow {
+      font-family: var(--body);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
     }
 
     /* ============================================================
-       HEADER + NAVIGATION
+       HEADER + NAVIGATION — quiet text links, hairline bottom,
+       active tab marked by a thin ombre underline (rationed accent)
        ============================================================ */
     header {
-      background: var(--ink);
       position: sticky;
       top: 0;
       z-index: 100;
+      background: color-mix(in srgb, var(--bg) 90%, transparent);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid var(--line-soft);
     }
-
-    /* thin gradient strip across the top of the header */
-    .header-accent {
-      height: 5px;
-      background: var(--grad-strip);
-    }
-
     .nav-wrap {
       max-width: var(--maxw);
       margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0.9rem 1.25rem;
+      padding: 1.1rem 1.5rem;
     }
-
     .site-name {
-      color: var(--heading);
+      font-family: var(--display);
+      color: var(--ink);
       font-weight: 600;
-      font-size: 1.25rem;
-      letter-spacing: 0.04em;
+      font-size: 1.35rem;
+      letter-spacing: 0.01em;
       text-decoration: none;
     }
-
     nav ul {
       list-style: none;
       display: flex;
-      gap: 0.25rem;
+      gap: 1.75rem;
     }
-
     nav a {
       display: block;
-      color: var(--text-muted);
+      font-family: var(--body);
+      color: var(--text);
       text-decoration: none;
-      font-size: 1.08rem;
-      font-weight: 600;
-      padding: 0.5rem 0.9rem;
-      border-radius: 999px;
-      transition: color 0.2s, background 0.2s;
+      font-size: 0.875rem;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      padding: 0.35rem 0;
+      position: relative;
+      transition: color 0.15s var(--ease);
     }
-
-    nav a:hover { color: var(--heading); }
-
-    nav a.active {
-      color: #fff;
-      background: var(--grad-b);
+    nav a:hover { color: var(--muted); }
+    /* active state: thin ombre underline — one of the two accent moments */
+    nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 100%;
+      bottom: 0;
+      height: 2px;
+      background: var(--ombre);
+      transition: right 0.2s var(--ease);
     }
-
-    /* Hamburger button — hidden on desktop */
+    nav a.active { color: var(--ink); font-weight: 500; }
+    nav a.active::after { right: 0; }
     .menu-toggle {
       display: none;
       background: none;
-      border: 2px solid var(--edge);
-      border-radius: 8px;
-      color: var(--heading);
-      font-size: 1.3rem;
+      border: 1px solid var(--line);
+      border-radius: var(--r-ctrl);
+      color: var(--ink);
+      font-size: 1.2rem;
       line-height: 1;
-      padding: 0.35rem 0.6rem;
+      padding: 0.4rem 0.6rem;
       cursor: pointer;
     }
 
     /* ============================================================
-       TAB PANELS
+       LAYOUT / SECTION RHYTHM — whitespace, never bands
        ============================================================ */
     main {
       max-width: var(--maxw);
       margin: 0 auto;
-      padding: 2.5rem 1.25rem 4rem;
+      padding: 0 1.5rem 8rem;
     }
-
     .tab-panel { display: none; }
-    .tab-panel.active { display: block; animation: fadeIn 0.25s ease; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
+    .tab-panel.active { display: block; animation: rise 0.4s var(--ease) both; }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(10px); }
       to   { opacity: 1; transform: none; }
     }
 
-    /* Section headings with gradient underline bar */
+    /* section heading — hierarchy from size + space */
+    .section-head { margin: 5.5rem 0 3rem; }
+    .section-head .eyebrow { display: block; margin-bottom: 1rem; }
     .section-title {
-      font-size: 2.3rem;
-      font-weight: 600;
-      color: var(--heading);
-      margin-bottom: 0.35rem;
+      font-family: var(--display);
+      font-size: clamp(2.4rem, 4.5vw, 3.4rem);
+      font-weight: 500;
+      line-height: 1.05;
+      color: var(--ink);
+      letter-spacing: 0.005em;
     }
-    .title-bar {
-      width: 72px;
-      height: 6px;
-      border-radius: 3px;
-      margin-bottom: 1.75rem;
-    }
-    .bar-a { background: var(--grad-a); }
-    .bar-b { background: var(--grad-b); }
-    .bar-c { background: var(--grad-c); }
 
-    /* Placeholder styling — makes it obvious what is placeholder */
-    .placeholder {
-      color: var(--text-muted);
+    /* ============================================================
+       HOME — big name hero (KEPT), editorial and airy
+       ============================================================ */
+    .hero {
+      padding: 7.5rem 0 5.5rem;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .hero .kicker {
+      font-family: var(--body);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 2rem;
+    }
+    /* THE big name */
+    .hero h1 {
+      font-family: var(--display);
+      color: var(--ink);
+      font-weight: 500;
+      font-size: clamp(3.4rem, 10vw, 7.5rem);
+      line-height: 0.98;
+      letter-spacing: 0.005em;
+      max-width: 12ch;
+    }
+    /* rationed ombre: the one thin signature rule under the name */
+    .hero .rule {
+      width: 110px;
+      height: 3px;
+      background: var(--ombre);
+      margin: 2.25rem 0;
+    }
+    .hero .disciplines {
+      font-family: var(--display);
       font-style: italic;
-      border: 2px dashed var(--line);
-      border-radius: var(--radius);
-      padding: 1rem 1.25rem;
-      background: rgba(58, 58, 56, 0.035);
+      font-weight: 500;
+      font-size: clamp(1.4rem, 3vw, 1.9rem);
+      color: var(--text);
+      line-height: 1.3;
+      letter-spacing: 0.01em;
+    }
+    .hero .disciplines .dot { color: var(--terracotta); font-style: normal; padding: 0 0.2em; }
+    .hero .tagline {
+      margin-top: 1.5rem;
+      font-family: var(--body);
+      font-size: 0.9375rem;
+      color: var(--muted);
+      max-width: 46ch;
+      letter-spacing: -0.01em;
     }
 
-    /* Cards */
-    .card {
+    /* prose */
+    .prose p {
+      max-width: 62ch;
+      margin-bottom: 1.35rem;
+      font-size: 1.0625rem;
+      line-height: 1.7;
+      color: var(--text);
+    }
+    .prose a, .entry p a {
+      color: var(--ink);
+      text-decoration: underline;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 3px;
+      text-decoration-color: color-mix(in srgb, var(--ink) 35%, transparent);
+      transition: text-decoration-color 0.15s var(--ease), color 0.15s var(--ease);
+    }
+    .prose a:hover, .entry p a:hover { text-decoration-color: var(--ink); }
+
+    /* ============================================================
+       EDITORIAL ENTRY LIST — flat rows, hairlines + whitespace
+       ============================================================ */
+    .entry {
+      display: grid;
+      grid-template-columns: 210px 1fr;
+      gap: 3rem;
+      padding: 3rem 0;
+      border-top: 1px solid var(--line);
+    }
+    .entry:last-child { border-bottom: 1px solid var(--line); }
+    .entry .meta { padding-top: 0.5rem; }
+    .entry .meta .eyebrow { display: block; margin-bottom: 0.5rem; }
+    .entry .meta .when {
+      font-family: var(--body);
+      font-size: 0.8125rem;
+      color: var(--ink-subtle);
+      letter-spacing: -0.01em;
+    }
+    .entry h3 {
+      font-family: var(--display);
+      font-size: 1.9rem;
+      font-weight: 500;
+      line-height: 1.12;
+      color: var(--ink);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.005em;
+    }
+    .entry .org-link {
+      display: inline-block;
+      font-family: var(--body);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--ink);
+      text-decoration: underline;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 3px;
+      text-decoration-color: color-mix(in srgb, var(--ink) 35%, transparent);
+      margin-bottom: 0.85rem;
+      transition: text-decoration-color 0.15s var(--ease);
+    }
+    .entry .org-link:hover { text-decoration-color: var(--ink); }
+    .entry p {
+      color: var(--text);
+      max-width: 60ch;
+      font-size: 0.9375rem;
+      line-height: 1.7;
+    }
+    .entry em { color: var(--ink); font-style: italic; }
+
+    /* subtle inline placeholder note */
+    .note { color: var(--ink-subtle); font-style: italic; }
+
+    /* ============================================================
+       ART — airy gallery grid, near-square frames, small captions
+       ============================================================ */
+    .art-intro {
+      max-width: 60ch;
+      font-size: 1.0625rem;
+      line-height: 1.7;
+      color: var(--text);
+      margin-bottom: 4rem;
+    }
+    .art-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 4rem 3rem;
+    }
+    .art-piece .frame {
+      aspect-ratio: 4 / 3;
       background: var(--paper);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      margin-bottom: 1.25rem;
-      box-shadow: 0 2px 12px rgba(58, 58, 56, 0.10);
-      border-top: 6px solid;
-      border-image-slice: 1;
-    }
-    .card-a { border-image-source: var(--grad-a); }
-    .card-b { border-image-source: var(--grad-b); }
-    .card-c { border-image-source: var(--grad-c); }
-
-    .card h3 {
-      color: var(--heading);
-      margin-bottom: 0.5rem;
-      font-size: 1.4rem;
-      font-weight: 600;
-    }
-
-    /* Media slot — replace the placeholder div with an <img> or a
-       file link (<a href="files/xyz.pdf">) when ready, or delete it */
-    .card-media {
-      border: 2px dashed var(--line);
-      border-radius: 10px;
-      min-height: 130px;
+      border: 1px solid var(--line-soft);
+      border-radius: var(--r-card);
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      color: var(--text-muted);
+      color: var(--ink-subtle);
       font-style: italic;
-      font-size: 0.9rem;
-      padding: 0.75rem;
-      margin-top: 1rem;
-    }
-    .card img {
-      width: 100%;
-      border-radius: 10px;
-      display: block;
-      margin-top: 1rem;
-    }
-
-    .portrait-slot { max-width: 320px; }
-
-    /* Art gallery grid */
-    .art-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.25rem;
-    }
-    .art-grid .card-media { min-height: 220px; margin-top: 0; }
-    .art-caption {
-      color: var(--text-muted);
-      font-style: italic;
-      font-size: 0.95rem;
-      margin-top: 0.6rem;
-    }
-
-    /* Small external link under a card title (company/org site) */
-    .org-link {
-      display: inline-block;
-      font-family: "EB Garamond", Georgia, serif;
-      font-size: 0.85rem;
-      color: var(--teal);
-      text-decoration: none;
-      margin-bottom: 0.5rem;
-    }
-    .org-link:hover { text-decoration: underline; color: var(--c4); }
-
-    .tag {
-      display: inline-block;
-      font-size: 0.75rem;
-      font-weight: 700;
-      font-style: normal;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: #fff;
-      padding: 0.2rem 0.65rem;
-      border-radius: 999px;
-      margin-bottom: 0.75rem;
-    }
-    .tag-teal    { background: var(--teal); }
-    .tag-pink { background: var(--pink); }
-    .tag-orange  { background: var(--orange); }
-
-    /* HOME hero block */
-    .hero {
-      background: var(--ink);
-      border: 1px solid var(--edge);
-      border-radius: var(--radius);
-      padding: 3rem 2rem;
-      margin-bottom: 2rem;
-      position: relative;
+      font-size: 0.875rem;
+      padding: 1rem;
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 2rem;
     }
-
-    /* Hero graphic — swap the <svg> for a photo anytime:
-       <img class="hero-photo" src="photos/your-photo.jpg" alt="Mary Clayton Soto" /> */
-    .hero-visual {
-      flex: 0 0 190px;
-    }
-    .hero-visual svg { width: 100%; height: auto; display: block; }
-    .hero-photo {
-      width: 190px;
-      height: 190px;
-      object-fit: cover;
-      border-radius: 50%;
-      border: 3px solid var(--c2);
-      display: block;
-    }
-    .hero h1 {
-      color: var(--heading);
-      font-size: 2.9rem;
-      font-weight: 700;
-      position: relative;
-      z-index: 1;
-    }
-    .hero p.tagline {
-      color: var(--text-muted);
-      font-size: 1.05rem;
-      max-width: 34ch;
-      position: relative;
-      z-index: 1;
-      margin-top: 0.5rem;
-    }
-    /* Academics line — deliberately contrasts with the name:
-       smaller, body serif (no italics), muted color, colored separators */
-    .hero .subhead {
-      display: block;
-      font-family: "EB Garamond", Georgia, serif;
-      font-weight: 400;
-      font-size: 1.25rem;
-      letter-spacing: 0.04em;
-      color: var(--text-muted);
-      margin-top: 0.75rem;
-    }
-    .hero .subhead .sep-a { color: var(--pink); }
-    .hero .subhead .sep-b { color: var(--orange); }
-
-    /* Contact/Resume layout */
-    .two-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.25rem;
-    }
-
-    .btn {
-      display: inline-block;
-      color: #fff;
-      font-weight: 700;
-      font-style: normal;
-      text-decoration: none;
-      padding: 0.7rem 1.4rem;
-      border-radius: 999px;
-      background: var(--grad-b);
-      margin-top: 0.75rem;
-    }
-
-    footer {
-      background: var(--ink);
-      color: var(--text-muted);
-      text-align: center;
-      font-size: 0.85rem;
-      padding: 1.5rem 1rem;
-    }
-    footer .footer-accent {
-      height: 4px;
-      background: var(--grad-strip);
-      margin-bottom: 1.5rem;
+    .art-piece img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .art-caption {
+      margin-top: 0.85rem;
+      color: var(--muted);
+      font-size: 0.8125rem;
+      letter-spacing: -0.01em;
     }
 
     /* ============================================================
-       MOBILE — nav collapses to hamburger menu
+       CONTACT / RESUME
        ============================================================ */
-    @media (max-width: 700px) {
-      .menu-toggle { display: block; }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      padding-top: 1rem;
+    }
+    .contact-grid h3 {
+      font-family: var(--display);
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 1.1rem;
+    }
+    .contact-grid p { font-size: 0.9375rem; }
+    .contact-grid a {
+      color: var(--ink);
+      text-decoration: underline;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 3px;
+      text-decoration-color: color-mix(in srgb, var(--ink) 35%, transparent);
+      transition: text-decoration-color 0.15s var(--ease);
+    }
+    .contact-grid a:hover { text-decoration-color: var(--ink); }
+    .contact-lines { line-height: 2.1; font-size: 0.9375rem; }
+    /* primary button — action color is the warm near-black, never the ombre */
+    .btn {
+      display: inline-block;
+      font-family: var(--body);
+      font-weight: 500;
+      font-size: 0.875rem;
+      letter-spacing: -0.01em;
+      color: var(--bg);
+      background: var(--ink);
+      text-decoration: none;
+      padding: 0.75rem 1.5rem;
+      border: 1px solid var(--ink);
+      border-radius: var(--r-ctrl);
+      margin-top: 1.25rem;
+      transition: background-color 0.15s var(--ease), color 0.15s var(--ease);
+    }
+    .btn:hover { background: var(--text); }
 
+    /* ============================================================
+       SCROLL REVEALS — subtle rise as rows enter the viewport
+       ============================================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+    }
+    .reveal.is-visible { opacity: 1; transform: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+
+    /* ============================================================
+       CORNER WATERMARK — faint, fixed, non-interactive
+       ============================================================ */
+    .watermark {
+      position: fixed;
+      right: 1.4rem;
+      bottom: 1.2rem;
+      width: 46px;
+      height: auto;
+      color: var(--ink);
+      opacity: 0.22;
+      pointer-events: none;
+      z-index: 90;
+    }
+    .watermark img { display: block; width: 100%; height: auto; }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    footer {
+      border-top: 1px solid var(--line-soft);
+      color: var(--ink-subtle);
+      font-size: 0.8125rem;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      max-width: var(--maxw);
+      margin: 0 auto;
+    }
+
+    /* ============================================================
+       MOBILE
+       ============================================================ */
+    @media (max-width: 760px) {
+      .menu-toggle { display: block; }
       nav {
         position: absolute;
         top: 100%;
         left: 0;
         right: 0;
-        background: var(--ink);
+        background: var(--bg);
+        border-bottom: 1px solid var(--line);
         display: none;
-        border-bottom: 4px solid;
-        border-image: var(--grad-strip) 1;
       }
       nav.open { display: block; }
-
-      nav ul {
-        flex-direction: column;
-        gap: 0;
-        padding: 0.5rem 0 1rem;
-      }
-      nav a {
-        border-radius: 0;
-        padding: 0.85rem 1.5rem;
-        font-size: 1rem;
-      }
+      nav ul { flex-direction: column; gap: 0; padding: 0.5rem 0 1rem; }
+      nav a { padding: 0.85rem 1.5rem; font-size: 0.9375rem; }
+      nav a::after { display: none; }
+      /* vertical menu: the ombre reads as a left accent bar */
       nav a.active {
-        background: none;
-        border-left: 5px solid var(--pink);
-        color: var(--teal);
+        border-left: 3px solid transparent;
+        border-image: var(--ombre) 1;
+        padding-left: calc(1.5rem - 3px);
       }
 
-      .hero h1 { font-size: 2rem; }
-      .hero .subhead { font-size: 1.1rem; }
-      .hero { flex-direction: column-reverse; align-items: flex-start; gap: 1.25rem; }
-      .hero-visual { flex: none; width: 120px; }
-      .hero-photo { width: 140px; height: 140px; }
-      .two-col { grid-template-columns: 1fr; }
-      .art-grid { grid-template-columns: 1fr; }
-      .section-title { font-size: 1.6rem; }
+      .entry { grid-template-columns: 1fr; gap: 0.85rem; padding: 2.25rem 0; }
+      .entry .meta { padding-top: 0; }
+      .art-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .contact-grid { grid-template-columns: 1fr; gap: 2.75rem; }
+      .hero { padding: 4rem 0 3.25rem; }
+      .section-head { margin: 3.5rem 0 2.25rem; }
+      .watermark { width: 36px; right: 1rem; bottom: 0.9rem; }
     }
   </style>
 </head>
@@ -417,7 +461,6 @@
 
   <!-- ==================== HEADER / NAV ==================== -->
   <header>
-    <div class="header-accent"></div>
     <div class="nav-wrap">
       <a href="#home" class="site-name" data-tab-link="home">Mary Clayton Soto</a>
       <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
@@ -439,178 +482,194 @@
     <!-- ==================== HOME ==================== -->
     <section id="home" class="tab-panel active">
       <div class="hero">
-        <div class="hero-text">
-          <h1>Mary Clayton Soto<span class="subhead">Biomedical Engineering <span class="sep-a">&middot;</span> Mathematics <span class="sep-b">&middot;</span> Visual Arts</span></h1>
-          <p class="tagline">Duke University, Pratt School of Engineering &middot; Class of 2028</p>
-        </div>
-        <!-- To use a photo instead of the graphic, replace the whole
-             .hero-visual div with:
-             <img class="hero-photo" src="photos/your-photo.jpg" alt="Mary Clayton Soto" /> -->
-        <div class="hero-visual" aria-hidden="true">
-          <!-- Hand-drawn blend of architectural construction lines and
-               a flowing ombre ribbon (design options A + B) -->
-          <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <defs>
-              <linearGradient id="heroOmbre" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0" stop-color="var(--c2)" />
-                <stop offset="0.5" stop-color="var(--c3)" />
-                <stop offset="1" stop-color="var(--c4)" />
-              </linearGradient>
-            </defs>
-            <!-- construction guides (A) -->
-            <path d="M12,206 C82,168 158,124 230,84" stroke="var(--taupe)" stroke-width="1.2" stroke-dasharray="5 7" opacity="0.9" />
-            <path d="M14,60 C84,44 156,40 228,48" stroke="var(--taupe)" stroke-width="1.1" stroke-dasharray="4 8" opacity="0.7" />
-            <path d="M196,16 C198,84 197,160 199,224" stroke="var(--taupe)" stroke-width="1" stroke-dasharray="3 8" opacity="0.6" />
-            <!-- sketched corner frame (A) -->
-            <path d="M30,24 C30,44 31,66 30,86 M30,24 C52,25 74,24 94,25" stroke="var(--text)" stroke-width="2" />
-            <path d="M35,30 C35,46 36,62 35,78" stroke="var(--taupe)" stroke-width="1" opacity="0.8" />
-            <!-- measurement ticks (A) -->
-            <path d="M32,228 L128,224 M32,222 L32,234 M128,218 L128,230" stroke="var(--text-muted)" stroke-width="1.4" />
-            <!-- flowing waves (B) -->
-            <path d="M6,118 C52,94 88,138 132,112 C172,88 206,120 236,102" stroke="var(--rose)" stroke-width="2" />
-            <!-- ombre feature ribbon (B) -->
-            <path d="M4,158 C56,126 94,180 140,148 C182,118 214,158 238,138" stroke="url(#heroOmbre)" stroke-width="6" />
-            <path d="M14,192 C60,172 98,204 146,182 C184,166 212,188 232,178" stroke="var(--c1)" stroke-width="2" />
-            <!-- accents -->
-            <circle cx="94" cy="25" r="3" fill="var(--c1)" />
-            <circle cx="140" cy="148" r="3.5" fill="var(--c2)" />
-            <circle cx="199" cy="160" r="2.5" fill="var(--c4)" />
-          </svg>
-        </div>
+        <p class="kicker">Portfolio</p>
+        <h1>Mary Clayton Soto</h1>
+        <div class="rule"></div>
+        <p class="disciplines">Biomedical Engineering <span class="dot">/</span> Mathematics <span class="dot">/</span> Visual Arts</p>
+        <p class="tagline">Duke University, Pratt School of Engineering &middot; Class of 2028</p>
       </div>
 
-      <h2 class="section-title">About</h2>
-      <div class="title-bar bar-a"></div>
-      <p>I'm a biomedical engineering and mathematics double major at Duke University's Pratt School of Engineering, with a minor in visual arts. I'm drawn to the places these fields overlap — medical device design, patent law, and the intersection of art and science.</p>
-      <br />
-      <p>Right now, I'm designing surgical education models with Duke's SEAL Lab through Bass Connections, coordinating cardiovascular device research at the Tallahassee Research Institute, teaching Python to first-year engineers as an EGR105 TA, and serving as Vice President of Professional Development for Theta Tau.</p>
-      <br />
-      <div class="card-media portrait-slot">[Portrait or personal photo goes here — optional]</div>
+      <div class="section-head">
+        <span class="eyebrow">About</span>
+        <h2 class="section-title">Where fields overlap</h2>
+      </div>
+      <div class="prose">
+        <p>I'm a biomedical engineering and mathematics double major at Duke University's Pratt School of Engineering, with a minor in visual arts. I'm drawn to the places these fields overlap — medical device design, patent law, and the intersection of art and science.</p>
+        <p>Right now, I'm designing surgical education models with Duke's SEAL Lab through Bass Connections, coordinating cardiovascular device research at the Tallahassee Research Institute, teaching Python to first-year engineers as an EGR105 TA, and serving as Vice President of Professional Development for Theta Tau.</p>
+      </div>
     </section>
 
     <!-- ==================== PROJECTS ==================== -->
     <section id="projects" class="tab-panel">
-      <h2 class="section-title">Projects</h2>
-      <div class="title-bar bar-b"></div>
-
-      <div class="card card-a">
-        <span class="tag tag-teal">Medical Device Design</span>
-        <h3>Rollator Oxygen-Canister Mount</h3>
-        <a class="org-link" href="#">[Project link — optional, or delete] &#8599;</a>
-        <p>Designed and prototyped a device to secure an oxygen canister to Duke Hospital rollators, improving patient mobility, safety, and clinical workflow efficiency. Conducted user-centered design analysis within hospital constraints and evaluated safety factors to ensure reliable performance in a clinical environment. (Aug 2024 – May 2025)</p>
-        <div class="card-media">[Photo, diagram, or file goes here — optional]</div>
+      <div class="section-head">
+        <span class="eyebrow">Selected Work</span>
+        <h2 class="section-title">Projects</h2>
       </div>
 
-      <div class="card card-b">
-        <span class="tag tag-pink">Robotics &amp; Embedded Systems</span>
-        <h3>Autonomous Arduino Robot</h3>
-        <a class="org-link" href="#">[Project link — optional, or delete] &#8599;</a>
-        <p>Built and programmed an Arduino-based robot using TI path sensors and IR thermal sensing, integrating multiple hardware components and developing control logic for autonomous navigation and wireless communication. (Jan – May 2025)</p>
-        <div class="card-media">[Photo or video still goes here — optional]</div>
+      <div class="entry reveal">
+        <div class="meta">
+          <span class="eyebrow">Medical Device Design</span>
+          <span class="when">Aug 2024 – May 2025</span>
+        </div>
+        <div class="body">
+          <h3>Rollator Oxygen-Canister Mount</h3>
+          <p>Designed and prototyped a device to secure an oxygen canister to Duke Hospital rollators, improving patient mobility, safety, and clinical workflow efficiency. Conducted user-centered design analysis within hospital constraints and evaluated safety factors to ensure reliable performance in a clinical environment.</p>
+        </div>
       </div>
 
-      <div class="card card-c">
-        <span class="tag tag-orange">Molecular Biology</span>
-        <h3>Yeast Genomic Library</h3>
-        <a class="org-link" href="#">[Project link — optional, or delete] &#8599;</a>
-        <p>Executed a recombinant DNA workflow including yeast genomic DNA isolation, plasmid cloning, bacterial transformation, and validation via PCR, gel electrophoresis, Sanger sequencing, and bioinformatic analysis. (Aug – Dec 2025)</p>
-        <div class="card-media">[Gel image, figure, or lab report goes here — optional]</div>
+      <div class="entry reveal">
+        <div class="meta">
+          <span class="eyebrow">Robotics &amp; Embedded Systems</span>
+          <span class="when">Jan – May 2025</span>
+        </div>
+        <div class="body">
+          <h3>Autonomous Arduino Robot</h3>
+          <p>Built and programmed an Arduino-based robot using TI path sensors and IR thermal sensing, integrating multiple hardware components and developing control logic for autonomous navigation and wireless communication.</p>
+        </div>
       </div>
 
-      <div class="card card-a">
-        <span class="tag tag-teal">Data Science</span>
-        <h3>Green Space &amp; Urban Temperature Analysis</h3>
-        <a class="org-link" href="#">[Project link — optional, or delete] &#8599;</a>
-        <p>Developed a Python-based analysis workflow to extract pixel data from environmental maps, compute quadrant-level metrics, and perform regression modeling to assess relationships between green space, land use, and urban temperature. (Aug – Dec 2024)</p>
-        <div class="card-media">[Map visualization or notebook link goes here — optional]</div>
+      <div class="entry reveal">
+        <div class="meta">
+          <span class="eyebrow">Molecular Biology</span>
+          <span class="when">Aug – Dec 2025</span>
+        </div>
+        <div class="body">
+          <h3>Yeast Genomic Library</h3>
+          <p>Executed a recombinant DNA workflow including yeast genomic DNA isolation, plasmid cloning, bacterial transformation, and validation via PCR, gel electrophoresis, Sanger sequencing, and bioinformatic analysis.</p>
+        </div>
+      </div>
+
+      <div class="entry reveal">
+        <div class="meta">
+          <span class="eyebrow">Data Science</span>
+          <span class="when">Aug – Dec 2024</span>
+        </div>
+        <div class="body">
+          <h3>Green Space &amp; Urban Temperature Analysis</h3>
+          <p>Developed a Python-based analysis workflow to extract pixel data from environmental maps, compute quadrant-level metrics, and perform regression modeling to assess relationships between green space, land use, and urban temperature.</p>
+        </div>
       </div>
     </section>
 
     <!-- ==================== EXPERIENCE ==================== -->
     <section id="experience" class="tab-panel">
-      <h2 class="section-title">Experience</h2>
-      <div class="title-bar bar-c"></div>
-
-      <div class="card card-a">
-        <span class="tag tag-teal">Mar 2025 – Present</span>
-        <h3>Team Member — Bass Connections, Developing Surgical Education Models</h3>
-        <a class="org-link" href="https://bassconnections.duke.edu">bassconnections.duke.edu &#8599;</a>
-        <p>Collaborate with Duke's SEAL Lab to design surgical education models that improve efficiency, accessibility, and consistency in clinical training. Design and iterate hydrogel organ models using MRI-derived DICOM scans, 3D Slicer segmentation, and Fusion 360 molds, tuning materials to replicate human tissue mechanics. Contribute to a computer-vision knot-tying assessment system that quantifies performance for objective surgical skill evaluation.</p>
-        <div class="card-media">[Photo of hydrogel model or team goes here — optional]</div>
+      <div class="section-head">
+        <span class="eyebrow">Research &amp; Teaching</span>
+        <h2 class="section-title">Experience</h2>
       </div>
 
-      <div class="card card-b">
-        <span class="tag tag-pink">May 2026 – Present</span>
-        <h3>Research Coordinator — Tallahassee Research Institute</h3>
-        <a class="org-link" href="#">[Company website link goes here — optional] &#8599;</a>
-        <p>Manage clinical research workflows and patient data for cardiovascular studies involving novel medical devices and research protocols. Compile and analyze patient data into structured reports, translating complex findings into actionable insights for data-driven biomedical research.</p>
-        <div class="card-media">[Photo or file goes here — optional]</div>
+      <div class="entry reveal">
+        <div class="meta">
+          <span class="eyebrow">Bass Connections</span>
+          <span class="when">Mar 2025 – Present</span>
+        </div>
+        <div class="body">
+          <h3>Team Member — Developing Surgical Education Models</h3>
+          <a class="org-link" href="https://bassconnections.duke.edu">bassconnections.duke.edu &#8599;</a>
+          <p>Collaborate with Duke's SEAL Lab to design surgical education models that improve efficiency, accessibility, and consistency in clinical training. Design and iterate hydrogel organ models using MRI-derived DICOM scans, 3D Slicer segmentation, and Fusion 360 molds, tuning materials to replicate human tissue mechanics. Contribute to a computer-vision knot-tying assessment system that quantifies performance for objective surgical skill evaluation.</p>
+        </div>
       </div>
 
-      <div class="card card-c">
-        <span class="tag tag-orange">May – Aug 2025</span>
-        <h3>Research Assistant — FSU Microparticle Lab</h3>
-        <a class="org-link" href="#">[Lab website link goes here — optional] &#8599;</a>
-        <p>Developed a MATLAB pipeline to segment and classify fluorescence cell images, analyzing ~20,000 cells and generating a standardized dataset supporting a manuscript published in <em>ACS Applied Materials &amp; Interfaces</em>. Improved classification accuracy by optimizing convolution-based segmentation and thresholding across heterogeneous fluorescence channels.</p>
-        <div class="card-media">[Segmentation figure goes here — optional]</div>
+      <div class="entry reveal">
+        <div class="meta">
+          <span class="eyebrow">Tallahassee Research Institute</span>
+          <span class="when">May 2026 – Present</span>
+        </div>
+        <div class="body">
+          <h3>Research Coordinator</h3>
+          <p>Manage clinical research workflows and patient data for cardiovascular studies involving novel medical devices and research protocols. Compile and analyze patient data into structured reports, translating complex findings into actionable insights for data-driven biomedical research.</p>
+        </div>
       </div>
 
-      <div class="card card-a">
-        <span class="tag tag-teal">Aug 2025 – Present</span>
-        <h3>Teaching Assistant — EGR105: Coding for Engineers, Duke University</h3>
-        <p>Mentor first-year engineering students in Python algorithm design, reinforcing debugging workflows and Git-based version control. Teach NumPy and Matplotlib for data analysis and visualization, emphasizing efficient data handling and interpretation.</p>
+      <div class="entry reveal">
+        <div class="meta">
+          <span class="eyebrow">FSU Microparticle Lab</span>
+          <span class="when">May – Aug 2025</span>
+        </div>
+        <div class="body">
+          <h3>Research Assistant</h3>
+          <p>Developed a MATLAB pipeline to segment and classify fluorescence cell images, analyzing ~20,000 cells and generating a standardized dataset supporting a manuscript published in <em>ACS Applied Materials &amp; Interfaces</em>. Improved classification accuracy by optimizing convolution-based segmentation and thresholding across heterogeneous fluorescence channels.</p>
+        </div>
       </div>
 
-      <div class="card card-b">
-        <span class="tag tag-pink">Aug 2025 – Present</span>
-        <h3>Vice President of Professional Development — Theta Tau</h3>
-        <p>Execute events highlighting engineering research and innovation, expanding members' professional opportunities and skills. Created a centralized member resource database for academic planning, networking, and career development.</p>
+      <div class="entry reveal">
+        <div class="meta">
+          <span class="eyebrow">Duke University</span>
+          <span class="when">Aug 2025 – Present</span>
+        </div>
+        <div class="body">
+          <h3>Teaching Assistant — EGR105: Coding for Engineers</h3>
+          <p>Mentor first-year engineering students in Python algorithm design, reinforcing debugging workflows and Git-based version control. Teach NumPy and Matplotlib for data analysis and visualization, emphasizing efficient data handling and interpretation.</p>
+        </div>
       </div>
 
-      <div class="card card-c">
-        <span class="tag tag-orange">Jan – May 2024</span>
-        <h3>Intern — Victor Tech</h3>
-        <a class="org-link" href="#">[Company website link goes here — optional] &#8599;</a>
-        <p>Designed and fabricated custom prosthetics using 3D printing, iterating on form and functionality to meet individual clinical needs.</p>
-        <div class="card-media">[Prosthetic photo goes here — optional]</div>
+      <div class="entry reveal">
+        <div class="meta">
+          <span class="eyebrow">Theta Tau</span>
+          <span class="when">Aug 2025 – Present</span>
+        </div>
+        <div class="body">
+          <h3>Vice President of Professional Development</h3>
+          <p>Execute events highlighting engineering research and innovation, expanding members' professional opportunities and skills. Created a centralized member resource database for academic planning, networking, and career development.</p>
+        </div>
+      </div>
+
+      <div class="entry reveal">
+        <div class="meta">
+          <span class="eyebrow">Victor Tech</span>
+          <span class="when">Jan – May 2024</span>
+        </div>
+        <div class="body">
+          <h3>Intern</h3>
+          <p>Designed and fabricated custom prosthetics using 3D printing, iterating on form and functionality to meet individual clinical needs.</p>
+        </div>
       </div>
     </section>
 
     <!-- ==================== PUBLICATION ==================== -->
     <section id="publication" class="tab-panel">
-      <h2 class="section-title">Publication</h2>
-      <div class="title-bar bar-a"></div>
+      <div class="section-head">
+        <span class="eyebrow">Peer-Reviewed</span>
+        <h2 class="section-title">Publication</h2>
+      </div>
 
-      <div class="card card-c">
-        <span class="tag tag-orange">2025 &middot; ACS Applied Materials &amp; Interfaces</span>
-        <h3>[Publication title goes here]</h3>
-        <p>Contributed image analysis to a manuscript published in <em>ACS Applied Materials &amp; Interfaces</em> — developed the MATLAB segmentation and classification pipeline that produced a standardized dataset of ~20,000 fluorescence cell images.</p>
-        <p class="placeholder">[Author list and DOI/link go here]</p>
+      <div class="entry reveal">
+        <div class="meta">
+          <span class="eyebrow">ACS Applied Materials &amp; Interfaces</span>
+          <span class="when">2025</span>
+        </div>
+        <div class="body">
+          <h3><span class="note">[Publication title goes here]</span></h3>
+          <p>Contributed image analysis to a manuscript published in <em>ACS Applied Materials &amp; Interfaces</em> — developed the MATLAB segmentation and classification pipeline that produced a standardized dataset of ~20,000 fluorescence cell images.</p>
+          <p class="note">[Author list and DOI / link go here]</p>
+        </div>
       </div>
     </section>
 
-    <!-- ==================== ART (toggleable — see SHOW_ART_TAB in the script) ==================== -->
+    <!-- ==================== ART  (toggleable — see SHOW_ART_TAB) ==================== -->
     <section id="art" class="tab-panel">
-      <h2 class="section-title">Art</h2>
-      <div class="title-bar bar-c"></div>
+      <div class="section-head">
+        <span class="eyebrow">Visual Arts</span>
+        <h2 class="section-title">Art</h2>
+      </div>
 
-      <p class="placeholder">[Short intro — your mediums, your relationship to art, and how it connects to your engineering work]</p>
-      <br />
+      <p class="art-intro note">[Short intro — your mediums, your relationship to art, and how it connects to your engineering work]</p>
+
       <div class="art-grid">
-        <div class="card card-a">
-          <div class="card-media">[Artwork image goes here]</div>
+        <div class="art-piece reveal">
+          <div class="frame">[Artwork image goes here]</div>
           <p class="art-caption">[Title, medium, year]</p>
         </div>
-        <div class="card card-b">
-          <div class="card-media">[Artwork image goes here]</div>
+        <div class="art-piece reveal">
+          <div class="frame">[Artwork image goes here]</div>
           <p class="art-caption">[Title, medium, year]</p>
         </div>
-        <div class="card card-c">
-          <div class="card-media">[Artwork image goes here]</div>
+        <div class="art-piece reveal">
+          <div class="frame">[Artwork image goes here]</div>
           <p class="art-caption">[Title, medium, year]</p>
         </div>
-        <div class="card card-a">
-          <div class="card-media">[Artwork image goes here — duplicate these cards for more pieces]</div>
+        <div class="art-piece reveal">
+          <div class="frame">[Artwork image goes here — duplicate for more pieces]</div>
           <p class="art-caption">[Title, medium, year]</p>
         </div>
       </div>
@@ -618,21 +677,24 @@
 
     <!-- ==================== CONTACT / RESUME ==================== -->
     <section id="contact" class="tab-panel">
-      <h2 class="section-title">Contact / Resume</h2>
-      <div class="title-bar bar-b"></div>
+      <div class="section-head">
+        <span class="eyebrow">Get in Touch</span>
+        <h2 class="section-title">Contact / Resume</h2>
+      </div>
 
-      <div class="two-col">
-        <div class="card card-a">
-          <h3>Get in touch</h3>
-          <p><a href="mailto:mary.soto@duke.edu" style="color: var(--teal);">mary.soto@duke.edu</a><br />
-          <a href="https://linkedin.com/in/maryclaytonsoto" style="color: var(--pink);">linkedin.com/in/maryclaytonsoto</a><br />
-          Tallahassee, FL &middot; Durham, NC</p>
+      <div class="contact-grid">
+        <div>
+          <h3>Reach me</h3>
+          <p class="contact-lines">
+            <a href="mailto:mary.soto@duke.edu">mary.soto@duke.edu</a><br />
+            <a href="https://linkedin.com/in/maryclaytonsoto">linkedin.com/in/maryclaytonsoto</a><br />
+            <span style="font-style:normal; color:var(--muted);">Tallahassee, FL &middot; Durham, NC</span>
+          </p>
         </div>
-
-        <div class="card card-b">
+        <div>
           <h3>Resume</h3>
           <p>Download my current resume below.</p>
-          <a href="#" class="btn">[Resume PDF link goes here]</a>
+          <a href="#" class="btn">Download Resume (PDF)</a>
         </div>
       </div>
     </section>
@@ -640,9 +702,13 @@
   </main>
 
   <footer>
-    <div class="footer-accent"></div>
     <p>&copy; 2026 Mary Clayton Soto</p>
   </footer>
+
+  <!-- ==================== CORNER WATERMARK (Mc monogram) ==================== -->
+  <div class="watermark" aria-hidden="true">
+    <img src="mc-logo.svg" alt="Mary Clayton Soto monogram" />
+  </div>
 
   <script>
     // ---------- Art tab visibility ----------
@@ -665,9 +731,10 @@
       links.forEach(l => {
         if (l.closest("nav")) l.classList.toggle("active", l.dataset.tabLink === id);
       });
-      nav.classList.remove("open");           // close mobile menu after choosing
+      nav.classList.remove("open");
       toggle.setAttribute("aria-expanded", "false");
       window.scrollTo({ top: 0 });
+      observeReveals();
     }
 
     links.forEach(link => {
@@ -688,6 +755,25 @@
       const open = nav.classList.toggle("open");
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
     });
+
+    // ---------- Subtle scroll reveals ----------
+    const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const io = reduceMotion ? null : new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (en.isIntersecting) {
+          en.target.classList.add("is-visible");
+          io.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    function observeReveals() {
+      document.querySelectorAll(".tab-panel.active .reveal").forEach(el => {
+        if (reduceMotion) { el.classList.add("is-visible"); return; }
+        if (!el.classList.contains("is-visible")) io.observe(el);
+      });
+    }
+    observeReveals();
   </script>
 </body>
 </html>

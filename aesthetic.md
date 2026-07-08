@@ -24,10 +24,12 @@ Portable design system for Mary Clayton Soto's visual identity. Any agent buildi
 
 ### Typography
 
-- All serif. Hierarchy via size and color, not weight stacking.
-- Headings / nav / name: **Cormorant Garamond** 600–700. Hero name large and bold (~2.9rem).
-- Body: **EB Garamond** regular. (Queued: increase base size, ~1.15–1.25rem.)
-- Subtitle lines: EB Garamond, no italics, smaller, muted brown, letter-spaced, middot separators colored pink and orange.
+- Serif display + neutral sans body split (the editorial system's signature move).
+- Display (name, headings, section titles): **Cormorant Garamond** 500–600. Hero name very large (clamp up to ~7.5rem).
+- Body / UI (paragraphs, nav, labels, buttons): **Inter** 400–600, tight tracking (~-0.01em). EB Garamond retired from body.
+- Eyebrow labels: Inter 11px, uppercase, 0.14em letterspacing, muted brown.
+- Disciplines line under the name: Cormorant italic, terracotta "/" separators.
+- Hierarchy from size and space first, weight second.
 - Approved reserve font: Playfair Display (unused so far). Rejected: Fraunces, Lora (too round).
 
 ### Illustration
@@ -39,12 +41,14 @@ Portable design system for Mary Clayton Soto's visual identity. Any agent buildi
 
 ### Layout & components
 
-- Content column max 960px, generous spacing, fully responsive, hamburger nav below 700px.
-- Sticky header with thin ombre color-block strip on top; pill nav links, active pill filled with the warm ombre.
-- Cards: 14px radius, soft warm shadow, 6px gradient top border rotating through accent variants.
-- Section headings: short gradient underline bar. (Queued: replace bars with organic/hand-drawn separators.)
-- Hero: bordered rounded panel, text left / sketch right, stacks on mobile.
-- Empty media slots render as dashed-border placeholders.
+- Content column max 1160px, generous whitespace rhythm (sections separated by space, never bands or rules), fully responsive, hamburger nav below 760px.
+- Sticky header, hairline bottom border, quiet sans text links; active tab marked by a thin 2px ombre underline (mobile: 3px ombre left bar).
+- Near-square radius personality: 2px everywhere. Flat surfaces, no shadows; separation via warm hairlines (`color-mix` of ink at 7–14%).
+- Entries (projects/experience/publication): editorial two-column rows — meta (eyebrow + dates) left, serif title + body right — separated by hairlines.
+- Ombre rationed to exactly two moments: the 3px rule under the hero name and the active-tab indicator. Terracotta reserved for tiny touches ("/" separators).
+- Action color is warm near-black (ink): filled near-square buttons, ink underlined links. The ombre is never a button fill.
+- Empty media slots render as quiet paper-surface frames with hairline borders (no dashed boxes).
+- Motion: subtle scroll reveals (IntersectionObserver, 0.5s rise), 0.15s micro-transitions; `prefers-reduced-motion` respected.
 
 ### Implementation convention
 
@@ -54,6 +58,7 @@ All colors flow from one theme block of CSS custom properties (`--bg`, `--text`,
 
 ## CHANGELOG
 
-- **2026-07-06** — v3 "Sketchbook Sunset" (current): cream/charcoal/earthy palette, bright ombre kept as signature, hand-drawn A+B hero sketch, non-italic subhead, bold hero name.
+- **2026-07-08** — v4 "Editorial Gallery" (current): restyled per the web-design-system skill at Mary's direction. Palette unchanged. Typography split to Cormorant display + Inter body (EB Garamond retired from body). Near-square 2px radii, flat hairline-row layout, ombre rationed to hero rule + active tab, ink as action color, subtle scroll reveals. Pill nav, gradient active pill, card gradient borders, dashed placeholders, and hand-drawn hero sketch retired.
+- **2026-07-06** — v3 "Sketchbook Sunset": cream/charcoal/earthy palette, bright ombre kept as signature, hand-drawn A+B hero sketch, non-italic subhead, bold hero name.
 - **2026-07-06** — v2 "Navy Sunset": dark navy bg, cream text, sunset palette (gold/pink/coral/orange), Cormorant + EB Garamond adopted; teal removed; geometric orbit hero (retired — too minimalist/modern).
 - **2026-07-06** — v1: black/cream with teal/magenta/orange color-blocking, sans-serif (retired); magenta removed for reading purple; Fraunces/Lora tried and rejected as too round.
