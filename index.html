@@ -12,8 +12,9 @@
        DESIGN TOKENS — web-design-system, "Sketchbook Sunset" palette
        Palette KEPT exactly (see redesign-keep.md). Everything else
        follows the editorial system: serif display + neutral sans
-       body, near-square radii, flat surfaces, hairlines + whitespace,
-       ombre rationed to two signature moments (hero rule, active tab).
+       body, near-square cards + pill controls, flat surfaces,
+       hairlines + whitespace, ombre rationed to two signature
+       moments (hero rule, active nav pill).
        Expression color = the ombre. Action color = warm near-black.
        ============================================================ */
     :root {
@@ -39,9 +40,10 @@
       --display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
       --body:    "Inter", "Helvetica Neue", Arial, sans-serif;
 
-      /* --- Near-square radius personality, held everywhere --- */
+      /* --- Two radii, held: near-square cards, full-pill controls --- */
       --r-card: 2px;
-      --r-ctrl: 2px;
+      --r-ctrl: 9999px;
+      --on-ombre: #ffffff;   /* text on the ombre fill */
 
       --maxw: 1160px;
       --ease: cubic-bezier(.4,0,.2,1);
@@ -75,8 +77,8 @@
     }
 
     /* ============================================================
-       HEADER + NAVIGATION — quiet text links, hairline bottom,
-       active tab marked by a thin ombre underline (rationed accent)
+       HEADER + NAVIGATION — pill tabs, hairline bottom border,
+       active tab filled with the signature ombre (rationed accent)
        ============================================================ */
     header {
       position: sticky;
@@ -105,7 +107,7 @@
     nav ul {
       list-style: none;
       display: flex;
-      gap: 1.75rem;
+      gap: 0.35rem;
     }
     nav a {
       display: block;
@@ -115,24 +117,17 @@
       font-size: 0.875rem;
       font-weight: 400;
       letter-spacing: -0.01em;
-      padding: 0.35rem 0;
-      position: relative;
-      transition: color 0.15s var(--ease);
+      padding: 0.45rem 1.05rem;
+      border-radius: var(--r-ctrl);
+      transition: color 0.15s var(--ease), background-color 0.15s var(--ease);
     }
-    nav a:hover { color: var(--muted); }
-    /* active state: thin ombre underline — one of the two accent moments */
-    nav a::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 100%;
-      bottom: 0;
-      height: 2px;
+    nav a:hover { color: var(--ink); background: var(--line-soft); }
+    /* active state: the signature ombre-filled pill */
+    nav a.active {
+      color: var(--on-ombre);
+      font-weight: 500;
       background: var(--ombre);
-      transition: right 0.2s var(--ease);
     }
-    nav a.active { color: var(--ink); font-weight: 500; }
-    nav a.active::after { right: 0; }
     .menu-toggle {
       display: none;
       background: none;
@@ -296,7 +291,8 @@
     .note { color: var(--ink-subtle); font-style: italic; }
 
     /* ============================================================
-       ART — airy gallery grid, near-square frames, small captions
+       GALLERY WALL — shared by Projects and Art. Framed pieces on
+       a grid: flat frame on top, gallery-label text below.
        ============================================================ */
     .art-intro {
       max-width: 60ch;
@@ -305,12 +301,12 @@
       color: var(--text);
       margin-bottom: 4rem;
     }
-    .art-grid {
+    .gallery-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 4rem 3rem;
+      gap: 4.5rem 3rem;
     }
-    .art-piece .frame {
+    .piece .frame {
       aspect-ratio: 4 / 3;
       background: var(--paper);
       border: 1px solid var(--line-soft);
@@ -325,7 +321,37 @@
       padding: 1rem;
       overflow: hidden;
     }
-    .art-piece img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .piece img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    /* gallery label: meta line, serif title, description */
+    .piece .label { padding-top: 1.15rem; }
+    .piece .label-meta {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    .piece .when {
+      font-family: var(--body);
+      font-size: 0.75rem;
+      color: var(--ink-subtle);
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+    .piece h3 {
+      font-family: var(--display);
+      font-size: 1.55rem;
+      font-weight: 500;
+      line-height: 1.15;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.005em;
+    }
+    .piece p {
+      color: var(--text);
+      font-size: 0.875rem;
+      line-height: 1.65;
+    }
     .art-caption {
       margin-top: 0.85rem;
       color: var(--muted);
@@ -438,18 +464,13 @@
       }
       nav.open { display: block; }
       nav ul { flex-direction: column; gap: 0; padding: 0.5rem 0 1rem; }
-      nav a { padding: 0.85rem 1.5rem; font-size: 0.9375rem; }
-      nav a::after { display: none; }
-      /* vertical menu: the ombre reads as a left accent bar */
-      nav a.active {
-        border-left: 3px solid transparent;
-        border-image: var(--ombre) 1;
-        padding-left: calc(1.5rem - 3px);
-      }
+      nav a { padding: 0.7rem 1.25rem; font-size: 0.9375rem; margin: 0.15rem 0.75rem; }
+      /* vertical menu: same ombre pill, inset in the list */
+      nav a.active { background: var(--ombre); color: var(--on-ombre); }
 
       .entry { grid-template-columns: 1fr; gap: 0.85rem; padding: 2.25rem 0; }
       .entry .meta { padding-top: 0; }
-      .art-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .gallery-grid { grid-template-columns: 1fr; gap: 3.25rem; }
       .contact-grid { grid-template-columns: 1fr; gap: 2.75rem; }
       .hero { padding: 4rem 0 3.25rem; }
       .section-head { margin: 3.5rem 0 2.25rem; }
@@ -506,47 +527,53 @@
         <h2 class="section-title">Projects</h2>
       </div>
 
-      <div class="entry reveal">
-        <div class="meta">
-          <span class="eyebrow">Medical Device Design</span>
-          <span class="when">Aug 2024 – May 2025</span>
+      <div class="gallery-grid">
+        <div class="piece reveal">
+          <div class="frame">[Project photo goes here — rollator prototype]</div>
+          <div class="label">
+            <div class="label-meta">
+              <span class="eyebrow">Medical Device Design</span>
+              <span class="when">Aug 2024 – May 2025</span>
+            </div>
+            <h3>Rollator Oxygen-Canister Mount</h3>
+            <p>Designed and prototyped a device to secure an oxygen canister to Duke Hospital rollators, improving patient mobility, safety, and clinical workflow efficiency. Conducted user-centered design analysis within hospital constraints and evaluated safety factors to ensure reliable performance in a clinical environment.</p>
+          </div>
         </div>
-        <div class="body">
-          <h3>Rollator Oxygen-Canister Mount</h3>
-          <p>Designed and prototyped a device to secure an oxygen canister to Duke Hospital rollators, improving patient mobility, safety, and clinical workflow efficiency. Conducted user-centered design analysis within hospital constraints and evaluated safety factors to ensure reliable performance in a clinical environment.</p>
-        </div>
-      </div>
 
-      <div class="entry reveal">
-        <div class="meta">
-          <span class="eyebrow">Robotics &amp; Embedded Systems</span>
-          <span class="when">Jan – May 2025</span>
+        <div class="piece reveal">
+          <div class="frame">[Project photo goes here — robot build]</div>
+          <div class="label">
+            <div class="label-meta">
+              <span class="eyebrow">Robotics &amp; Embedded Systems</span>
+              <span class="when">Jan – May 2025</span>
+            </div>
+            <h3>Autonomous Arduino Robot</h3>
+            <p>Built and programmed an Arduino-based robot using TI path sensors and IR thermal sensing, integrating multiple hardware components and developing control logic for autonomous navigation and wireless communication.</p>
+          </div>
         </div>
-        <div class="body">
-          <h3>Autonomous Arduino Robot</h3>
-          <p>Built and programmed an Arduino-based robot using TI path sensors and IR thermal sensing, integrating multiple hardware components and developing control logic for autonomous navigation and wireless communication.</p>
-        </div>
-      </div>
 
-      <div class="entry reveal">
-        <div class="meta">
-          <span class="eyebrow">Molecular Biology</span>
-          <span class="when">Aug – Dec 2025</span>
+        <div class="piece reveal">
+          <div class="frame">[Project photo goes here — gel or workflow figure]</div>
+          <div class="label">
+            <div class="label-meta">
+              <span class="eyebrow">Molecular Biology</span>
+              <span class="when">Aug – Dec 2025</span>
+            </div>
+            <h3>Yeast Genomic Library</h3>
+            <p>Executed a recombinant DNA workflow including yeast genomic DNA isolation, plasmid cloning, bacterial transformation, and validation via PCR, gel electrophoresis, Sanger sequencing, and bioinformatic analysis.</p>
+          </div>
         </div>
-        <div class="body">
-          <h3>Yeast Genomic Library</h3>
-          <p>Executed a recombinant DNA workflow including yeast genomic DNA isolation, plasmid cloning, bacterial transformation, and validation via PCR, gel electrophoresis, Sanger sequencing, and bioinformatic analysis.</p>
-        </div>
-      </div>
 
-      <div class="entry reveal">
-        <div class="meta">
-          <span class="eyebrow">Data Science</span>
-          <span class="when">Aug – Dec 2024</span>
-        </div>
-        <div class="body">
-          <h3>Green Space &amp; Urban Temperature Analysis</h3>
-          <p>Developed a Python-based analysis workflow to extract pixel data from environmental maps, compute quadrant-level metrics, and perform regression modeling to assess relationships between green space, land use, and urban temperature.</p>
+        <div class="piece reveal">
+          <div class="frame">[Project photo goes here — map or regression figure]</div>
+          <div class="label">
+            <div class="label-meta">
+              <span class="eyebrow">Data Science</span>
+              <span class="when">Aug – Dec 2024</span>
+            </div>
+            <h3>Green Space &amp; Urban Temperature Analysis</h3>
+            <p>Developed a Python-based analysis workflow to extract pixel data from environmental maps, compute quadrant-level metrics, and perform regression modeling to assess relationships between green space, land use, and urban temperature.</p>
+          </div>
         </div>
       </div>
     </section>
@@ -655,20 +682,20 @@
 
       <p class="art-intro note">[Short intro — your mediums, your relationship to art, and how it connects to your engineering work]</p>
 
-      <div class="art-grid">
-        <div class="art-piece reveal">
+      <div class="gallery-grid">
+        <div class="piece reveal">
           <div class="frame">[Artwork image goes here]</div>
           <p class="art-caption">[Title, medium, year]</p>
         </div>
-        <div class="art-piece reveal">
+        <div class="piece reveal">
           <div class="frame">[Artwork image goes here]</div>
           <p class="art-caption">[Title, medium, year]</p>
         </div>
-        <div class="art-piece reveal">
+        <div class="piece reveal">
           <div class="frame">[Artwork image goes here]</div>
           <p class="art-caption">[Title, medium, year]</p>
         </div>
-        <div class="art-piece reveal">
+        <div class="piece reveal">
           <div class="frame">[Artwork image goes here — duplicate for more pieces]</div>
           <p class="art-caption">[Title, medium, year]</p>
         </div>

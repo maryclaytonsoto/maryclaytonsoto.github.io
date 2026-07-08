@@ -42,11 +42,11 @@ Portable design system for Mary Clayton Soto's visual identity. Any agent buildi
 ### Layout & components
 
 - Content column max 1160px, generous whitespace rhythm (sections separated by space, never bands or rules), fully responsive, hamburger nav below 760px.
-- Sticky header, hairline bottom border, quiet sans text links; active tab marked by a thin 2px ombre underline (mobile: 3px ombre left bar).
-- Near-square radius personality: 2px everywhere. Flat surfaces, no shadows; separation via warm hairlines (`color-mix` of ink at 7–14%).
-- Entries (projects/experience/publication): editorial two-column rows — meta (eyebrow + dates) left, serif title + body right — separated by hairlines.
-- Ombre rationed to exactly two moments: the 3px rule under the hero name and the active-tab indicator. Terracotta reserved for tiny touches ("/" separators).
-- Action color is warm near-black (ink): filled near-square buttons, ink underlined links. The ombre is never a button fill.
+- Sticky header, hairline bottom border, sans pill nav links; active tab is a pill filled with the signature ombre, white text (same pill inset in the mobile menu).
+- Two radii, held: near-square 2px on cards/frames, full-pill (9999px) on controls (nav pills, buttons). Flat surfaces, no shadows; separation via warm hairlines (`color-mix` of ink at 7–14%).
+- Projects and Art: gallery-wall grid — 2-up framed pieces (4:3 paper frame, hairline border) with gallery-label text below (eyebrow + dates meta line, serif title, small description). Experience/Publication: editorial two-column hairline rows (meta left, serif title + body right).
+- Ombre rationed to exactly two moments: the 3px rule under the hero name and the active nav pill. Terracotta reserved for tiny touches ("/" separators).
+- Action color is warm near-black (ink): pill buttons, ink underlined links. The ombre is never a button fill (the nav pill is its one control appearance).
 - Empty media slots render as quiet paper-surface frames with hairline borders (no dashed boxes).
 - Motion: subtle scroll reveals (IntersectionObserver, 0.5s rise), 0.15s micro-transitions; `prefers-reduced-motion` respected.
 
@@ -58,7 +58,8 @@ All colors flow from one theme block of CSS custom properties (`--bg`, `--text`,
 
 ## CHANGELOG
 
-- **2026-07-08** — v4 "Editorial Gallery" (current): restyled per the web-design-system skill at Mary's direction. Palette unchanged. Typography split to Cormorant display + Inter body (EB Garamond retired from body). Near-square 2px radii, flat hairline-row layout, ombre rationed to hero rule + active tab, ink as action color, subtle scroll reveals. Pill nav, gradient active pill, card gradient borders, dashed placeholders, and hand-drawn hero sketch retired.
+- **2026-07-08** — v4.1 "Gallery Wall" (current): per Mary's feedback on v4 — Projects and Art become a 2-up gallery-wall grid (framed pieces + gallery-label text); Experience/Publication keep editorial rows; ombre-filled active nav pill reinstated (pill controls return, cards stay 2px). Fonts and palette unchanged from v4.
+- **2026-07-08** — v4 "Editorial Gallery": restyled per the web-design-system skill at Mary's direction. Palette unchanged. Typography split to Cormorant display + Inter body (EB Garamond retired from body). Near-square 2px radii, flat hairline-row layout, ombre rationed to hero rule + active tab, ink as action color, subtle scroll reveals. Pill nav, gradient active pill, card gradient borders, dashed placeholders, and hand-drawn hero sketch retired. Thin-underline active tab retired same day in v4.1 (Mary preferred the ombre pill).
 - **2026-07-06** — v3 "Sketchbook Sunset": cream/charcoal/earthy palette, bright ombre kept as signature, hand-drawn A+B hero sketch, non-italic subhead, bold hero name.
 - **2026-07-06** — v2 "Navy Sunset": dark navy bg, cream text, sunset palette (gold/pink/coral/orange), Cormorant + EB Garamond adopted; teal removed; geometric orbit hero (retired — too minimalist/modern).
 - **2026-07-06** — v1: black/cream with teal/magenta/orange color-blocking, sans-serif (retired); magenta removed for reading purple; Fraunces/Lora tried and rejected as too round.
