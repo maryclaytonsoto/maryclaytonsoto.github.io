@@ -306,12 +306,17 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 4.5rem 3rem;
+      align-items: start;   /* mixed-height pieces align to the top, no stretching */
     }
     .piece .frame {
-      aspect-ratio: 4 / 3;
       background: var(--paper);
       border: 1px solid var(--line-soft);
       border-radius: var(--r-card);
+      overflow: hidden;
+    }
+    /* empty / text-placeholder frames keep the 4:3 paper slot */
+    .piece .frame:not(:has(img)) {
+      aspect-ratio: 4 / 3;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -320,9 +325,9 @@
       font-style: italic;
       font-size: 0.875rem;
       padding: 1rem;
-      overflow: hidden;
     }
-    .piece img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    /* images keep their own shape — portrait, landscape, or square */
+    .piece img { width: 100%; height: auto; display: block; }
     /* gallery label: meta line, serif title, description */
     .piece .label { padding-top: 1.15rem; }
     .piece .label-meta {
@@ -736,6 +741,7 @@
           <p class="contact-lines">
             <a href="mailto:mary.soto@duke.edu">mary.soto@duke.edu</a><br />
             <a href="mailto:maryclaytonsoto@gmail.com">maryclaytonsoto@gmail.com</a><br />
+            <a href="tel:+18505679336">(850) 567-9336</a><br />
             <a href="https://github.com/maryclaytonsoto">github.com/maryclaytonsoto</a><br />
             <a href="https://linkedin.com/in/maryclaytonsoto">linkedin.com/in/maryclaytonsoto</a><br />
             <span style="font-style:normal; color:var(--muted);">Tallahassee, FL &middot; Durham, NC</span>
