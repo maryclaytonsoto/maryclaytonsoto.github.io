@@ -157,8 +157,37 @@
     }
 
     /* section heading — hierarchy from size + space */
-    .section-head { margin: 5.5rem 0 3rem; }
+    .section-head { margin: 5.5rem 0 3rem; position: relative; }
+    .section-head > * { position: relative; z-index: 1; }
     .section-head .eyebrow { display: block; margin-bottom: 1rem; }
+    /* mesh family — small generative accents behind section titles,
+       plus open ribbon bands (contact, footer). Same parametric
+       language as the hero ribbon; slow ambient drift only. */
+    .mesh-accent {
+      position: absolute;
+      left: -2.75rem;
+      top: 50%;
+      width: 200px;
+      aspect-ratio: 1 / 1;
+      transform: translateY(-50%);
+      z-index: 0;
+      pointer-events: none;
+    }
+    .mesh-accent canvas, .mesh-band canvas, .mesh-footer canvas {
+      width: 100%; height: 100%; display: block;
+    }
+    .mesh-band {
+      width: 100%;
+      height: 150px;
+      margin: 0 0 2.5rem;
+      pointer-events: none;
+    }
+    .mesh-footer {
+      max-width: var(--maxw);
+      height: 90px;
+      margin: 0 auto 1.25rem;
+      pointer-events: none;
+    }
     .section-title {
       font-family: var(--display);
       font-size: clamp(2.4rem, 4.5vw, 3.4rem);
@@ -513,6 +542,9 @@
       .hero h1 .line-b { margin-left: 17vw; }
       .about-grid { grid-template-columns: 1fr; gap: 1.5rem; margin-top: 3.5rem; }
       .section-head { margin: 3.5rem 0 2.25rem; }
+      .mesh-accent { width: 150px; left: -1.25rem; }
+      .mesh-band { height: 110px; margin-bottom: 2rem; }
+      .mesh-footer { height: 70px; }
       .watermark { width: 36px; right: 1rem; bottom: 0.9rem; }
     }
   </style>
@@ -575,6 +607,7 @@
     <!-- ==================== PROJECTS ==================== -->
     <section id="projects" class="tab-panel">
       <div class="section-head">
+        <div class="mesh-accent" aria-hidden="true"><canvas></canvas></div>
         <span class="eyebrow">Selected Work</span>
         <h2 class="section-title">Projects</h2>
       </div>
@@ -609,6 +642,7 @@
     <!-- ==================== EXPERIENCE ==================== -->
     <section id="experience" class="tab-panel">
       <div class="section-head">
+        <div class="mesh-accent" aria-hidden="true"><canvas></canvas></div>
         <span class="eyebrow">Research &amp; Teaching</span>
         <h2 class="section-title">Experience</h2>
       </div>
@@ -684,6 +718,7 @@
     <!-- ==================== PUBLICATION ==================== -->
     <section id="publication" class="tab-panel">
       <div class="section-head">
+        <div class="mesh-accent" aria-hidden="true"><canvas></canvas></div>
         <span class="eyebrow">Peer-Reviewed &amp; Ongoing</span>
         <h2 class="section-title">Research</h2>
       </div>
@@ -718,6 +753,7 @@
     <!-- ==================== ART  (toggleable — see SHOW_ART_TAB) ==================== -->
     <section id="art" class="tab-panel">
       <div class="section-head">
+        <div class="mesh-accent" aria-hidden="true"><canvas></canvas></div>
         <span class="eyebrow">Visual Arts</span>
         <h2 class="section-title">Art</h2>
       </div>
@@ -761,6 +797,8 @@
         <h2 class="section-title">Contact / Resume</h2>
       </div>
 
+      <div class="mesh-band" aria-hidden="true"><canvas></canvas></div>
+
       <div class="contact-grid">
         <div>
           <h3>Reach me</h3>
@@ -784,6 +822,7 @@
   </main>
 
   <footer>
+    <div class="mesh-footer" aria-hidden="true"><canvas></canvas></div>
     <p>&copy; 2026 Mary Clayton Soto</p>
   </footer>
 
@@ -859,27 +898,24 @@
     }
     observeReveals();
 
-    // ---------- Hero mesh ribbon ----------
-    // Generative parametric loop (spirograph/Lissajous family):
-    // a closed harmonic center curve carrying ~64 fine strands that
-    // weave across the band, drawn in the ombre colors from the
-    // theme block (read at runtime — no hard-coded hexes here).
-    // Interactive: eased cursor tracking rotates and warps the form;
-    // prefers-reduced-motion gets a single static render.
+    // ---------- Generative mesh family ----------
+    // One parametric engine (spirograph/Lissajous family) draws every
+    // mesh graphic on the site: the hero ribbon (closed loop, cursor-
+    // reactive), small section-title accents (closed loops, varied
+    // lobe counts so each tab has its own blob), and open horizontal
+    // ribbon bands (Contact, footer). Colors are read from the theme
+    // block at runtime — no hard-coded hexes here. Secondary meshes
+    // drift slowly and ignore the cursor; prefers-reduced-motion
+    // renders everything as a single static frame.
     (function () {
-      const holder = document.querySelector(".hero-canvas");
-      if (!holder) return;
-      const canvas = holder.querySelector("canvas");
-      const ctx = canvas.getContext("2d");
       const TAU = Math.PI * 2;
 
-      // ombre stops from the theme block
+      // ombre stops from the theme block: pink → coral → orange → coral
       const rootStyle = getComputedStyle(document.documentElement);
       const rgb = v => {
         const h = rootStyle.getPropertyValue(v).trim().replace("#", "");
         return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16));
       };
-      // pink → coral → orange → coral (loops back seamlessly)
       const stops = [rgb("--pink"), rgb("--coral"), rgb("--orange"), rgb("--coral")];
       function strandColor(u, alpha) {
         const x = u * stops.length;
@@ -891,39 +927,56 @@
       }
 
       const small = matchMedia("(max-width: 760px)").matches;
-      const STRANDS = small ? 44 : 64;
-      const STEPS = small ? 180 : 240;
 
-      let W = 0, H = 0;
-      function size() {
-        const r = holder.getBoundingClientRect();
-        if (!r.width) { W = 0; return; }
-        const dpr = Math.min(window.devicePixelRatio || 1, 2);
-        W = r.width; H = r.height;
-        canvas.width = Math.round(W * dpr);
-        canvas.height = Math.round(H * dpr);
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      // eased cursor state, -1..1 (hero only)
+      let mx = 0, my = 0, tx = 0, ty = 0;
+      if (!reduceMotion) {
+        window.addEventListener("pointermove", e => {
+          tx = (e.clientX / window.innerWidth) * 2 - 1;
+          ty = (e.clientY / window.innerHeight) * 2 - 1;
+        });
       }
 
-      // eased cursor state, in -1..1
-      let mx = 0, my = 0, tx = 0, ty = 0;
+      const meshes = [];
+      function addMesh(sel, o) {
+        const holder = document.querySelector(sel);
+        if (!holder) return;
+        const canvas = holder.querySelector("canvas");
+        const m = { holder, canvas, ctx: canvas.getContext("2d"), o, W: 0, H: 0, inView: true };
+        if (!reduceMotion) {
+          new IntersectionObserver(en => { m.inView = en[0].isIntersecting; }).observe(holder);
+        }
+        meshes.push(m);
+      }
 
-      function draw(t) {
+      function size(m) {
+        const r = m.holder.getBoundingClientRect();
+        if (!r.width) { m.W = 0; return; }
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        m.W = r.width; m.H = r.height;
+        m.canvas.width = Math.round(m.W * dpr);
+        m.canvas.height = Math.round(m.H * dpr);
+        m.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      // closed organic loop (hero + section accents)
+      function drawClosed(m, t) {
+        const { ctx, W, H, o } = m;
         ctx.clearRect(0, 0, W, H);
         const cx = W / 2, cy = H / 2;
-        const R = Math.min(W, H) * 0.315 * (1 + 0.012 * Math.sin(t * 0.0003));
-        const rot = mx * 0.35 + t * 0.000018;
-        const amp3 = 0.17 + my * 0.05;
+        const R = Math.min(W, H) * 0.315 * (1 + 0.012 * Math.sin(t * 0.0003 + o.phase));
+        const rot = (o.interactive ? mx * 0.35 : 0) + o.phase + t * 0.000018;
+        const amp = o.amp + (o.interactive ? my * 0.05 : 0);
         ctx.lineWidth = 0.6;
-        for (let i = 0; i < STRANDS; i++) {
-          const phi = (i / STRANDS) * TAU;
-          ctx.strokeStyle = strandColor(i / STRANDS, 0.55);
+        for (let i = 0; i < o.strands; i++) {
+          const phi = (i / o.strands) * TAU;
+          ctx.strokeStyle = strandColor(i / o.strands, o.alpha);
           ctx.beginPath();
-          for (let s = 0; s <= STEPS; s++) {
-            const u = (s / STEPS) * TAU;
-            const rad = R * (1 + amp3 * Math.sin(3 * u + 0.6 + t * 0.00006)
-                               + 0.08 * Math.sin(5 * u + 1.7 - t * 0.00004));
-            const w = R * 0.24 * (1 + 0.3 * Math.sin(2 * u + 0.9));
+          for (let s = 0; s <= o.steps; s++) {
+            const u = (s / o.steps) * TAU;
+            const rad = R * (1 + amp * Math.sin(o.lobes * u + 0.6 + t * 0.00006)
+                               + o.amp2 * Math.sin((o.lobes + 2) * u + 1.7 - t * 0.00004));
+            const w = R * o.band * (1 + 0.3 * Math.sin(2 * u + 0.9));
             const rr = rad + Math.sin(2 * u + phi + t * 0.00012) * w;
             const x = cx + rr * Math.cos(u + rot);
             const y = cy + rr * Math.sin(u + rot) * 0.94;
@@ -934,26 +987,57 @@
         }
       }
 
-      size();
-      if (reduceMotion) {
-        if (W) draw(0);
-        window.addEventListener("resize", () => { size(); if (W) draw(0); });
-      } else {
-        window.addEventListener("pointermove", e => {
-          tx = (e.clientX / window.innerWidth) * 2 - 1;
-          ty = (e.clientY / window.innerHeight) * 2 - 1;
-        });
-        window.addEventListener("resize", size);
-        let inView = true;
-        new IntersectionObserver(en => { inView = en[0].isIntersecting; }).observe(holder);
+      // open horizontal ribbon (contact band, footer), tapered ends
+      function drawOpen(m, t) {
+        const { ctx, W, H, o } = m;
+        ctx.clearRect(0, 0, W, H);
+        const steps = 130;
+        ctx.lineWidth = 0.6;
+        for (let i = 0; i < o.strands; i++) {
+          const phi = (i / o.strands) * TAU;
+          ctx.strokeStyle = strandColor(i / o.strands, o.alpha);
+          ctx.beginPath();
+          for (let s = 0; s <= steps; s++) {
+            const u = s / steps;
+            const taper = Math.pow(Math.sin(u * Math.PI), 0.65);
+            const mid = H * 0.5 + H * 0.2 * Math.sin(u * TAU * o.waves + o.phase + t * 0.00004);
+            const y = mid + Math.sin(u * TAU * 1.5 + phi + t * 0.00012) * H * 0.3 * taper;
+            s ? ctx.lineTo(u * W, y) : ctx.moveTo(u * W, y);
+          }
+          ctx.stroke();
+        }
+      }
+
+      function draw(m, t) { (m.o.open ? drawOpen : drawClosed)(m, t); }
+
+      // the family — one language, varied parameters per placement
+      addMesh(".hero-canvas",              { strands: small ? 44 : 64, steps: small ? 180 : 240, lobes: 3, amp: 0.17, amp2: 0.08, band: 0.24, alpha: 0.55, phase: 0, interactive: true });
+      addMesh("#publication .mesh-accent", { strands: 34, steps: 150, lobes: 4, amp: 0.13, amp2: 0.05, band: 0.26, alpha: 0.4, phase: 1.3 });
+      addMesh("#experience .mesh-accent",  { strands: 34, steps: 150, lobes: 5, amp: 0.10, amp2: 0.04, band: 0.24, alpha: 0.4, phase: 2.1 });
+      addMesh("#projects .mesh-accent",    { strands: 34, steps: 150, lobes: 4, amp: 0.18, amp2: 0.05, band: 0.20, alpha: 0.4, phase: 4.4 });
+      addMesh("#art .mesh-accent",         { strands: 34, steps: 150, lobes: 3, amp: 0.22, amp2: 0.07, band: 0.30, alpha: 0.4, phase: 5.2 });
+      addMesh("#contact .mesh-band",       { open: true, strands: 40, waves: 1.4, alpha: 0.45, phase: 0.8 });
+      addMesh(".mesh-footer",              { open: true, strands: 26, waves: 2.2, alpha: 0.35, phase: 2.4 });
+
+      window.addEventListener("resize", () => meshes.forEach(m => {
+        size(m);
+        if (reduceMotion && m.W) draw(m, 0);
+      }));
+
+      // first paint (also the only paint under reduced motion)
+      meshes.forEach(m => { size(m); if (m.W) draw(m, 0); });
+
+      if (!reduceMotion) {
         (function loop(t) {
           requestAnimationFrame(loop);
-          if (!holder.offsetParent) return;          // Home tab hidden
-          if (!W) { size(); if (!W) return; }        // was hidden at load
-          if (!inView) return;                       // scrolled past hero
           mx += (tx - mx) * 0.045;
           my += (ty - my) * 0.045;
-          draw(t || 0);
+          meshes.forEach(m => {
+            if (!m.holder.offsetParent) return;   // tab hidden
+            if (!m.W) { size(m); if (!m.W) return; } // was hidden at load
+            if (!m.inView) return;                // off-screen
+            draw(m, t || 0);
+          });
         })(0);
       }
     })();

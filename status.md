@@ -2,6 +2,16 @@
 
 Last updated: July 8, 2026 (end of session 4)
 
+## Session 4, part 2 (July 8, 2026) — v4.3 "Mesh Family"
+
+Mary asked for more blobby mesh graphics throughout the site — same idea as the hero, not identical, dynamic and cohesive. Her choices: integrated throughout; slow drift only for secondary meshes (hero stays cursor-reactive).
+
+- Hero ribbon script refactored into a shared mesh engine (one IIFE, `addMesh(selector, params)`); all seven canvases run off a single rAF loop that skips hidden tabs and off-screen meshes.
+- New placements: section-title accent blob behind Research (4-lobe), Experience (5-lobe), Projects (4-lobe pinched), Art (free 3-lobe) — 200px, 34 strands, 0.4 alpha, tucked left of/behind the serif title; an open tapered ribbon band on Contact between the heading and the grid; a low open footer ribbon on every page. All parameter variations were prototyped and visually confirmed before implementation.
+- Mobile: accents shrink to 150px, bands shorten; reduced-motion renders every mesh as one static frame.
+- aesthetic.md updated: mesh-family rules added; the "ombre rationed to exactly two moments" rule formally retired (moved to changelog per spec convention).
+- Same caveat as v4.2: verified by code checks + prototype renders, not a browser screenshot — Mary should eyeball locally, then push.
+
 ## Session 4 summary (July 8, 2026) — v4.2 "Woven Hero"
 
 Landing-page redesign per Mary (she disliked the accidental line break in her name and wanted a more creative, dynamic hero with parametric mesh-ribbon graphics). Her choices via clarifying questions: name interwoven with the graphic; interactive; full Home tab scope; graphic replaces the small ombre rule (ombre nav pills kept).
