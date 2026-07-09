@@ -169,39 +169,50 @@
     }
 
     /* ============================================================
-       HOME — big name hero (KEPT), editorial and airy
+       HOME — big name hero (KEPT), interwoven with the parametric
+       mesh ribbon: a generative Lissajous/spirograph wireframe
+       loop drawn on canvas in the ombre colors, cursor-reactive.
+       The ribbon IS the hero's ombre moment — it replaces the old
+       thin gradient rule. (Ombre nav pill untouched.)
        ============================================================ */
     .hero {
-      padding: 7.5rem 0 5.5rem;
+      position: relative;
+      padding: 6.5rem 0 5rem;
       border-bottom: 1px solid var(--line-soft);
     }
-    .hero .kicker {
-      font-family: var(--body);
-      font-size: 0.6875rem;
-      font-weight: 600;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 2rem;
+    /* the mesh ribbon — part of the name composition, behind the type */
+    .hero-canvas {
+      position: absolute;
+      top: 46%;
+      right: 6%;
+      width: min(44vw, 540px);
+      aspect-ratio: 1 / 1;
+      transform: translateY(-50%);
+      z-index: 0;
+      pointer-events: none;
     }
-    /* THE big name */
+    .hero-canvas canvas { width: 100%; height: 100%; display: block; }
+    /* THE big name — two intentional lines; "Soto" set italic and
+       offset right so it nests into the ribbon */
     .hero h1 {
+      position: relative;
+      z-index: 1;
       font-family: var(--display);
       color: var(--ink);
       font-weight: 500;
-      font-size: clamp(3.4rem, 10vw, 7.5rem);
-      line-height: 0.98;
+      font-size: clamp(3.4rem, 10.5vw, 8.5rem);
+      line-height: 0.95;
       letter-spacing: 0.005em;
-      max-width: 12ch;
     }
-    /* rationed ombre: the one thin signature rule under the name */
-    .hero .rule {
-      width: 110px;
-      height: 3px;
-      background: var(--ombre);
-      margin: 2.25rem 0;
+    .hero h1 .line { display: block; }
+    .hero h1 .line-b {
+      font-style: italic;
+      margin-left: clamp(4.5rem, 24vw, 19rem);
     }
     .hero .disciplines {
+      position: relative;
+      z-index: 1;
+      margin-top: 2.5rem;
       font-family: var(--display);
       font-style: italic;
       font-weight: 500;
@@ -212,12 +223,31 @@
     }
     .hero .disciplines .dot { color: var(--terracotta); font-style: normal; padding: 0 0.2em; }
     .hero .tagline {
+      position: relative;
+      z-index: 1;
       margin-top: 1.5rem;
       font-family: var(--body);
       font-size: 0.9375rem;
       color: var(--muted);
       max-width: 46ch;
       letter-spacing: -0.01em;
+    }
+
+    /* Home about — editorial two-column: heading rail + prose */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 3rem;
+      margin-top: 5.5rem;
+    }
+    .about-grid .rail .eyebrow { display: block; margin-bottom: 1rem; }
+    .about-grid .rail h2 {
+      font-family: var(--display);
+      font-size: clamp(1.9rem, 3vw, 2.5rem);
+      font-weight: 500;
+      line-height: 1.1;
+      color: var(--ink);
+      letter-spacing: 0.005em;
     }
 
     /* prose */
@@ -478,7 +508,10 @@
       .entry .meta { padding-top: 0; }
       .gallery-grid { grid-template-columns: 1fr; gap: 3.25rem; }
       .contact-grid { grid-template-columns: 1fr; gap: 2.75rem; }
-      .hero { padding: 4rem 0 3.25rem; }
+      .hero { padding: 3.75rem 0 3rem; }
+      .hero-canvas { width: 76vw; right: -10%; top: 42%; opacity: 0.85; }
+      .hero h1 .line-b { margin-left: 17vw; }
+      .about-grid { grid-template-columns: 1fr; gap: 1.5rem; margin-top: 3.5rem; }
       .section-head { margin: 3.5rem 0 2.25rem; }
       .watermark { width: 36px; right: 1rem; bottom: 0.9rem; }
     }
@@ -509,20 +542,22 @@
     <!-- ==================== HOME ==================== -->
     <section id="home" class="tab-panel active">
       <div class="hero">
-        <h1>Mary Clayton Soto</h1>
-        <div class="rule"></div>
+        <div class="hero-canvas" aria-hidden="true"><canvas id="mesh-ribbon"></canvas></div>
+        <h1><span class="line">Mary Clayton</span><span class="line line-b">Soto</span></h1>
         <p class="disciplines">Biomedical Engineering <span class="dot">/</span> Mathematics <span class="dot">/</span> Visual Arts</p>
         <p class="tagline">Duke University, Pratt School of Engineering &middot; Class of 2028</p>
       </div>
 
-      <div class="section-head">
-        <span class="eyebrow">About</span>
-        <h2 class="section-title">Where fields overlap</h2>
-      </div>
-      <div class="prose">
+      <div class="about-grid">
+        <div class="rail">
+          <span class="eyebrow">About</span>
+          <h2>Where fields overlap</h2>
+        </div>
+        <div class="prose">
         <p>I'm a biomedical engineering and mathematics double major at Duke University's Pratt School of Engineering, with a minor in visual arts. I'm drawn to the places these fields overlap — medical device design, patent law, and the intersection of art and science.</p>
         <p>Right now, I'm designing surgical education models with Duke's SEAL Lab through Bass Connections, coordinating cardiovascular device research at the Tallahassee Research Institute, teaching Python to first-year engineers as an EGR105 TA, and serving as Vice President of Professional Development for Theta Tau.</p>
         <p>Visual art has always been more than a creative outlet for me — it shapes how I observe, question, and solve problems. Whether I'm drawing hands reaching toward bubbles or 3D-printing molds for hydrogel organ models, I'm driven by the same process: observing carefully, asking questions, and turning abstract ideas into tangible forms.</p>
+        </div>
       </div>
 
       <div class="gallery-grid" style="margin-top:4rem;">
@@ -782,6 +817,8 @@
       toggle.setAttribute("aria-expanded", "false");
       window.scrollTo({ top: 0 });
       observeReveals();
+      // let the hero ribbon re-measure (it has zero size while Home is hidden)
+      window.dispatchEvent(new Event("resize"));
     }
 
     links.forEach(link => {
@@ -821,6 +858,105 @@
       });
     }
     observeReveals();
+
+    // ---------- Hero mesh ribbon ----------
+    // Generative parametric loop (spirograph/Lissajous family):
+    // a closed harmonic center curve carrying ~64 fine strands that
+    // weave across the band, drawn in the ombre colors from the
+    // theme block (read at runtime — no hard-coded hexes here).
+    // Interactive: eased cursor tracking rotates and warps the form;
+    // prefers-reduced-motion gets a single static render.
+    (function () {
+      const holder = document.querySelector(".hero-canvas");
+      if (!holder) return;
+      const canvas = holder.querySelector("canvas");
+      const ctx = canvas.getContext("2d");
+      const TAU = Math.PI * 2;
+
+      // ombre stops from the theme block
+      const rootStyle = getComputedStyle(document.documentElement);
+      const rgb = v => {
+        const h = rootStyle.getPropertyValue(v).trim().replace("#", "");
+        return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16));
+      };
+      // pink → coral → orange → coral (loops back seamlessly)
+      const stops = [rgb("--pink"), rgb("--coral"), rgb("--orange"), rgb("--coral")];
+      function strandColor(u, alpha) {
+        const x = u * stops.length;
+        const i = Math.floor(x) % stops.length;
+        const f = x - Math.floor(x);
+        const c0 = stops[i], c1 = stops[(i + 1) % stops.length];
+        const c = c0.map((v, k) => Math.round(v + (c1[k] - v) * f));
+        return `rgba(${c[0]},${c[1]},${c[2]},${alpha})`;
+      }
+
+      const small = matchMedia("(max-width: 760px)").matches;
+      const STRANDS = small ? 44 : 64;
+      const STEPS = small ? 180 : 240;
+
+      let W = 0, H = 0;
+      function size() {
+        const r = holder.getBoundingClientRect();
+        if (!r.width) { W = 0; return; }
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        W = r.width; H = r.height;
+        canvas.width = Math.round(W * dpr);
+        canvas.height = Math.round(H * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      // eased cursor state, in -1..1
+      let mx = 0, my = 0, tx = 0, ty = 0;
+
+      function draw(t) {
+        ctx.clearRect(0, 0, W, H);
+        const cx = W / 2, cy = H / 2;
+        const R = Math.min(W, H) * 0.315 * (1 + 0.012 * Math.sin(t * 0.0003));
+        const rot = mx * 0.35 + t * 0.000018;
+        const amp3 = 0.17 + my * 0.05;
+        ctx.lineWidth = 0.6;
+        for (let i = 0; i < STRANDS; i++) {
+          const phi = (i / STRANDS) * TAU;
+          ctx.strokeStyle = strandColor(i / STRANDS, 0.55);
+          ctx.beginPath();
+          for (let s = 0; s <= STEPS; s++) {
+            const u = (s / STEPS) * TAU;
+            const rad = R * (1 + amp3 * Math.sin(3 * u + 0.6 + t * 0.00006)
+                               + 0.08 * Math.sin(5 * u + 1.7 - t * 0.00004));
+            const w = R * 0.24 * (1 + 0.3 * Math.sin(2 * u + 0.9));
+            const rr = rad + Math.sin(2 * u + phi + t * 0.00012) * w;
+            const x = cx + rr * Math.cos(u + rot);
+            const y = cy + rr * Math.sin(u + rot) * 0.94;
+            s ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+          }
+          ctx.closePath();
+          ctx.stroke();
+        }
+      }
+
+      size();
+      if (reduceMotion) {
+        if (W) draw(0);
+        window.addEventListener("resize", () => { size(); if (W) draw(0); });
+      } else {
+        window.addEventListener("pointermove", e => {
+          tx = (e.clientX / window.innerWidth) * 2 - 1;
+          ty = (e.clientY / window.innerHeight) * 2 - 1;
+        });
+        window.addEventListener("resize", size);
+        let inView = true;
+        new IntersectionObserver(en => { inView = en[0].isIntersecting; }).observe(holder);
+        (function loop(t) {
+          requestAnimationFrame(loop);
+          if (!holder.offsetParent) return;          // Home tab hidden
+          if (!W) { size(); if (!W) return; }        // was hidden at load
+          if (!inView) return;                       // scrolled past hero
+          mx += (tx - mx) * 0.045;
+          my += (ty - my) * 0.045;
+          draw(t || 0);
+        })(0);
+      }
+    })();
   </script>
 </body>
 </html>

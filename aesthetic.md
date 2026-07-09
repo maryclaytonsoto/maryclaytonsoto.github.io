@@ -25,7 +25,7 @@ Portable design system for Mary Clayton Soto's visual identity. Any agent buildi
 ### Typography
 
 - Serif display + neutral sans body split (the editorial system's signature move).
-- Display (name, headings, section titles): **Cormorant Garamond** 500–600. Hero name very large (clamp up to ~7.5rem).
+- Display (name, headings, section titles): **Cormorant Garamond** 500–600. Hero name very large (clamp up to ~8.5rem), set as two intentional lines: "Mary Clayton" roman, "Soto" italic and offset right, nesting into the hero mesh ribbon. Never allow an accidental wrap of the name.
 - Body / UI (paragraphs, nav, labels, buttons): **Inter** 400–600, tight tracking (~-0.01em). EB Garamond retired from body.
 - Eyebrow labels: Inter 11px, uppercase, 0.14em letterspacing, muted brown.
 - Disciplines line under the name: Cormorant italic, terracotta "/" separators.
@@ -34,10 +34,10 @@ Portable design system for Mary Clayton Soto's visual identity. Any agent buildi
 
 ### Illustration
 
-- Hand-drawn, never geometric-perfect: sketched SVG with wobbly bezier paths, round caps, varied stroke weights.
-- Motifs: dashed architectural construction guides + measurement ticks (taupe/charcoal, blueprint feel) combined with flowing ribbon waves; exactly one thick ribbon carries the sunset ombre; tiny bright dots as punctuation.
-- Mood: organized and professional, not chaotic. See `design-options.html` for the explored directions (A+B chosen).
-- (Queued: Mary's own doodles will be converted into graphics and may replace/join these motifs.)
+- Hero graphic: a **generative parametric mesh ribbon** — a closed organic loop (spirograph/Lissajous family: harmonic center curve, ~64 fine strands weaving across the band) drawn live on a `<canvas>`, colored with the ombre (pink→coral→orange), ~0.6px strokes at ~0.55 alpha so overlaps read as translucent woven lattice on the cream ground. Cursor-reactive (eased rotation/warp) with slow ambient drift; `prefers-reduced-motion` gets one static render. Colors are read from the theme block at runtime — no hard-coded hexes in the script.
+- The earlier hand-drawn sketch style (wobbly beziers, construction guides) is retired from the hero but remains an approved accent language.
+- Mood: mathematical yet organic — mirrors Mary's art themes (order and spontaneity).
+- (Queued: Mary's own doodles will be converted into graphics and may join as accents.)
 
 ### Layout & components
 
@@ -45,7 +45,8 @@ Portable design system for Mary Clayton Soto's visual identity. Any agent buildi
 - Sticky header, hairline bottom border, sans pill nav links; active tab is a pill filled with the signature ombre, white text (same pill inset in the mobile menu).
 - Two radii, held: near-square 2px on cards/frames, full-pill (9999px) on controls (nav pills, buttons). Flat surfaces, no shadows; separation via warm hairlines (`color-mix` of ink at 7–14%).
 - Projects and Art: gallery-wall grid — 2-up framed pieces (4:3 paper frame, hairline border) with gallery-label text below (eyebrow + dates meta line, serif title, small description). Experience/Publication: editorial two-column hairline rows (meta left, serif title + body right).
-- Ombre rationed to exactly two moments: the 3px rule under the hero name and the active nav pill. Terracotta reserved for tiny touches ("/" separators).
+- Ombre rationed to exactly two moments: the hero mesh ribbon (replaced the retired 3px rule under the name) and the active nav pill. Terracotta reserved for tiny touches ("/" separators).
+- Home about section: editorial two-column grid — heading rail (eyebrow + serif title) left, prose right; collapses to one column below 760px.
 - Action color is warm near-black (ink): pill buttons, ink underlined links. The ombre is never a button fill (the nav pill is its one control appearance).
 - Empty media slots render as quiet paper-surface frames with hairline borders (no dashed boxes).
 - Motion: subtle scroll reveals (IntersectionObserver, 0.5s rise), 0.15s micro-transitions; `prefers-reduced-motion` respected.
@@ -58,6 +59,7 @@ All colors flow from one theme block of CSS custom properties (`--bg`, `--text`,
 
 ## CHANGELOG
 
+- **2026-07-08** — v4.2 "Woven Hero": hero redesigned per Mary. Name set as two intentional lines (roman "Mary Clayton" / italic offset "Soto") interwoven with a new generative parametric mesh-ribbon canvas (ombre-colored, cursor-reactive, reduced-motion safe) that replaces the 3px ombre rule. About restructured to a two-column rail+prose grid. Ombre nav pill untouched. Hand-drawn hero sketch language retired from the hero.
 - **2026-07-08** — Gallery frames now honor each image's natural aspect ratio (portrait / landscape / square) instead of a forced 4:3 `object-fit: cover` crop; grid uses `align-items: start` so mixed-height pieces align to the top. Empty/text-placeholder frames still fall back to the 4:3 paper slot (via `:frame:not(:has(img))`).
 - **2026-07-08** — Content fill (no style change): real photos and copy added from Portfolio/PortfolioInfo.md. Nav reordered (Publication → "Research", moved to lead; order now Home · Research · Experience · Projects · Art · Contact). Projects trimmed to Rollator + Arduino (Yeast Library and Green Space removed) with real photos; Publication given real title + DOI and a BME 271 continuation entry; Art filled (Boundless, Owl, High School collection); About gained a third paragraph + a 2-up portrait pair (reuses the existing `.gallery-grid`/`.piece` pattern — no new CSS); Contact gained GitHub + gmail and a working resume PDF link. Phone still intentionally omitted. Meta description added.
 - **2026-07-08** — v4.1 "Gallery Wall" (current): per Mary's feedback on v4 — Projects and Art become a 2-up gallery-wall grid (framed pieces + gallery-label text); Experience/Publication keep editorial rows; ombre-filled active nav pill reinstated (pill controls return, cards stay 2px). Fonts and palette unchanged from v4.

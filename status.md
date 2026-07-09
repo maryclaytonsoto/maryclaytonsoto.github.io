@@ -1,6 +1,16 @@
 # Project Status — Personal Portfolio Website
 
-Last updated: July 8, 2026 (end of session 2)
+Last updated: July 8, 2026 (end of session 4)
+
+## Session 4 summary (July 8, 2026) — v4.2 "Woven Hero"
+
+Landing-page redesign per Mary (she disliked the accidental line break in her name and wanted a more creative, dynamic hero with parametric mesh-ribbon graphics). Her choices via clarifying questions: name interwoven with the graphic; interactive; full Home tab scope; graphic replaces the small ombre rule (ombre nav pills kept).
+
+- **Hero:** name set as two intentional lines — "Mary Clayton" roman, "Soto" italic offset right — up to ~8.5rem, nesting into a new generative **parametric mesh ribbon**: a closed organic loop (harmonic/spirograph curves, 64 fine woven strands) drawn on `<canvas>` in the ombre colors, read from the theme block at runtime (no new hexes). Interactive: eased cursor rotation/warp plus slow ambient drift; pauses off-screen/on other tabs; static single render under `prefers-reduced-motion`; fewer strands below 760px. The 3px ombre rule is retired. Disciplines + tagline unchanged.
+- **Home about:** editorial two-column grid (eyebrow + "Where fields overlap" rail left, prose right), collapsing below 760px. Prose and photo pair unchanged — no content invented.
+- Verified: JS syntax, tag balance, no hard-coded hexes outside the theme block, 760px breakpoint intact, all-warm gradient. Ribbon math prototyped and visually confirmed (woven lattice at crossing frequency q=2, 64 strands).
+- aesthetic.md updated (typography, illustration, layout, v4.2 changelog).
+- **Mary should eyeball locally before pushing** — mesh/name overlap was verified by geometry calculation, not a rendered screenshot (no headless browser this session). Ribbon position/size tweaks are one line: `.hero-canvas` in the CSS.
 
 ## Session 2 summary (July 8, 2026)
 
