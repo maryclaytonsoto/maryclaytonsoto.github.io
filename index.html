@@ -168,21 +168,20 @@
     /* section heading — hierarchy from size + space */
     .section-head { margin: 5.5rem 0 3rem; }
     .section-head .eyebrow { display: block; margin-bottom: 1rem; }
-    /* mesh family — flowing path ribbons: one full-bleed canvas per
-       tab tracing a unique route through the page's whitespace
-       (loops and sweeps, per Mary's sketch). Same parametric
-       language as the hero loop; slow ambient drift only. */
+    /* mesh family — static 2D "paint stroke" ribbons: one full-bleed
+       canvas per tab, a flat mesh stroke (parallel hairlines, ombre
+       across the stroke) following a unique route with loops kept in
+       whitespace, never behind text. No animation on these. */
     .mesh-flow {
       position: absolute;
       top: 0;
       left: 50%;
       margin-left: -50vw;
       width: 100vw;
-      height: 460px;
+      height: 320px;
       z-index: -1;
       pointer-events: none;
     }
-    #contact .mesh-flow { height: 540px; }
     .mesh-flow canvas, .mesh-footer canvas {
       width: 100%; height: 100%; display: block;
     }
@@ -516,22 +515,25 @@
       max-width: var(--maxw);
       margin: 0 auto;
     }
-    /* signature — Mary's handwriting font, sitting on the footer ribbon */
+    /* sign-off — catchphrase over the footer ribbon, then Mary's
+       handwriting signature */
+    .signature-note {
+      position: relative;
+      z-index: 1;
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--text);
+      margin: -3rem 0 0.5rem;
+    }
     .signature {
       position: relative;
       z-index: 1;
       font-family: "Handwriting MCS", var(--display);
-      font-size: 2.1rem;
+      font-size: 2rem;
       color: var(--ink);
       line-height: 1;
-      margin: -3.25rem 0 0.4rem;
-    }
-    .signature-note {
-      font-family: var(--display);
-      font-style: italic;
-      font-size: 1.05rem;
-      color: var(--muted);
-      margin-bottom: 1.4rem;
+      margin: 0 0 1.5rem;
     }
 
     /* ============================================================
@@ -563,10 +565,10 @@
       .hero h1 .line-b { margin-left: 17vw; }
       .about-grid { grid-template-columns: 1fr; gap: 1.5rem; margin-top: 3.5rem; }
       .section-head { margin: 3.5rem 0 2.25rem; }
-      .mesh-flow { height: 300px; }
-      #contact .mesh-flow { height: 340px; }
+      .mesh-flow { display: none; } /* no whitespace to live in on phones */
       .mesh-footer { height: 70px; }
-      .signature { font-size: 1.7rem; margin-top: -2.5rem; }
+      .signature-note { margin-top: -2.2rem; font-size: 1rem; }
+      .signature { font-size: 1.6rem; }
       .watermark { width: 36px; right: 1rem; bottom: 0.9rem; }
     }
   </style>
@@ -844,8 +846,8 @@
 
   <footer>
     <div class="mesh-footer" aria-hidden="true"><canvas></canvas></div>
-    <p class="signature">Mary Clayton</p>
-    <p class="signature-note">curiosity, made tangible</p>
+    <p class="signature-note">Building @ the intersection of science &amp; creativity.</p>
+    <p class="signature">xx, MC</p>
     <p>&copy; 2026 Mary Clayton Soto</p>
   </footer>
 
@@ -1010,9 +1012,19 @@
         }
       }
 
-      // flowing path ribbon: strands weave around a Catmull-Rom
-      // spline through per-tab waypoints (loops + sweeps, per
-      // Mary's sketch), tapered at both ends
+      // non-wrapping ombre across a flat stroke: pink → coral → orange
+      const flat = [rgb("--pink"), rgb("--coral"), rgb("--orange")];
+      function strokeColor(f, alpha) {
+        const x = Math.min(f, 0.999) * (flat.length - 1);
+        const i = Math.floor(x), g = x - i;
+        const c0 = flat[i], c1 = flat[i + 1];
+        const c = c0.map((v, k) => Math.round(v + (c1[k] - v) * g));
+        return `rgba(${c[0]},${c[1]},${c[2]},${alpha})`;
+      }
+
+      // 2D paint-stroke ribbon: parallel hairlines (a flat mesh, not
+      // a woven tube) along a Catmull-Rom spline through per-tab
+      // waypoints. Static — drawn once, no animation.
       function catmull(pts, segs) {
         const out = [];
         for (let i = 0; i < pts.length - 1; i++) {
@@ -1030,13 +1042,10 @@
         return out;
       }
 
-      function drawFlow(m, t) {
+      function drawFlow(m) {
         const { ctx, W, H, o } = m;
         ctx.clearRect(0, 0, W, H);
-        const wp = o.path.map((p, k) => [
-          (p[0] + 0.008 * Math.sin(t * 0.00005 + k * 1.7)) * W,
-          (p[1] + 0.015 * Math.sin(t * 0.00004 + k * 2.3)) * H
-        ]);
+        const wp = o.path.map(p => [p[0] * W, p[1] * H]);
         const P = catmull(wp, 18);
         const n = P.length;
         const N = [];
@@ -1046,16 +1055,19 @@
           const L = Math.hypot(dx, dy) || 1;
           N.push([-dy / L, dx / L]);
         }
-        const width = o.width * (small ? 0.65 : 1);
         ctx.lineWidth = 0.6;
         for (let i = 0; i < o.strands; i++) {
-          const phi = (i / o.strands) * TAU;
-          ctx.strokeStyle = strandColor(i / o.strands, o.alpha);
+          const f = i / (o.strands - 1);   // 0..1 across the stroke
+          ctx.strokeStyle = strokeColor(f, o.alpha);
           ctx.beginPath();
           for (let j = 0; j < n; j++) {
             const u = j / (n - 1);
-            const taper = Math.pow(Math.sin(u * Math.PI), 0.6);
-            const off = Math.sin(u * TAU * o.weave + phi + t * 0.00012) * width * taper;
+            const taper = Math.pow(Math.sin(u * Math.PI), 0.55);
+            // flat brush: parallel offset + calligraphic width swell
+            // + a hair of per-strand wobble so it stays hand-made
+            const off = (f * 2 - 1) * o.width * taper
+                          * (0.75 + 0.25 * Math.sin(u * TAU * 0.9 + (o.phase || 0)))
+                        + Math.sin(u * 17 + i * 2.1) * 1.2;
             const x = P[j][0] + N[j][0] * off;
             const y = P[j][1] + N[j][1] * off;
             j ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
@@ -1064,53 +1076,38 @@
         }
       }
 
-      // open horizontal ribbon (footer), tapered ends
-      function drawOpen(m, t) {
-        const { ctx, W, H, o } = m;
-        ctx.clearRect(0, 0, W, H);
-        const steps = 130;
-        ctx.lineWidth = 0.6;
-        for (let i = 0; i < o.strands; i++) {
-          const phi = (i / o.strands) * TAU;
-          ctx.strokeStyle = strandColor(i / o.strands, o.alpha);
-          ctx.beginPath();
-          for (let s = 0; s <= steps; s++) {
-            const u = s / steps;
-            const taper = Math.pow(Math.sin(u * Math.PI), 0.65);
-            const mid = H * 0.5 + H * 0.2 * Math.sin(u * TAU * o.waves + o.phase + t * 0.00004);
-            const y = mid + Math.sin(u * TAU * 1.5 + phi + t * 0.00012) * H * 0.3 * taper;
-            s ? ctx.lineTo(u * W, y) : ctx.moveTo(u * W, y);
-          }
-          ctx.stroke();
-        }
-      }
-
-      function draw(m, t) { (m.o.path ? drawFlow : m.o.open ? drawOpen : drawClosed)(m, t); }
+      function draw(m, t) { m.o.path ? drawFlow(m) : drawClosed(m, t); }
 
       // the family — one language, a unique route per page.
       // Waypoints are [x, y] normalized to the flow canvas
       // (x: 0 = left viewport edge, 1 = right; y within canvas height).
+      // PLACEMENT RULE: strokes and their loops live in whitespace —
+      // right of the section titles (x ≳ 0.36) and above the content
+      // (y ≲ 0.85 of the 320px canvas), or in the right margin.
       addMesh(".hero-canvas", { strands: small ? 44 : 64, steps: small ? 180 : 240, lobes: 3, amp: 0.17, amp2: 0.08, band: 0.24, alpha: 0.55, phase: 0, interactive: true });
-      // Research: enter left under the nav, loop beside the title, sweep right, dip, rise off-edge
-      addMesh("#publication .mesh-flow", { strands: 28, weave: 2.6, width: 34, alpha: 0.42, path:
-        [[-0.03,0.10],[0.12,0.28],[0.26,0.34],[0.33,0.26],[0.30,0.16],[0.22,0.22],[0.28,0.38],[0.45,0.40],[0.60,0.36],[0.74,0.52],[0.86,0.70],[0.95,0.58],[1.03,0.40]] });
-      // Experience: enter right, S-curve down across the whitespace, exit left
-      addMesh("#experience .mesh-flow", { strands: 26, weave: 2.2, width: 30, alpha: 0.4, path:
-        [[1.03,0.14],[0.86,0.20],[0.68,0.34],[0.50,0.26],[0.34,0.36],[0.42,0.52],[0.58,0.56],[0.50,0.70],[0.30,0.76],[0.10,0.68],[-0.03,0.78]] });
-      // Projects: enter right, loop right of the title, run down-left, exit
-      addMesh("#projects .mesh-flow", { strands: 26, weave: 2.4, width: 32, alpha: 0.4, path:
-        [[1.03,0.26],[0.84,0.32],[0.66,0.24],[0.58,0.38],[0.66,0.50],[0.76,0.40],[0.68,0.30],[0.50,0.44],[0.30,0.62],[0.10,0.58],[-0.03,0.70]] });
-      // Art: playful wave with a small loop mid-page
-      addMesh("#art .mesh-flow", { strands: 26, weave: 3.0, width: 30, alpha: 0.4, path:
-        [[-0.03,0.44],[0.14,0.32],[0.30,0.46],[0.46,0.32],[0.54,0.44],[0.47,0.55],[0.42,0.42],[0.56,0.30],[0.72,0.40],[0.86,0.30],[1.03,0.44]] });
-      // Contact: sweep under the title, loop through the grid gap, run off bottom-right
-      addMesh("#contact .mesh-flow", { strands: 26, weave: 2.4, width: 32, alpha: 0.42, path:
-        [[-0.03,0.20],[0.18,0.30],[0.40,0.24],[0.58,0.40],[0.50,0.55],[0.42,0.44],[0.56,0.34],[0.76,0.48],[0.90,0.66],[1.03,0.80]] });
-      addMesh(".mesh-footer", { open: true, strands: 26, waves: 2.2, alpha: 0.35, phase: 2.4 });
+      // Research: enter top-right, loop in the open area right of the title, exit right
+      addMesh("#publication .mesh-flow", { strands: 30, width: 30, alpha: 0.42, phase: 0.4, path:
+        [[1.03,0.12],[0.85,0.22],[0.68,0.30],[0.58,0.42],[0.64,0.58],[0.74,0.50],[0.68,0.36],[0.82,0.55],[0.92,0.70],[1.03,0.78]] });
+      // Experience: high S-curve across the top-right, tail down the right margin
+      addMesh("#experience .mesh-flow", { strands: 28, width: 26, alpha: 0.4, phase: 1.6, path:
+        [[0.35,0.12],[0.50,0.24],[0.66,0.16],[0.82,0.26],[0.92,0.44],[0.80,0.62],[0.66,0.56],[0.76,0.72],[0.90,0.80],[1.03,0.86]] });
+      // Projects: high stroke with a loop, held above the gallery grid
+      addMesh("#projects .mesh-flow", { strands: 28, width: 26, alpha: 0.4, phase: 2.8, path:
+        [[1.03,0.35],[0.88,0.20],[0.72,0.28],[0.58,0.18],[0.46,0.28],[0.54,0.44],[0.66,0.40],[0.60,0.26],[0.76,0.46],[0.90,0.55],[1.03,0.48]] });
+      // Art: playful top-right wave, loop clear of the intro paragraph
+      addMesh("#art .mesh-flow", { strands: 28, width: 26, alpha: 0.4, phase: 4.1, path:
+        [[0.40,0.12],[0.55,0.22],[0.70,0.14],[0.84,0.22],[0.90,0.40],[0.78,0.50],[0.72,0.36],[0.82,0.28],[0.94,0.55],[1.03,0.70]] });
+      // Contact: drops in from the top edge, loops right of the title, exits right
+      addMesh("#contact .mesh-flow", { strands: 28, width: 26, alpha: 0.42, phase: 5.3, path:
+        [[0.45,0.06],[0.60,0.18],[0.76,0.12],[0.88,0.26],[0.80,0.42],[0.70,0.34],[0.78,0.22],[0.92,0.44],[1.03,0.60]] });
+      // Footer: low wave under the sign-off (same flat-stroke language)
+      addMesh(".mesh-footer", { strands: 22, width: 16, alpha: 0.35, phase: 2.4, path:
+        [[0.02,0.55],[0.18,0.30],[0.38,0.68],[0.58,0.32],[0.78,0.62],[0.98,0.42]] });
 
       window.addEventListener("resize", () => meshes.forEach(m => {
         size(m);
-        if (reduceMotion && m.W) draw(m, 0);
+        // static strokes and reduced-motion meshes repaint here
+        if (m.W && (reduceMotion || m.o.path)) draw(m, 0);
       }));
 
       // first paint (also the only paint under reduced motion)
@@ -1123,7 +1120,8 @@
           my += (ty - my) * 0.045;
           meshes.forEach(m => {
             if (!m.holder.offsetParent) return;   // tab hidden
-            if (!m.W) { size(m); if (!m.W) return; } // was hidden at load
+            if (!m.W) { size(m); if (m.W) draw(m, t || 0); return; } // first show
+            if (m.o.path) return;                 // static stroke — drawn once
             if (!m.inView) return;                // off-screen
             draw(m, t || 0);
           });

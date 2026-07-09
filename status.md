@@ -2,6 +2,15 @@
 
 Last updated: July 8, 2026 (end of session 4)
 
+## Session 4, part 4 (July 8, 2026) — v4.5 "Paint Strokes" + final sign-off
+
+Mary rejected the v4.4 ribbons: loops must sit in whitespace (not behind text), and the ribbons should be static 2D paint strokes, not dynamic 3D woven tubes (mesh look kept). She also finalized the sign-off text.
+
+- Flow ribbons redrawn as flat strokes: parallel hairlines, ombre graded across the stroke (pink edge → orange edge), calligraphic width swell, slight per-strand wobble, tapered ends. No animation — drawn once (redrawn on resize/tab show). Hero loop unchanged (still woven + cursor-reactive).
+- All five routes repositioned into whitespace: top-right of each tab, loops right of the titles, tails down the right margin. Verified against title/content exclusion zones in a rendered layout check (no collisions at 1440px). Footer band converted to the same flat language. Flow strokes hidden below 760px — phones have no whitespace for them (flagged per mobile rule; footer + hero still show).
+- Sign-off finalized by Mary: catchphrase "Building @ the intersection of science & creativity." (Cormorant italic, over the footer stroke) then "xx, MC" in her handwriting font. Draft "curiosity, made tangible" retired. Glyph coverage for "xx, MC" verified.
+- JS: drawOpen removed, drawFlow rewritten (static, non-wrapping stroke gradient); rAF loop skips static meshes after first paint.
+
 ## Session 4, part 3 (July 8, 2026) — v4.4 "Flow Lines" + signature
 
 Mary reviewed v4.3 live and rejected the accent blobs parked behind section titles and the "random line" feel; she sketched a flowing route (enter from an edge, loop, sweep through whitespace) and asked for unique-but-cohesive per-page graphics. She also uploaded her handwriting font (`Handwritingmcs-Regular.ttf`) and asked for a signature with a short catchphrase.
