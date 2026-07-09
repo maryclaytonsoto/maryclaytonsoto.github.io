@@ -2,6 +2,14 @@
 
 Last updated: July 8, 2026 (end of session 4)
 
+## Session 4, part 3 (July 8, 2026) — v4.4 "Flow Lines" + signature
+
+Mary reviewed v4.3 live and rejected the accent blobs parked behind section titles and the "random line" feel; she sketched a flowing route (enter from an edge, loop, sweep through whitespace) and asked for unique-but-cohesive per-page graphics. She also uploaded her handwriting font (`Handwritingmcs-Regular.ttf`) and asked for a signature with a short catchphrase.
+
+- Accent blobs and the Contact band removed. Each tab (Research, Experience, Projects, Art, Contact) now has a full-bleed **flow ribbon**: mesh strands weaving around a Catmull-Rom spline through per-tab waypoints — Research loops beside the title then sweeps right (her sketch), Experience S-curves right-to-left, Projects loops right of the title, Art waves mid-page, Contact dives through the grid gap. Same engine, slow drift, behind content (z-index −1), tapered ends, `html{overflow-x:hidden}` guards the full-bleed. Footer ribbon kept.
+- Signature: font copied to `fonts/`, `@font-face` "Handwriting MCS" (81 glyphs, verified covers "Mary Clayton"), used ONLY for the footer signature over the ribbon. **Catchphrase "curiosity, made tangible" is my draft (from her About wording) — Mary must approve or replace it.**
+- Verified: JS syntax, tag balance, flow-spline math (217 finite points, sane y-range), font glyph coverage. Same caveat: no rendered screenshot; Mary should eyeball locally, then push.
+
 ## Session 4, part 2 (July 8, 2026) — v4.3 "Mesh Family"
 
 Mary asked for more blobby mesh graphics throughout the site — same idea as the hero, not identical, dynamic and cohesive. Her choices: integrated throughout; slow drift only for secondary meshes (hero stays cursor-reactive).

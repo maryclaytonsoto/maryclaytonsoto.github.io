@@ -50,9 +50,18 @@
       --ease: cubic-bezier(.4,0,.2,1);
     }
 
+    /* Mary's handwriting — used only for the signature */
+    @font-face {
+      font-family: "Handwriting MCS";
+      src: url("fonts/Handwritingmcs-Regular.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
 
     body {
       font-family: var(--body);
@@ -149,7 +158,7 @@
       margin: 0 auto;
       padding: 0 1.5rem 8rem;
     }
-    .tab-panel { display: none; }
+    .tab-panel { display: none; position: relative; }
     .tab-panel.active { display: block; animation: rise 0.4s var(--ease) both; }
     @keyframes rise {
       from { opacity: 0; transform: translateY(10px); }
@@ -157,30 +166,25 @@
     }
 
     /* section heading — hierarchy from size + space */
-    .section-head { margin: 5.5rem 0 3rem; position: relative; }
-    .section-head > * { position: relative; z-index: 1; }
+    .section-head { margin: 5.5rem 0 3rem; }
     .section-head .eyebrow { display: block; margin-bottom: 1rem; }
-    /* mesh family — small generative accents behind section titles,
-       plus open ribbon bands (contact, footer). Same parametric
-       language as the hero ribbon; slow ambient drift only. */
-    .mesh-accent {
+    /* mesh family — flowing path ribbons: one full-bleed canvas per
+       tab tracing a unique route through the page's whitespace
+       (loops and sweeps, per Mary's sketch). Same parametric
+       language as the hero loop; slow ambient drift only. */
+    .mesh-flow {
       position: absolute;
-      left: -2.75rem;
-      top: 50%;
-      width: 200px;
-      aspect-ratio: 1 / 1;
-      transform: translateY(-50%);
-      z-index: 0;
+      top: 0;
+      left: 50%;
+      margin-left: -50vw;
+      width: 100vw;
+      height: 460px;
+      z-index: -1;
       pointer-events: none;
     }
-    .mesh-accent canvas, .mesh-band canvas, .mesh-footer canvas {
+    #contact .mesh-flow { height: 540px; }
+    .mesh-flow canvas, .mesh-footer canvas {
       width: 100%; height: 100%; display: block;
-    }
-    .mesh-band {
-      width: 100%;
-      height: 150px;
-      margin: 0 0 2.5rem;
-      pointer-events: none;
     }
     .mesh-footer {
       max-width: var(--maxw);
@@ -512,6 +516,23 @@
       max-width: var(--maxw);
       margin: 0 auto;
     }
+    /* signature — Mary's handwriting font, sitting on the footer ribbon */
+    .signature {
+      position: relative;
+      z-index: 1;
+      font-family: "Handwriting MCS", var(--display);
+      font-size: 2.1rem;
+      color: var(--ink);
+      line-height: 1;
+      margin: -3.25rem 0 0.4rem;
+    }
+    .signature-note {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--muted);
+      margin-bottom: 1.4rem;
+    }
 
     /* ============================================================
        MOBILE
@@ -542,9 +563,10 @@
       .hero h1 .line-b { margin-left: 17vw; }
       .about-grid { grid-template-columns: 1fr; gap: 1.5rem; margin-top: 3.5rem; }
       .section-head { margin: 3.5rem 0 2.25rem; }
-      .mesh-accent { width: 150px; left: -1.25rem; }
-      .mesh-band { height: 110px; margin-bottom: 2rem; }
+      .mesh-flow { height: 300px; }
+      #contact .mesh-flow { height: 340px; }
       .mesh-footer { height: 70px; }
+      .signature { font-size: 1.7rem; margin-top: -2.5rem; }
       .watermark { width: 36px; right: 1rem; bottom: 0.9rem; }
     }
   </style>
@@ -606,8 +628,8 @@
 
     <!-- ==================== PROJECTS ==================== -->
     <section id="projects" class="tab-panel">
+      <div class="mesh-flow" aria-hidden="true"><canvas></canvas></div>
       <div class="section-head">
-        <div class="mesh-accent" aria-hidden="true"><canvas></canvas></div>
         <span class="eyebrow">Selected Work</span>
         <h2 class="section-title">Projects</h2>
       </div>
@@ -641,8 +663,8 @@
 
     <!-- ==================== EXPERIENCE ==================== -->
     <section id="experience" class="tab-panel">
+      <div class="mesh-flow" aria-hidden="true"><canvas></canvas></div>
       <div class="section-head">
-        <div class="mesh-accent" aria-hidden="true"><canvas></canvas></div>
         <span class="eyebrow">Research &amp; Teaching</span>
         <h2 class="section-title">Experience</h2>
       </div>
@@ -717,8 +739,8 @@
 
     <!-- ==================== PUBLICATION ==================== -->
     <section id="publication" class="tab-panel">
+      <div class="mesh-flow" aria-hidden="true"><canvas></canvas></div>
       <div class="section-head">
-        <div class="mesh-accent" aria-hidden="true"><canvas></canvas></div>
         <span class="eyebrow">Peer-Reviewed &amp; Ongoing</span>
         <h2 class="section-title">Research</h2>
       </div>
@@ -752,8 +774,8 @@
 
     <!-- ==================== ART  (toggleable — see SHOW_ART_TAB) ==================== -->
     <section id="art" class="tab-panel">
+      <div class="mesh-flow" aria-hidden="true"><canvas></canvas></div>
       <div class="section-head">
-        <div class="mesh-accent" aria-hidden="true"><canvas></canvas></div>
         <span class="eyebrow">Visual Arts</span>
         <h2 class="section-title">Art</h2>
       </div>
@@ -792,12 +814,11 @@
 
     <!-- ==================== CONTACT / RESUME ==================== -->
     <section id="contact" class="tab-panel">
+      <div class="mesh-flow" aria-hidden="true"><canvas></canvas></div>
       <div class="section-head">
         <span class="eyebrow">Get in Touch</span>
         <h2 class="section-title">Contact / Resume</h2>
       </div>
-
-      <div class="mesh-band" aria-hidden="true"><canvas></canvas></div>
 
       <div class="contact-grid">
         <div>
@@ -823,6 +844,8 @@
 
   <footer>
     <div class="mesh-footer" aria-hidden="true"><canvas></canvas></div>
+    <p class="signature">Mary Clayton</p>
+    <p class="signature-note">curiosity, made tangible</p>
     <p>&copy; 2026 Mary Clayton Soto</p>
   </footer>
 
@@ -987,7 +1010,61 @@
         }
       }
 
-      // open horizontal ribbon (contact band, footer), tapered ends
+      // flowing path ribbon: strands weave around a Catmull-Rom
+      // spline through per-tab waypoints (loops + sweeps, per
+      // Mary's sketch), tapered at both ends
+      function catmull(pts, segs) {
+        const out = [];
+        for (let i = 0; i < pts.length - 1; i++) {
+          const p0 = pts[Math.max(i - 1, 0)], p1 = pts[i],
+                p2 = pts[i + 1], p3 = pts[Math.min(i + 2, pts.length - 1)];
+          for (let s = 0; s < segs; s++) {
+            const tt = s / segs, t2 = tt * tt, t3 = t2 * tt;
+            out.push([
+              0.5 * (2 * p1[0] + (-p0[0] + p2[0]) * tt + (2 * p0[0] - 5 * p1[0] + 4 * p2[0] - p3[0]) * t2 + (-p0[0] + 3 * p1[0] - 3 * p2[0] + p3[0]) * t3),
+              0.5 * (2 * p1[1] + (-p0[1] + p2[1]) * tt + (2 * p0[1] - 5 * p1[1] + 4 * p2[1] - p3[1]) * t2 + (-p0[1] + 3 * p1[1] - 3 * p2[1] + p3[1]) * t3)
+            ]);
+          }
+        }
+        out.push(pts[pts.length - 1].slice());
+        return out;
+      }
+
+      function drawFlow(m, t) {
+        const { ctx, W, H, o } = m;
+        ctx.clearRect(0, 0, W, H);
+        const wp = o.path.map((p, k) => [
+          (p[0] + 0.008 * Math.sin(t * 0.00005 + k * 1.7)) * W,
+          (p[1] + 0.015 * Math.sin(t * 0.00004 + k * 2.3)) * H
+        ]);
+        const P = catmull(wp, 18);
+        const n = P.length;
+        const N = [];
+        for (let j = 0; j < n; j++) {
+          const a = P[Math.max(j - 1, 0)], b = P[Math.min(j + 1, n - 1)];
+          const dx = b[0] - a[0], dy = b[1] - a[1];
+          const L = Math.hypot(dx, dy) || 1;
+          N.push([-dy / L, dx / L]);
+        }
+        const width = o.width * (small ? 0.65 : 1);
+        ctx.lineWidth = 0.6;
+        for (let i = 0; i < o.strands; i++) {
+          const phi = (i / o.strands) * TAU;
+          ctx.strokeStyle = strandColor(i / o.strands, o.alpha);
+          ctx.beginPath();
+          for (let j = 0; j < n; j++) {
+            const u = j / (n - 1);
+            const taper = Math.pow(Math.sin(u * Math.PI), 0.6);
+            const off = Math.sin(u * TAU * o.weave + phi + t * 0.00012) * width * taper;
+            const x = P[j][0] + N[j][0] * off;
+            const y = P[j][1] + N[j][1] * off;
+            j ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+          }
+          ctx.stroke();
+        }
+      }
+
+      // open horizontal ribbon (footer), tapered ends
       function drawOpen(m, t) {
         const { ctx, W, H, o } = m;
         ctx.clearRect(0, 0, W, H);
@@ -1008,16 +1085,28 @@
         }
       }
 
-      function draw(m, t) { (m.o.open ? drawOpen : drawClosed)(m, t); }
+      function draw(m, t) { (m.o.path ? drawFlow : m.o.open ? drawOpen : drawClosed)(m, t); }
 
-      // the family — one language, varied parameters per placement
-      addMesh(".hero-canvas",              { strands: small ? 44 : 64, steps: small ? 180 : 240, lobes: 3, amp: 0.17, amp2: 0.08, band: 0.24, alpha: 0.55, phase: 0, interactive: true });
-      addMesh("#publication .mesh-accent", { strands: 34, steps: 150, lobes: 4, amp: 0.13, amp2: 0.05, band: 0.26, alpha: 0.4, phase: 1.3 });
-      addMesh("#experience .mesh-accent",  { strands: 34, steps: 150, lobes: 5, amp: 0.10, amp2: 0.04, band: 0.24, alpha: 0.4, phase: 2.1 });
-      addMesh("#projects .mesh-accent",    { strands: 34, steps: 150, lobes: 4, amp: 0.18, amp2: 0.05, band: 0.20, alpha: 0.4, phase: 4.4 });
-      addMesh("#art .mesh-accent",         { strands: 34, steps: 150, lobes: 3, amp: 0.22, amp2: 0.07, band: 0.30, alpha: 0.4, phase: 5.2 });
-      addMesh("#contact .mesh-band",       { open: true, strands: 40, waves: 1.4, alpha: 0.45, phase: 0.8 });
-      addMesh(".mesh-footer",              { open: true, strands: 26, waves: 2.2, alpha: 0.35, phase: 2.4 });
+      // the family — one language, a unique route per page.
+      // Waypoints are [x, y] normalized to the flow canvas
+      // (x: 0 = left viewport edge, 1 = right; y within canvas height).
+      addMesh(".hero-canvas", { strands: small ? 44 : 64, steps: small ? 180 : 240, lobes: 3, amp: 0.17, amp2: 0.08, band: 0.24, alpha: 0.55, phase: 0, interactive: true });
+      // Research: enter left under the nav, loop beside the title, sweep right, dip, rise off-edge
+      addMesh("#publication .mesh-flow", { strands: 28, weave: 2.6, width: 34, alpha: 0.42, path:
+        [[-0.03,0.10],[0.12,0.28],[0.26,0.34],[0.33,0.26],[0.30,0.16],[0.22,0.22],[0.28,0.38],[0.45,0.40],[0.60,0.36],[0.74,0.52],[0.86,0.70],[0.95,0.58],[1.03,0.40]] });
+      // Experience: enter right, S-curve down across the whitespace, exit left
+      addMesh("#experience .mesh-flow", { strands: 26, weave: 2.2, width: 30, alpha: 0.4, path:
+        [[1.03,0.14],[0.86,0.20],[0.68,0.34],[0.50,0.26],[0.34,0.36],[0.42,0.52],[0.58,0.56],[0.50,0.70],[0.30,0.76],[0.10,0.68],[-0.03,0.78]] });
+      // Projects: enter right, loop right of the title, run down-left, exit
+      addMesh("#projects .mesh-flow", { strands: 26, weave: 2.4, width: 32, alpha: 0.4, path:
+        [[1.03,0.26],[0.84,0.32],[0.66,0.24],[0.58,0.38],[0.66,0.50],[0.76,0.40],[0.68,0.30],[0.50,0.44],[0.30,0.62],[0.10,0.58],[-0.03,0.70]] });
+      // Art: playful wave with a small loop mid-page
+      addMesh("#art .mesh-flow", { strands: 26, weave: 3.0, width: 30, alpha: 0.4, path:
+        [[-0.03,0.44],[0.14,0.32],[0.30,0.46],[0.46,0.32],[0.54,0.44],[0.47,0.55],[0.42,0.42],[0.56,0.30],[0.72,0.40],[0.86,0.30],[1.03,0.44]] });
+      // Contact: sweep under the title, loop through the grid gap, run off bottom-right
+      addMesh("#contact .mesh-flow", { strands: 26, weave: 2.4, width: 32, alpha: 0.42, path:
+        [[-0.03,0.20],[0.18,0.30],[0.40,0.24],[0.58,0.40],[0.50,0.55],[0.42,0.44],[0.56,0.34],[0.76,0.48],[0.90,0.66],[1.03,0.80]] });
+      addMesh(".mesh-footer", { open: true, strands: 26, waves: 2.2, alpha: 0.35, phase: 2.4 });
 
       window.addEventListener("resize", () => meshes.forEach(m => {
         size(m);
