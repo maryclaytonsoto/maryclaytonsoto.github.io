@@ -172,25 +172,8 @@
        canvas per tab, a flat mesh stroke (parallel hairlines, ombre
        across the stroke) following a unique route with loops kept in
        whitespace, never behind text. No animation on these. */
-    .mesh-flow {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      margin-left: -50vw;
-      width: 100vw;
-      height: 320px;
-      z-index: -1;
-      pointer-events: none;
-    }
-    .mesh-flow canvas, .mesh-footer canvas {
-      width: 100%; height: 100%; display: block;
-    }
-    .mesh-footer {
-      max-width: var(--maxw);
-      height: 90px;
-      margin: 0 auto 1.25rem;
-      pointer-events: none;
-    }
+    /* Mesh waves retired (2026-07-09) — holders hidden site-wide. */
+    .mesh-flow, .mesh-footer { display: none !important; }
     .section-title {
       font-family: var(--display);
       font-size: clamp(2.4rem, 4.5vw, 3.4rem);
@@ -209,41 +192,42 @@
        ============================================================ */
     .hero {
       position: relative;
-      padding: 6.5rem 0 5rem;
+      min-height: min(86vh, 780px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 4rem 0 4.5rem;
       border-bottom: 1px solid var(--line-soft);
+      overflow: hidden;      /* keep the floating bubbles inside the opening view */
     }
-    /* the mesh ribbon — part of the name composition, behind the type */
-    .hero-canvas {
+    /* the bubble field — full-bleed behind the name; catches clicks so
+       bubbles can be popped anywhere in the opening view */
+    .bubble-hero {
       position: absolute;
-      top: 46%;
-      right: 6%;
-      width: min(44vw, 540px);
-      aspect-ratio: 1 / 1;
-      transform: translateY(-50%);
+      inset: 0;
+      width: 100%;
+      height: 100%;
       z-index: 0;
-      pointer-events: none;
+      display: block;
+      cursor: pointer;
     }
-    .hero-canvas canvas { width: 100%; height: 100%; display: block; }
-    /* THE big name — two intentional lines; "Soto" set italic and
-       offset right so it nests into the ribbon */
+    /* THE big name — one line, one style, large */
     .hero h1 {
       position: relative;
       z-index: 1;
+      pointer-events: none;   /* let clicks fall through to pop bubbles */
       font-family: var(--display);
       color: var(--ink);
       font-weight: 500;
-      font-size: clamp(3.4rem, 10.5vw, 8.5rem);
-      line-height: 0.95;
+      font-size: clamp(2.15rem, 8.4vw, 6.4rem);
+      line-height: 1.0;
       letter-spacing: 0.005em;
-    }
-    .hero h1 .line { display: block; }
-    .hero h1 .line-b {
-      font-style: italic;
-      margin-left: clamp(4.5rem, 24vw, 19rem);
+      white-space: nowrap;
     }
     .hero .disciplines {
       position: relative;
       z-index: 1;
+      pointer-events: none;
       margin-top: 2.5rem;
       font-family: var(--display);
       font-style: italic;
@@ -520,20 +504,21 @@
     .signature-note {
       position: relative;
       z-index: 1;
-      font-family: var(--display);
-      font-style: italic;
-      font-size: 1.1rem;
+      font-family: "Handwriting MCS", var(--display);
+      font-size: 1.6rem;
+      line-height: 1.25;
       color: var(--text);
-      margin: -3rem 0 0.5rem;
+      margin: -3rem 0 0.25rem;
     }
     .signature {
       position: relative;
       z-index: 1;
       font-family: "Handwriting MCS", var(--display);
-      font-size: 2rem;
+      font-size: 1.9rem;
       color: var(--ink);
       line-height: 1;
       margin: 0 0 1.5rem;
+      padding-left: 2.5rem;
     }
 
     /* ============================================================
@@ -560,15 +545,11 @@
       .entry .meta { padding-top: 0; }
       .gallery-grid { grid-template-columns: 1fr; gap: 3.25rem; }
       .contact-grid { grid-template-columns: 1fr; gap: 2.75rem; }
-      .hero { padding: 3.75rem 0 3rem; }
-      .hero-canvas { width: 76vw; right: -10%; top: 42%; opacity: 0.85; }
-      .hero h1 .line-b { margin-left: 17vw; }
+      .hero { min-height: 78vh; padding: 3rem 0 3rem; }
       .about-grid { grid-template-columns: 1fr; gap: 1.5rem; margin-top: 3.5rem; }
       .section-head { margin: 3.5rem 0 2.25rem; }
-      .mesh-flow { display: none; } /* no whitespace to live in on phones */
-      .mesh-footer { height: 70px; }
-      .signature-note { margin-top: -2.2rem; font-size: 1rem; }
-      .signature { font-size: 1.6rem; }
+      .signature-note { margin-top: -2.2rem; font-size: 1.25rem; }
+      .signature { font-size: 1.5rem; padding-left: 1.5rem; }
       .watermark { width: 36px; right: 1rem; bottom: 0.9rem; }
     }
   </style>
@@ -598,8 +579,8 @@
     <!-- ==================== HOME ==================== -->
     <section id="home" class="tab-panel active">
       <div class="hero">
-        <div class="hero-canvas" aria-hidden="true"><canvas id="mesh-ribbon"></canvas></div>
-        <h1><span class="line">Mary Clayton</span><span class="line line-b">Soto</span></h1>
+        <canvas id="bubble-hero" class="bubble-hero" aria-hidden="true"></canvas>
+        <h1 class="hero-name">Mary Clayton Soto</h1>
         <p class="disciplines">Biomedical Engineering <span class="dot">/</span> Mathematics <span class="dot">/</span> Visual Arts</p>
         <p class="tagline">Duke University, Pratt School of Engineering &middot; Class of 2028</p>
       </div>
@@ -1023,8 +1004,23 @@
       }
 
       // 2D paint-stroke ribbon: parallel hairlines (a flat mesh, not
-      // a woven tube) along a Catmull-Rom spline through per-tab
-      // waypoints. Static — drawn once, no animation.
+      // a woven tube). Two centerline sources: a smooth full-bleed
+      // sine wave (current sitewide language — enters off the left
+      // edge, exits off the right, no visible ends), or a Catmull-Rom
+      // spline through per-tab waypoints (legacy). Static, drawn once.
+      // A smooth sine centerline that runs OFF both screen edges, so
+      // the bundle has no start/end points on the page.
+      function wavePath(o, W, H) {
+        const pts = [], n = 220, x0 = -0.14, x1 = 1.14;
+        for (let s = 0; s <= n; s++) {
+          const u = s / n;
+          const x = (x0 + (x1 - x0) * u) * W;
+          const y = (o.base + o.amp * Math.sin(u * TAU * o.freq + (o.phase || 0))
+                            + (o.amp2 || 0) * Math.sin(u * TAU * (o.freq * 1.9 + 0.5) + 1.3)) * H;
+          pts.push([x, y]);
+        }
+        return pts;
+      }
       function catmull(pts, segs) {
         const out = [];
         for (let i = 0; i < pts.length - 1; i++) {
@@ -1045,8 +1041,7 @@
       function drawFlow(m) {
         const { ctx, W, H, o } = m;
         ctx.clearRect(0, 0, W, H);
-        const wp = o.path.map(p => [p[0] * W, p[1] * H]);
-        const P = catmull(wp, 18);
+        const P = o.wave ? wavePath(o, W, H) : catmull(o.path.map(p => [p[0] * W, p[1] * H]), 18);
         const n = P.length;
         const N = [];
         for (let j = 0; j < n; j++) {
@@ -1062,12 +1057,14 @@
           ctx.beginPath();
           for (let j = 0; j < n; j++) {
             const u = j / (n - 1);
-            const taper = Math.pow(Math.sin(u * Math.PI), 0.55);
+            // waves keep full width to the edges (ends run off-page);
+            // legacy waypoint strokes still taper to a point.
+            const taper = o.wave ? 1 : Math.pow(Math.sin(u * Math.PI), 0.55);
             // flat brush: parallel offset + calligraphic width swell
             // + a hair of per-strand wobble so it stays hand-made
             const off = (f * 2 - 1) * o.width * taper
-                          * (0.75 + 0.25 * Math.sin(u * TAU * 0.9 + (o.phase || 0)))
-                        + Math.sin(u * 17 + i * 2.1) * 1.2;
+                          * (0.82 + 0.18 * Math.sin(u * TAU * 1.3 + (o.phase || 0)))
+                        + Math.sin(u * 17 + i * 2.1) * 1.1;
             const x = P[j][0] + N[j][0] * off;
             const y = P[j][1] + N[j][1] * off;
             j ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
@@ -1076,38 +1073,18 @@
         }
       }
 
-      function draw(m, t) { m.o.path ? drawFlow(m) : drawClosed(m, t); }
+      const isFlat = o => o.path || o.wave;
+      function draw(m, t) { isFlat(m.o) ? drawFlow(m) : drawClosed(m, t); }
 
-      // the family — one language, a unique route per page.
-      // Waypoints are [x, y] normalized to the flow canvas
-      // (x: 0 = left viewport edge, 1 = right; y within canvas height).
-      // PLACEMENT RULE: strokes and their loops live in whitespace —
-      // right of the section titles (x ≳ 0.36) and above the content
-      // (y ≲ 0.85 of the 320px canvas), or in the right margin.
-      addMesh(".hero-canvas", { strands: small ? 44 : 64, steps: small ? 180 : 240, lobes: 3, amp: 0.17, amp2: 0.08, band: 0.24, alpha: 0.55, phase: 0, interactive: true });
-      // Research: enter top-right, loop in the open area right of the title, exit right
-      addMesh("#publication .mesh-flow", { strands: 30, width: 30, alpha: 0.42, phase: 0.4, path:
-        [[1.03,0.12],[0.85,0.22],[0.68,0.30],[0.58,0.42],[0.64,0.58],[0.74,0.50],[0.68,0.36],[0.82,0.55],[0.92,0.70],[1.03,0.78]] });
-      // Experience: high S-curve across the top-right, tail down the right margin
-      addMesh("#experience .mesh-flow", { strands: 28, width: 26, alpha: 0.4, phase: 1.6, path:
-        [[0.35,0.12],[0.50,0.24],[0.66,0.16],[0.82,0.26],[0.92,0.44],[0.80,0.62],[0.66,0.56],[0.76,0.72],[0.90,0.80],[1.03,0.86]] });
-      // Projects: high stroke with a loop, held above the gallery grid
-      addMesh("#projects .mesh-flow", { strands: 28, width: 26, alpha: 0.4, phase: 2.8, path:
-        [[1.03,0.35],[0.88,0.20],[0.72,0.28],[0.58,0.18],[0.46,0.28],[0.54,0.44],[0.66,0.40],[0.60,0.26],[0.76,0.46],[0.90,0.55],[1.03,0.48]] });
-      // Art: playful top-right wave, loop clear of the intro paragraph
-      addMesh("#art .mesh-flow", { strands: 28, width: 26, alpha: 0.4, phase: 4.1, path:
-        [[0.40,0.12],[0.55,0.22],[0.70,0.14],[0.84,0.22],[0.90,0.40],[0.78,0.50],[0.72,0.36],[0.82,0.28],[0.94,0.55],[1.03,0.70]] });
-      // Contact: drops in from the top edge, loops right of the title, exits right
-      addMesh("#contact .mesh-flow", { strands: 28, width: 26, alpha: 0.42, phase: 5.3, path:
-        [[0.45,0.06],[0.60,0.18],[0.76,0.12],[0.88,0.26],[0.80,0.42],[0.70,0.34],[0.78,0.22],[0.92,0.44],[1.03,0.60]] });
-      // Footer: low wave under the sign-off (same flat-stroke language)
-      addMesh(".mesh-footer", { strands: 22, width: 16, alpha: 0.35, phase: 2.4, path:
-        [[0.02,0.55],[0.18,0.30],[0.38,0.68],[0.58,0.32],[0.78,0.62],[0.98,0.42]] });
+      // Mesh waves removed per Mary (2026-07-09). The hero now uses the
+      // bubble field (see the bubble-hero script below); the other tabs and
+      // the footer carry no wave. The mesh engine above is left dormant
+      // (no addMesh calls) in case a wave is ever wanted again.
 
       window.addEventListener("resize", () => meshes.forEach(m => {
         size(m);
         // static strokes and reduced-motion meshes repaint here
-        if (m.W && (reduceMotion || m.o.path)) draw(m, 0);
+        if (m.W && (reduceMotion || isFlat(m.o))) draw(m, 0);
       }));
 
       // first paint (also the only paint under reduced motion)
@@ -1121,12 +1098,257 @@
           meshes.forEach(m => {
             if (!m.holder.offsetParent) return;   // tab hidden
             if (!m.W) { size(m); if (m.W) draw(m, t || 0); return; } // first show
-            if (m.o.path) return;                 // static stroke — drawn once
+            if (isFlat(m.o)) return;              // static stroke — drawn once
             if (!m.inView) return;                // off-screen
             draw(m, t || 0);
           });
         })(0);
       }
+    })();
+  </script>
+
+  <!-- ============================================================
+       HERO BUBBLE FIELD — photoreal soap bubbles floating behind the
+       name, poppable on click/tap. Illustration-only pastel thin-film
+       colours (the soap-film spectrum) live in this script as a
+       documented exception, exactly like the retired hero-sketch
+       --taupe/--rose colours were. No interface colour is hard-coded.
+       Reduced-motion: one static frame, no drift, no pop loop.
+       ============================================================ -->
+  <script>
+    (function(){
+      const canvas = document.getElementById('bubble-hero');
+      if(!canvas) return;
+      const hero = canvas.parentElement;               // .hero box we fill
+      const ctx = canvas.getContext('2d');
+      const TAU = Math.PI*2;
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const rand = (a,b)=> a + Math.random()*(b-a);
+      let w, h, dpr, bubbles = [], pops = [], raf;
+
+      // Soap-film reflection spectrum (pastels) + interior colour pockets.
+      const FILM   = ['#ff9ecb','#ffd59e','#fff59e','#b6f5c8','#9ee0ff','#c9a9ff','#a0e0ab','#ffc36b','#ff9ecb'];
+      const POCKET = [[255,158,203],[255,213,158],[255,245,158],[182,245,200],[158,224,255],[201,169,255],[160,224,171]];
+
+      function size(){
+        dpr = Math.min(window.devicePixelRatio||1, 2);
+        w = hero.clientWidth; h = hero.clientHeight;
+        canvas.width = w*dpr; canvas.height = h*dpr;
+        ctx.setTransform(dpr,0,0,dpr,0,0);
+      }
+      function makePockets(){
+        const n = 3 + (Math.random()*2|0);
+        return Array.from({length:n}, ()=>({
+          a: rand(0,TAU), d: rand(0.12,0.5), s: rand(0.35,0.75),
+          c: POCKET[(Math.random()*POCKET.length)|0], spin: rand(-0.005,0.005)
+        }));
+      }
+      function make(fromBottom){
+        // a spread of sizes, with a few small ones for depth
+        const r = Math.random() < 0.28 ? rand(10,26) : rand(30,104);
+        return {
+          x: rand(0,w),
+          y: fromBottom ? h + r + rand(0,h*0.5) : rand(0,h),
+          r,
+          vx: rand(-0.22,0.22),
+          vy: -rand(0.12,0.42),
+          phase: rand(0,TAU),
+          wobble: rand(0.12,0.34),
+          squashPhase: rand(0,TAU),
+          rot: rand(0,TAU),
+          spin: rand(-0.0035,0.0035),
+          pockets: makePockets(),
+          pop: 0
+        };
+      }
+      function init(){
+        size();
+        const count = Math.max(7, Math.min(22, Math.round((w*h)/78000)));
+        bubbles = Array.from({length:count}, ()=> make(false));
+        pops = [];
+      }
+
+      function conicFilm(x,y,rot){
+        let g;
+        if(ctx.createConicGradient){ g = ctx.createConicGradient(rot, x, y); }
+        else { g = ctx.createLinearGradient(x-1,y-1,x+1,y+1); }
+        for(let i=0;i<FILM.length;i++) g.addColorStop(i/(FILM.length-1), FILM[i]);
+        return g;
+      }
+
+      function drawBubble(b){
+        const grow = b.pop ? 1 + b.pop*0.35 : 1;
+        const R = b.r*grow;
+        const a = b.pop ? (1 - b.pop) : 1;
+        // gentle organic squash (ellipse) as it floats
+        const sq = reduce ? 1 : 1 + Math.sin(b.squashPhase)*0.05;
+        const x = b.x, y = b.y;
+
+        ctx.save();
+        ctx.globalAlpha = a;
+        ctx.translate(x,y);
+        ctx.scale(1, sq);
+        ctx.translate(-x,-y);
+
+        // --- clip to the sphere for the body + iridescent interior ---
+        ctx.save();
+        ctx.beginPath(); ctx.arc(x,y,R,0,TAU); ctx.clip();
+
+        // 1) glassy body, Fresnel-bright at the rim
+        let body = ctx.createRadialGradient(x-R*0.25, y-R*0.30, R*0.05, x, y, R);
+        body.addColorStop(0,'rgba(255,255,255,0.16)');
+        body.addColorStop(0.72,'rgba(255,255,255,0.03)');
+        body.addColorStop(1,'rgba(255,255,255,0.22)');
+        ctx.fillStyle = body; ctx.fillRect(x-R,y-R,2*R,2*R);
+
+        // 2) drifting iridescent colour pockets (interference bands)
+        ctx.globalCompositeOperation = 'lighten';
+        for(const p of b.pockets){
+          const px = x + Math.cos(p.a)*R*p.d;
+          const py = y + Math.sin(p.a)*R*p.d;
+          const g = ctx.createRadialGradient(px,py,0,px,py,R*p.s);
+          g.addColorStop(0, `rgba(${p.c[0]},${p.c[1]},${p.c[2]},0.5)`);
+          g.addColorStop(1, `rgba(${p.c[0]},${p.c[1]},${p.c[2]},0)`);
+          ctx.fillStyle = g; ctx.fillRect(x-R,y-R,2*R,2*R);
+        }
+        ctx.globalCompositeOperation = 'source-over';
+
+        // 3) soft inner shading lower-right — gives the sphere volume
+        let shade = ctx.createRadialGradient(x+R*0.30, y+R*0.34, R*0.1, x+R*0.30, y+R*0.34, R*0.95);
+        shade.addColorStop(0,'rgba(47,47,45,0.10)');
+        shade.addColorStop(1,'rgba(47,47,45,0)');
+        ctx.fillStyle = shade; ctx.fillRect(x-R,y-R,2*R,2*R);
+        ctx.restore(); // drop clip
+
+        // 4) thin-film RIM — the bright rainbow edge
+        ctx.save();
+        ctx.beginPath(); ctx.arc(x,y,R*0.94,0,TAU);
+        ctx.lineWidth = Math.max(2, R*0.09);
+        ctx.strokeStyle = conicFilm(x,y,b.rot);
+        ctx.globalAlpha = a*0.85;
+        ctx.stroke();
+        ctx.restore();
+
+        // 5) second, offset film ring for the double-shimmer
+        ctx.save();
+        ctx.beginPath(); ctx.arc(x,y,R*0.80,0,TAU);
+        ctx.lineWidth = Math.max(1, R*0.035);
+        ctx.strokeStyle = conicFilm(x,y,b.rot + 1.4);
+        ctx.globalAlpha = a*0.5;
+        ctx.stroke();
+        ctx.restore();
+
+        // 6) crisp bright edge line
+        ctx.save();
+        ctx.beginPath(); ctx.arc(x,y,R*0.99,0,TAU);
+        ctx.lineWidth = Math.max(1, R*0.02);
+        ctx.strokeStyle = `rgba(255,255,255,${0.55*a})`;
+        ctx.stroke();
+        ctx.restore();
+
+        // 7) big soft specular highlight (upper-left window of light)
+        const hx = x - R*0.34, hy = y - R*0.40;
+        let hl = ctx.createRadialGradient(hx,hy,0,hx,hy,R*0.55);
+        hl.addColorStop(0,`rgba(255,255,255,${0.92*a})`);
+        hl.addColorStop(0.4,`rgba(255,255,255,${0.22*a})`);
+        hl.addColorStop(1,'rgba(255,255,255,0)');
+        ctx.fillStyle = hl;
+        ctx.beginPath(); ctx.arc(hx,hy,R*0.55,0,TAU); ctx.fill();
+
+        // 8) tiny sharp glint
+        ctx.beginPath(); ctx.arc(x-R*0.27, y-R*0.32, R*0.06, 0, TAU);
+        ctx.fillStyle = `rgba(255,255,255,${0.95*a})`; ctx.fill();
+
+        // 9) reflected rim-light crescent lower-right
+        ctx.save();
+        ctx.beginPath(); ctx.arc(x,y,R*0.86, 0.06*TAU, 0.34*TAU);
+        ctx.lineWidth = R*0.05; ctx.lineCap='round';
+        ctx.strokeStyle = `rgba(255,255,255,${0.28*a})`;
+        ctx.stroke();
+        ctx.restore();
+
+        ctx.restore();
+      }
+
+      function spawnPop(b){
+        const n = 8 + (Math.random()*5|0), drops = [];
+        for(let i=0;i<n;i++){
+          const ang = (i/n)*TAU + rand(-0.2,0.2), sp = rand(1.5,4.5);
+          drops.push({x:b.x, y:b.y, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp,
+                      r:rand(1.5,4), life:1, c:b.pockets[i%b.pockets.length].c});
+        }
+        pops.push({x:b.x, y:b.y, r:b.r, ring:0, drops});
+      }
+      function drawPops(){
+        for(let i=pops.length-1;i>=0;i--){
+          const p = pops[i];
+          p.ring += 0.06;
+          const rr = p.r*(1+p.ring*1.4), alpha = Math.max(0,1-p.ring);
+          if(alpha>0){
+            ctx.save();
+            ctx.beginPath(); ctx.arc(p.x,p.y,rr,0,TAU);
+            ctx.lineWidth = Math.max(1, p.r*0.12*(1-p.ring));
+            ctx.strokeStyle = conicFilm(p.x,p.y,p.ring*3);
+            ctx.globalAlpha = alpha*0.8; ctx.stroke();
+            ctx.restore();
+          }
+          for(const d of p.drops){
+            d.x+=d.vx; d.y+=d.vy; d.vy+=0.08; d.life-=0.03;
+            if(d.life>0){
+              ctx.beginPath(); ctx.arc(d.x,d.y,Math.max(0.5,d.r*d.life),0,TAU);
+              ctx.fillStyle=`rgba(${d.c[0]},${d.c[1]},${d.c[2]},${0.7*d.life})`; ctx.fill();
+            }
+          }
+          if(p.ring>1 && p.drops.every(d=>d.life<=0)) pops.splice(i,1);
+        }
+      }
+
+      function step(){
+        ctx.clearRect(0,0,w,h);
+        for(let i=bubbles.length-1;i>=0;i--){
+          const b = bubbles[i];
+          if(b.pop){
+            b.pop += 0.10;
+            if(b.pop>=1){ bubbles.splice(i,1); bubbles.push(make(true)); continue; }
+          } else {
+            b.phase += 0.01; b.rot += b.spin; b.squashPhase += 0.02;
+            b.x += b.vx + Math.sin(b.phase)*b.wobble;
+            b.y += b.vy;
+            for(const p of b.pockets) p.a += p.spin;
+            if(b.y + b.r < -40){ Object.assign(b, make(true)); }
+            if(b.x < -b.r-40) b.x = w + b.r + 20;
+            if(b.x > w + b.r+40) b.x = -b.r - 20;
+          }
+          drawBubble(b);
+        }
+        drawPops();
+        raf = requestAnimationFrame(step);
+      }
+
+      function hit(mx,my){
+        for(let i=bubbles.length-1;i>=0;i--){
+          const b = bubbles[i];
+          if(!b.pop && Math.hypot(mx-b.x,my-b.y) <= b.r){ b.pop = 0.001; spawnPop(b); return; }
+        }
+      }
+      function pointer(e){
+        const rect = canvas.getBoundingClientRect();
+        const cx = e.clientX ?? (e.touches && e.touches[0] && e.touches[0].clientX);
+        const cy = e.clientY ?? (e.touches && e.touches[0] && e.touches[0].clientY);
+        if(cx==null) return;
+        hit(cx-rect.left, cy-rect.top);
+      }
+      canvas.addEventListener('click', pointer);
+      canvas.addEventListener('touchstart', pointer, {passive:true});
+
+      init();
+      if(reduce){ ctx.clearRect(0,0,w,h); bubbles.forEach(drawBubble); }
+      else step();
+      let rt; window.addEventListener('resize', ()=>{
+        clearTimeout(rt);
+        rt = setTimeout(()=>{ cancelAnimationFrame(raf); init();
+          if(reduce){ bubbles.forEach(drawBubble); } else step(); }, 150);
+      });
     })();
   </script>
 </body>
