@@ -1,6 +1,46 @@
 # Project Status — Personal Portfolio Website
 
-Last updated: July 20, 2026 (end of session 5)
+Last updated: July 20, 2026 (session 6)
+
+## TRIAL, PARKED: WebGL thin-film bubbles (July 20, 2026)
+
+Built and reverted the same day. The code is still in `index.html`, fully wired and tuned;
+`USE_GL_BUBBLES = false` at the top of the bubble script turns it back on. **Read this before
+reviving it, so the same ground is not covered twice.**
+
+**What it was.** A WebGL layer painting the bubble bodies with real thin-film interference
+(path difference 2·n·d·cos θ, summed across 20 wavelength samples) instead of the 2D conic
+gradient. Mary approved it from a side-by-side prototype at iridescence 0.49, thickness 640.
+It renders under the existing 2D canvas, which kept the pop rings and the click target, so
+the motion, spawning and popping were never touched.
+
+**Why it was parked.** On the live hero it never looked as good as it did in the prototype
+panel, and after several rounds of tuning Mary preferred the original 2D bubbles.
+
+**What was learned, in order of usefulness:**
+
+1. **Value matters more than saturation on a pale ground.** Interference returns a correct hue
+   at a very dark value. Painted onto the cream it reads as mud: olive at the rim, brown at the
+   edge. The fix is to normalise the hue to full brightness, saturate, then tint *white* toward
+   it. A bubble on a light background is a pale pastel, not a dark stain. Chasing saturation
+   while the value was wrong wasted two rounds.
+2. **Never add a flat neutral term.** Anything added equally to r, g and b only pushes the
+   result back toward grey. A fresnel term at 0.26 was removing more colour than the physics
+   was creating.
+3. **Thickness trades saturation for banding**, it is not a "more colour" dial:
+   640 → 5 bands / mean chroma 0.190 · 880 → 6 / 0.174 · 1150 → 7 / 0.151 · 1500 → 10 / 0.109.
+4. **Prototype scale lies.** A colour band set to the outer 28% of the bubble reads as a ring in
+   a 420px panel and as a hairline on a full-width hero. Anything tuned in a small panel needs
+   re-checking at real size.
+5. Coordinate space bugs are silent: the specular was written for normalised coordinates and fed
+   pixels, so it was simply never drawn, and when "fixed" naively it became a hard white dot in
+   the top-left of every bubble.
+6. Performance note if revived: hero only. The other four tabs run idle 2D fields, and a GL
+   context on every tab is not worth it.
+
+**Still true:** the earlier finding that CSS blobs cannot do liquid iridescence stands. If this is
+ever wanted, a shader is the right tool. The open question is whether it suits a warm cream,
+low-key palette at all, since the effect wants a darker ground to read against.
 
 ## Session 5 (July 9–20, 2026) — v5 → v5.3 "Bubbles"
 

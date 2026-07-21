@@ -49,8 +49,12 @@
          the footer sign-off only. Never headings, nav, or body copy. */
       --hand:    "Handwriting MCS", "Cormorant Garamond", Georgia, serif;
 
-      /* --- Two radii, held: near-square cards, full-pill controls --- */
+      /* --- Radii: near-square cards, rounded media, full-pill controls ---
+         --r-media is the one dial for every image corner on the site.
+         Change it here, nowhere else. 12px reads rounded without going
+         bubbly; 6px is a hint, 20px is soft-app territory. */
       --r-card: 2px;
+      --r-media: 12px;
       --r-ctrl: 9999px;
       --on-ombre: #ffffff;   /* text on the ombre fill */
 
@@ -87,7 +91,7 @@
     /* small letterspaced label */
     .eyebrow {
       font-family: var(--body);
-      font-size: 0.6875rem;
+      font-size: 0.75rem;
       font-weight: 600;
       letter-spacing: 0.14em;
       text-transform: uppercase;
@@ -217,6 +221,20 @@
       display: block;
       cursor: pointer;
     }
+    /* WebGL layer that paints the bubbles themselves, sitting UNDER the
+       2D canvas above (which now carries only the pop rings + droplets
+       and still catches the clicks). Hidden unless the GL context
+       initialises, so the 2D renderer remains a working fallback. */
+    .bubble-hero-gl {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      display: none;
+      pointer-events: none;
+    }
+    .bubble-hero-gl.on { display: block; }
     /* idle (non-interactive) bubble fields on the other tabs: waft
        quietly behind the content */
     .bubble-idle {
@@ -250,26 +268,32 @@
       letter-spacing: 0.05em;
       white-space: nowrap;
     }
+    /* Disciplines line in Mary's hand. Note this stretches the --hand rule
+       stated at the token: the handwriting is otherwise the annotation
+       voice (captions, asides, sign-off) and not used in the hero. Her
+       call, and it works here because the line reads as a personal note
+       under the formal name rather than as a heading in its own right.
+       Sized up from the Cormorant version: the marker face has a much
+       smaller x-height, so matching point sizes would read smaller. */
     .hero .disciplines {
       position: relative;
       z-index: 2;
       pointer-events: none;
       margin-top: 2.5rem;
-      font-family: var(--display);
-      font-style: italic;
-      font-weight: 500;
-      font-size: clamp(1.4rem, 3vw, 1.9rem);
+      font-family: var(--hand);
+      font-weight: 400;
+      font-size: clamp(1.6rem, 3.6vw, 2.3rem);
       color: var(--text);
-      line-height: 1.3;
-      letter-spacing: 0.01em;
+      line-height: 1.35;
+      letter-spacing: 0.015em;
     }
-    .hero .disciplines .dot { color: var(--terracotta); font-style: normal; padding: 0 0.2em; }
+    .hero .disciplines .dot { color: var(--terracotta); padding: 0 0.3em; }
     .hero .tagline {
       position: relative;
       z-index: 2;
       margin-top: 1.5rem;
       font-family: var(--body);
-      font-size: 0.9375rem;
+      font-size: 1.0625rem;
       color: var(--muted);
       white-space: nowrap;
       letter-spacing: -0.01em;
@@ -323,7 +347,7 @@
     .entry .meta .eyebrow { display: block; margin-bottom: 0.5rem; }
     .entry .meta .when {
       font-family: var(--body);
-      font-size: 0.8125rem;
+      font-size: 0.875rem;
       color: var(--ink-subtle);
       letter-spacing: -0.01em;
     }
@@ -339,7 +363,7 @@
     .entry .org-link {
       display: inline-block;
       font-family: var(--body);
-      font-size: 0.8125rem;
+      font-size: 0.875rem;
       font-weight: 500;
       color: var(--ink);
       text-decoration: underline;
@@ -353,7 +377,7 @@
     .entry p {
       color: var(--text);
       max-width: 60ch;
-      font-size: 0.9375rem;
+      font-size: 1rem;
       line-height: 1.7;
     }
     .entry em { color: var(--ink); font-style: italic; }
@@ -365,7 +389,7 @@
        Mary is still workshopping. Marker is a middot, never a dash. */
     .skel { list-style: none; margin: 0.35rem 0 0; max-width: 60ch; }
     .skel li {
-      font-size: 0.9375rem;
+      font-size: 1rem;
       line-height: 1.65;
       color: var(--text);
       padding-left: 1.1rem;
@@ -423,9 +447,13 @@
     .piece .frame {
       background: var(--paper);
       border: 1px solid var(--line-soft);
-      border-radius: var(--r-card);
-      overflow: hidden;
+      border-radius: var(--r-media);
+      overflow: hidden;   /* required: this is what clips the img to the radius */
     }
+    /* Safari occasionally lets a child bleed past a rounded parent during
+       transforms (the reveal animation). Rounding the image itself too is
+       a belt-and-braces fix and costs nothing. */
+    .piece .frame img { border-radius: calc(var(--r-media) - 1px); }
     /* empty / text-placeholder frames keep the 4:3 paper slot */
     .piece .frame:not(:has(img)) {
       aspect-ratio: 4 / 3;
@@ -435,7 +463,7 @@
       text-align: center;
       color: var(--ink-subtle);
       font-style: italic;
-      font-size: 0.875rem;
+      font-size: 0.9375rem;
       padding: 1rem;
     }
     /* images keep their own shape: portrait, landscape, or square */
@@ -451,7 +479,7 @@
     }
     .piece .when {
       font-family: var(--body);
-      font-size: 0.75rem;
+      font-size: 0.8125rem;
       color: var(--ink-subtle);
       letter-spacing: -0.01em;
       white-space: nowrap;
@@ -465,55 +493,69 @@
       margin-bottom: 0.5rem;
       letter-spacing: 0.005em;
     }
+    /* Artwork titles in Mary's hand. Scoped to #art so project titles stay
+       in Cormorant: the handwriting is the personal voice, and the art is
+       where it belongs. Sized UP from 1.55rem because the marker face has
+       a much smaller x-height, so a matching point size reads noticeably
+       smaller than the serif beside it. */
     .piece p {
       color: var(--text);
-      font-size: 0.875rem;
+      font-size: 0.9375rem;
       line-height: 1.65;
     }
     /* captions carry the annotation voice: it reads as though Mary
        labelled her own photographs. Sized up from the old 0.8125rem
        because the marker face needs the room to stay legible. */
-    .art-caption {
-      margin-top: 0.8rem;
+    /* ONE handwriting treatment for every line that sits under an image,
+       whether it is an artwork title (#art .piece h3) or a photo caption
+       (.art-caption). Change it here and all seven move together. */
+    .art-caption,
+    #art .piece h3 {
       font-family: var(--hand);
-      color: var(--muted);
-      font-size: 1.05rem;
+      font-weight: 400;
+      font-size: 1.5rem;
       line-height: 1.3;
-      letter-spacing: 0.01em;
+      letter-spacing: 0.012em;
+      color: var(--ink);
+      margin-top: 0.85rem;
+      margin-bottom: 0;
     }
 
-    /* ============================================================
-       CONTACT / RESUME
-       ============================================================ */
-    /* Centred single measure. The size jump from the primary address to
-       everything below it does the organising, so the icon row only has
-       to distinguish link types, not carry hierarchy. */
-    .contact-block {
-      max-width: 30rem;
-      margin: 0 auto;
-      text-align: center;
-      padding-top: 1rem;
-    }
-    .contact-block .primary {
+    /* Contact block parked in the Home photo grid's left column, under
+       the headshot caption. Left-aligned to match the caption above it
+       and the rest of Home; spacing is an even 1.5rem step between parts
+       rather than the uneven gaps this had as a standalone tab. */
+    .home-contact { margin-top: 4rem; text-align: left; }
+    /* One label, not two: the eyebrow "Get in touch" over a "Contact"
+       heading said the same thing twice. The heading carries it alone. */
+    .home-contact h2 {
       font-family: var(--display);
-      font-size: 2.1rem;
+      font-size: 2.4rem;
       font-weight: 500;
-      line-height: 1.15;
-      margin-bottom: 0.4rem;
+      line-height: 1.05;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
     }
-    .contact-block .primary a {
+    .home-contact .home-mail {
+      font-family: var(--display);
+      font-size: clamp(1.5rem, 3.2vw, 2rem);
+      font-weight: 500;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+    .home-contact .home-mail a {
       color: var(--ink);
       text-decoration: none;
       border-bottom: 2px solid color-mix(in srgb, var(--terracotta) 55%, transparent);
       transition: border-color 0.15s var(--ease);
     }
-    .contact-block .primary a:hover { border-color: var(--ink); }
-    .contact-block .alt {
-      font-size: 0.875rem;
+    .home-contact .home-mail a:hover { border-color: var(--ink); }
+    .home-contact .home-alt {
+      font-size: 1rem;
       color: var(--ink-subtle);
-      margin-bottom: 2.25rem;
+      line-height: 1.8;
     }
-    .contact-block .alt a {
+    .home-contact .home-alt a {
       color: var(--muted);
       text-decoration: underline;
       text-decoration-thickness: 1.5px;
@@ -521,8 +563,11 @@
       text-decoration-color: color-mix(in srgb, var(--muted) 35%, transparent);
       transition: text-decoration-color 0.15s var(--ease);
     }
-    .contact-block .alt a:hover { text-decoration-color: var(--muted); }
+    .home-contact .home-alt a:hover { text-decoration-color: var(--muted); }
 
+    /* ============================================================
+       CONTACT / RESUME
+       ============================================================ */
     /* hand-drawn icons: sized in em so they track the label */
     .ic {
       width: 1.15em; height: 1.15em; flex: none;
@@ -534,46 +579,34 @@
     .icon-row {
       display: flex;
       justify-content: center;
-      gap: 2.25rem;
-      margin-bottom: 2.5rem;
+      gap: 2.5rem;
     }
     .icon-row a {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.45rem;
+      gap: 0.4rem;
       color: var(--ink);
       text-decoration: none;
-      font-size: 0.6875rem;
+      font-size: 0.75rem;
       font-weight: 600;
       letter-spacing: 0.12em;
       text-transform: uppercase;
+      transition: color 0.15s var(--ease);
     }
     .icon-row .ic {
-      width: 1.75em; height: 1.75em;
+      width: 1.6em; height: 1.6em;
       color: var(--terracotta);
       transition: transform 0.15s var(--ease);
     }
     .icon-row a:hover .ic { transform: translateY(-2px); }
     .icon-row a:hover { color: var(--muted); }
-
-    /* location closes the page in the annotation voice */
-    .contact-loc {
-      font-family: var(--hand);
-      font-size: 1.05rem;
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-    }
-    .contact-loc .ic { color: var(--terracotta); }
     /* primary button: action color is the warm near-black, never the ombre */
     .btn {
       display: inline-block;
       font-family: var(--body);
       font-weight: 500;
-      font-size: 0.875rem;
+      font-size: 0.9375rem;
       letter-spacing: -0.01em;
       color: var(--bg);
       background: var(--ink);
@@ -626,23 +659,75 @@
     /* ============================================================
        FOOTER
        ============================================================ */
+    /* ------------------------------------------------------------------
+       FOOTER = the contact block, on every tab.
+
+       Four parts, in Mary's stated order:
+         catchphrase --> email --> icons --> location
+       An even 1.6rem step between each. The gmail address and phone
+       number are deliberately NOT here: they live in the Home contact
+       block, so the footer stays a compact repeating sign-off rather
+       than a full contact card on every tab.
+       ------------------------------------------------------------------ */
     footer {
       color: var(--ink-subtle);
-      font-size: 0.8125rem;
-      padding: 2.5rem 1.5rem;
+      font-size: 0.875rem;
       text-align: center;
-      max-width: var(--maxw);
+      max-width: 34rem;
       margin: 0 auto;
+      padding: 1rem 1.5rem 3.25rem;
     }
-    /* sign-off: the catchphrase in Mary's handwriting, over the footer */
+    /* sign-off: the catchphrase in Mary's handwriting */
     .signature-note {
       position: relative;
       z-index: 1;
       font-family: var(--hand);
-      font-size: 1.6rem;
-      line-height: 1.25;
+      font-size: 1.35rem;
+      line-height: 1.3;
       color: var(--text);
-      margin: -3rem 0 1.5rem;
+      margin: 0 0 1.6rem;
+    }
+    /* primary address: levelled with the location line so the four parts
+       read as one sign-off rather than a heading with satellites. The
+       terracotta underline, not size, is what marks it as the action. */
+    .footer-mail {
+      font-family: var(--display);
+      font-size: 1.15rem;
+      font-weight: 500;
+      line-height: 1.3;
+      margin: 0 0 1.6rem;
+    }
+    .footer-mail a {
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 2px solid color-mix(in srgb, var(--terracotta) 55%, transparent);
+      transition: border-color 0.15s var(--ease);
+    }
+    .footer-mail a:hover { border-color: var(--ink); }
+    footer .icon-row { margin: 0 0 1.6rem; }
+    /* location closes the page in the annotation voice */
+    .contact-loc {
+      font-family: var(--hand);
+      font-size: 1.15rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin: 0;
+    }
+    .contact-loc .ic { color: var(--terracotta); }
+
+    /* Separator for text set in --hand. The handwriting font has 85
+       glyphs and does NOT include U+00B7, so a bare middot silently fell
+       back to Cormorant mid-line. This makes the fallback deliberate:
+       body face, terracotta, matching the hero's separator. Verified
+       present in the hand font: & @ , . and the full Latin alphabet.
+       U+00D7 is also absent, which is why the hero uses & now. */
+    .sep {
+      font-family: var(--body);
+      color: var(--terracotta);
+      padding: 0 0.35em;
     }
 
     /* ============================================================
@@ -668,13 +753,17 @@
       .entry { grid-template-columns: 1fr; gap: 0.85rem; padding: 2.25rem 0; }
       .entry .meta { padding-top: 0; }
       .gallery-grid { grid-template-columns: 1fr; gap: 3.25rem; }
-      .contact-block .primary { font-size: 1.5rem; word-break: break-word; }
-      .icon-row { gap: 1.5rem; }
+      .icon-row { gap: 1.75rem; }
+      /* single-column grid on mobile: the gap the contact block was
+         filling no longer exists, so give it its own separation */
+      .home-contact { margin-top: 3rem; }
+      .home-contact h2 { font-size: 2.1rem; }
       .hero { min-height: 78vh; padding: 3rem 0 3rem; }
       .hero .tagline { white-space: normal; }   /* allow wrap on small phones */
       .about-grid { grid-template-columns: 1fr; gap: 1.5rem; margin-top: 3.5rem; }
       .section-head { margin: 3.5rem 0 2.25rem; }
-      .signature-note { margin-top: -2.2rem; font-size: 1.25rem; }
+      .signature-note { font-size: 1.2rem; margin-bottom: 1.4rem; }
+      footer { padding-bottom: 2.75rem; }
       .watermark { width: 36px; right: 1rem; bottom: 0.9rem; }
     }
   </style>
@@ -725,7 +814,6 @@
           <li><a href="#experience" data-tab-link="experience">Experience</a></li>
           <li><a href="#projects" data-tab-link="projects">Projects</a></li>
           <li><a href="#art" data-tab-link="art">Art</a></li>
-          <li><a href="#contact" data-tab-link="contact">Contact</a></li>
         </ul>
       </nav>
     </div>
@@ -736,9 +824,10 @@
     <!-- ==================== HOME ==================== -->
     <section id="home" class="tab-panel active">
       <div class="hero">
+        <canvas id="bubble-hero-gl" class="bubble-hero-gl" aria-hidden="true"></canvas>
         <canvas id="bubble-hero" class="bubble-hero" aria-hidden="true"></canvas>
         <h1 class="hero-name">Mary Clayton Soto</h1>
-        <p class="disciplines">Biomedical Engineering <span class="dot">&times;</span> Mathematics <span class="dot">&times;</span> Visual Arts</p>
+        <p class="disciplines">Biomedical Engineering <span class="dot">&amp;</span> Mathematics <span class="dot">&amp;</span> Visual Arts</p>
         <p class="tagline">Duke University, Pratt School of Engineering &middot; Class of 2028</p>
       </div>
 
@@ -766,7 +855,20 @@
       <div class="gallery-grid" style="margin-top:4rem;">
         <div class="piece reveal">
           <div class="frame"><img src="images/headshot.jpg" alt="Portrait of Mary Clayton Soto in the Duke Chapel archway" /></div>
-          <p class="art-caption">Duke University &middot; Pratt School of Engineering</p>
+          <p class="art-caption">Duke University <span class="sep">&middot;</span> Pratt School of Engineering</p>
+
+          <!-- Contact sits in the left column because the chapel photo is
+               portrait and the headshot landscape, which left a tall gap
+               here. Filling it with real content beats padding it out. -->
+          <div class="home-contact">
+            <h2>Get in touch</h2>
+            <p class="home-mail"><a href="mailto:mary.soto@duke.edu">mary.soto@duke.edu</a></p>
+            <p class="home-alt">
+              <a href="mailto:maryclaytonsoto@gmail.com">maryclaytonsoto@gmail.com</a>
+              &nbsp;&middot;&nbsp;
+              <a href="tel:+18505679336">(850) 567-9336</a>
+            </p>
+          </div>
         </div>
         <div class="piece reveal">
           <div class="frame"><img src="images/duke.jpg" alt="Mary Clayton Soto on Duke's campus" /></div>
@@ -820,6 +922,55 @@
               <li class="todo">Code repository link to be added</li>
             </ul>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ART  (toggleable: see SHOW_ART_TAB) ==================== -->
+    <section id="art" class="tab-panel">
+      <canvas class="bubble-idle" aria-hidden="true"></canvas>
+      <div class="section-head">
+        <span class="eyebrow">Visual Arts</span>
+        <h2 class="section-title">Art</h2>
+      </div>
+
+      <p class="art-intro">Two common motifs run through my work: hands &amp; bubbles. The hands carry emotion, and they hold my fascination with the distortion of light into color, a property bubbles embody entirely.</p>
+
+      <div class="gallery-grid">
+        <div class="piece reveal">
+          <div class="frame"><img src="images/art-boundless.jpg" alt="Boundless, grayscale hands reaching toward colorful floating bubbles" /></div>
+          <div class="label">
+            <h3>Boundless</h3>
+            <ul class="skel">
+              <li>Grayscale hands reaching toward vibrant bubbles</li>
+              <li>Observation meeting the boundless</li>
+              <li>Duality: logic and imagination, stillness and motion</li>
+              <li class="todo">Medium and dimensions</li>
+            </ul>
+          </div>
+        </div>
+        <div class="piece reveal">
+          <div class="frame"><img src="images/art-owl.jpg" alt="Guardian Owl, a small gilded owl sculpture perched on a branch" /></div>
+          <div class="label">
+            <h3>Guardian Owl</h3>
+            <ul class="skel">
+              <li>Mixed-media sculpture</li>
+              <li>Gilded owl perched on a branch</li>
+              <li class="todo">Materials and dimensions</li>
+            </ul>
+          </div>
+        </div>
+        <div class="piece reveal">
+          <div class="frame"><img src="images/art-hs-rainbow.jpg" alt="A hand reaching into a beam of rainbow light" /></div>
+          <p class="art-caption">Holding Rainbow</p>
+        </div>
+        <div class="piece reveal">
+          <div class="frame"><img src="images/art-hs-iridescent.jpg" alt="Study of iridescent draped fabric" /></div>
+          <p class="art-caption">Iridescent Fabric</p>
+        </div>
+        <div class="piece reveal">
+          <div class="frame"><img src="images/art-hs-flame.jpg" alt="Three hands gathered around a small candle flame on a black ground" /></div>
+          <p class="art-caption">Tiny Flame</p>
         </div>
       </div>
     </section>
@@ -955,104 +1106,33 @@
       </div>
     </section>
 
-    <!-- ==================== ART  (toggleable: see SHOW_ART_TAB) ==================== -->
-    <section id="art" class="tab-panel">
-      <canvas class="bubble-idle" aria-hidden="true"></canvas>
-      <div class="section-head">
-        <span class="eyebrow">Visual Arts</span>
-        <h2 class="section-title">Art</h2>
-      </div>
-
-      <ul class="skel art-intro-skel">
-        <li>Two recurring images: hands and bubbles</li>
-        <li>Hands = reaching for an idea just past my understanding</li>
-        <li>Bubbles = mathematically efficient, visually unpredictable</li>
-        <li>Surface tension, pressure and light, still looking like magic</li>
-        <li>A bubble as self-portrait: fluctuating, refusing a single state</li>
-        <li>Graphite, gold leaf, 3D-printed mold: same chase either way</li>
-        <li>Where order and spontaneity meet and something feels alive</li>
-      </ul>
-
-      <div class="gallery-grid">
-        <div class="piece reveal">
-          <div class="frame"><img src="images/art-boundless.jpg" alt="Boundless, grayscale hands reaching toward colorful floating bubbles" /></div>
-          <div class="label">
-            <h3>Boundless</h3>
-            <ul class="skel">
-              <li>Grayscale hands reaching toward vibrant bubbles</li>
-              <li>Observation meeting the boundless</li>
-              <li>Duality: logic and imagination, stillness and motion</li>
-              <li class="todo">Medium and dimensions</li>
-            </ul>
-          </div>
-        </div>
-        <div class="piece reveal">
-          <div class="frame"><img src="images/art-owl.jpg" alt="Owl, a small gilded owl sculpture perched on a branch" /></div>
-          <div class="label">
-            <h3>Owl</h3>
-            <ul class="skel">
-              <li>Mixed-media sculpture</li>
-              <li>Gilded owl perched on a branch</li>
-              <li class="todo">Materials and dimensions</li>
-            </ul>
-          </div>
-        </div>
-        <div class="piece reveal">
-          <div class="frame"><img src="images/art-hs-rainbow.jpg" alt="A hand reaching into a beam of rainbow light" /></div>
-          <p class="art-caption">Holding Rainbow</p>
-        </div>
-        <div class="piece reveal">
-          <div class="frame"><img src="images/art-hs-iridescent.jpg" alt="Study of iridescent draped fabric" /></div>
-          <p class="art-caption">Iridescent Fabric</p>
-        </div>
-        <div class="piece reveal">
-          <div class="frame"><img src="images/art-hs-flame.jpg" alt="Three hands gathered around a small candle flame on a black ground" /></div>
-          <p class="art-caption">Tiny Flame</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== CONTACT / RESUME ==================== -->
-    <section id="contact" class="tab-panel">
-      <canvas class="bubble-idle" aria-hidden="true"></canvas>
-      <div class="section-head">
-        <span class="eyebrow">Get in Touch</span>
-        <h2 class="section-title">Contact</h2>
-      </div>
-
-      <div class="contact-block">
-        <p class="primary"><a href="mailto:mary.soto@duke.edu">mary.soto@duke.edu</a></p>
-        <p class="alt">
-          <a href="mailto:maryclaytonsoto@gmail.com">maryclaytonsoto@gmail.com</a>
-          &nbsp;&middot;&nbsp;
-          <a href="tel:+18505679336">(850) 567-9336</a>
-        </p>
-
-        <div class="icon-row">
-          <a href="https://github.com/maryclaytonsoto" target="_blank" rel="noopener">
-            <svg class="ic" aria-hidden="true"><use href="#i-code"/></svg>GitHub
-          </a>
-          <a href="https://linkedin.com/in/maryclaytonsoto" target="_blank" rel="noopener">
-            <svg class="ic" aria-hidden="true"><use href="#i-in"/></svg>LinkedIn
-          </a>
-          <a href="files/SotoResume.pdf" target="_blank" rel="noopener">
-            <svg class="ic" aria-hidden="true"><use href="#i-doc"/></svg>Resume
-          </a>
-        </div>
-
-        <p class="contact-loc">
-          <svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg>
-          Tallahassee, FL &nbsp;&middot;&nbsp; Durham, NC
-        </p>
-      </div>
-    </section>
 
   </main>
 
+  <!-- Contact lives here, outside <main>, so it renders under every tab
+       rather than being a destination of its own. The Contact tab and its
+       nav item were removed when this landed. -->
   <footer>
-    <div class="mesh-footer" aria-hidden="true"><canvas></canvas></div>
     <p class="signature-note">Building @ the intersection of science &amp; creativity.</p>
-    <p>&copy; 2026 Mary Clayton Soto</p>
+
+    <p class="footer-mail"><a href="mailto:mary.soto@duke.edu">mary.soto@duke.edu</a></p>
+
+    <div class="icon-row">
+      <a href="https://github.com/maryclaytonsoto" target="_blank" rel="noopener">
+        <svg class="ic" aria-hidden="true"><use href="#i-code"/></svg>GitHub
+      </a>
+      <a href="https://linkedin.com/in/maryclaytonsoto" target="_blank" rel="noopener">
+        <svg class="ic" aria-hidden="true"><use href="#i-in"/></svg>LinkedIn
+      </a>
+      <a href="files/SotoResume.pdf" target="_blank" rel="noopener">
+        <svg class="ic" aria-hidden="true"><use href="#i-doc"/></svg>Resume
+      </a>
+    </div>
+
+    <p class="contact-loc">
+      <svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg>
+      Tallahassee, FL <span class="sep">&middot;</span> Durham, NC
+    </p>
   </footer>
 
   <!-- ==================== CORNER WATERMARK (Mc monogram) ==================== -->
@@ -1351,6 +1431,188 @@
       // thin-film rim spectrum (pastel soap-film rainbow): drawn as a THIN ring
       const FILM  = ['#ff9ecb','#ffd59e','#fff59e','#b6f5c8','#9ee0ff','#c9a9ff','#a0e0ab','#ffc36b','#ff9ecb'];
 
+      /* ----------------------------------------------------------------
+         WebGL thin-film renderer (hero only).
+
+         Why: soap-film colour is interference, not a fixed rainbow ring.
+         Light reflecting off the outer and inner surfaces of the film
+         travels different distances; that gap is 2*n*d*cos(theta). Where
+         it lands on a whole number of wavelengths the colour reinforces,
+         on a half number it cancels. Sweeping the visible band gives the
+         pastel bands. Because the film drains thinner toward the top and
+         theta changes across the curve, colour varies over each bubble
+         and shifts as it squashes, which a conic gradient cannot do.
+
+         Settings chosen by Mary from the side-by-side prototype:
+         strength 0.49, thickness 640.
+
+         This renderer draws ONLY the bubble bodies. Pop rings and
+         droplets stay on the 2D canvas above. If the context fails to
+         create, init() returns null and createField silently keeps its
+         original 2D drawing path.
+         ---------------------------------------------------------------- */
+      /* OFF by default. Flip to true to re-enable the WebGL bubbles.
+         Everything below is kept intact and tuned; see the trial notes in
+         status.md before changing values, so the same ground is not
+         covered twice. */
+      const USE_GL_BUBBLES = false;
+
+      const IRIDESCENCE = 0.49;
+      // Film thickness in nanometres. Raising it adds more interference
+      // fringes across each bubble, so more distinct colour bands, but
+      // each band is narrower and the bands average toward white, so
+      // saturation drops as you climb. Measured across this shader:
+      //   640 -> 5 bands, mean chroma 0.190
+      //   880 -> 6 bands, mean chroma 0.174   <- current
+      //  1150 -> 7 bands, mean chroma 0.151
+      //  1500 -> 10 bands, mean chroma 0.109  (visibly washed out)
+      // Push further only if you want banding more than saturation.
+      const FILM_NM     = 880;
+      const GL_MAX      = 24;    // must match the array size in the shader
+
+      function createGLRenderer(canvas){
+        const gl = canvas.getContext('webgl', {alpha:true, premultipliedAlpha:false, antialias:true})
+                || canvas.getContext('experimental-webgl');
+        if(!gl) return null;
+
+        const VS = 'attribute vec2 p; void main(){ gl_Position = vec4(p,0.0,1.0); }';
+        const FS = [
+          'precision highp float;',
+          'uniform vec2  u_res;',
+          'uniform float u_time;',
+          'uniform int   u_n;',
+          'uniform vec4  u_b[24];',   // x, y, radius, squash
+          'uniform vec2  u_ph[24];',  // phase, alpha
+          'vec3 spectral(float w){',
+          '  return vec3(exp(-pow((w-600.0)/50.0,2.0)),',
+          '              exp(-pow((w-540.0)/50.0,2.0)),',
+          '              exp(-pow((w-460.0)/50.0,2.0)));',
+          '}',
+          'vec3 thinFilm(float d, float cosT){',
+          '  vec3 acc = vec3(0.0);',
+          '  for(int i=0;i<20;i++){',
+          '    float w = 400.0 + float(i)*(300.0/19.0);',
+          '    acc += spectral(w) * (0.5 + 0.5*cos((4.0*3.14159265*1.34*d*cosT)/w));',
+          '  }',
+          '  return acc/7.0;',
+          '}',
+          'void main(){',
+          '  vec2 fc = gl_FragCoord.xy;',
+          '  vec3 col = vec3(0.0); float alpha = 0.0;',
+          '  for(int i=0;i<24;i++){',
+          '    if(i >= u_n) break;',
+          '    vec4 b = u_b[i]; vec2 ph = u_ph[i];',
+          '    vec2 d2 = vec2(fc.x - b.x, (fc.y - b.y)/max(b.w,0.01));',
+          '    float dist = length(d2); float R = b.z;',
+          '    if(dist > R) continue;',
+          '    float nrm = dist/R;',
+          '    float nz  = sqrt(max(0.0, 1.0 - nrm*nrm));',
+          '    float drain = 1.0 - 0.42*((d2.y/R)*0.5 + 0.5);',
+          '    float thick = ' + FILM_NM.toFixed(1) + ' * drain * (0.55 + 0.85*pow(nrm,1.6));',
+          '    thick += 20.0*sin(u_time*0.0006 + ph.x + nrm*5.0);',
+          '    vec3 film = thinFilm(thick, nz);',
+          // Interference returns the right HUE at a low, dark value. Painted
+          // straight onto cream that reads as mud, not iridescence. So:
+          // normalise the hue to full brightness, saturate it, and later
+          // tint white toward it. A soap bubble on a pale ground is a light
+          // pastel, not a dark stain, and value is what was missing.
+          '    float mx = max(max(film.r, film.g), film.b);',
+          '    film = film / max(mx, 0.001);',
+          '    float lum = dot(film, vec3(0.299, 0.587, 0.114));',
+          '    film = clamp(mix(vec3(lum), film, 1.45), 0.0, 1.0);',
+          '    float fres = pow(1.0 - nz, 2.6);',
+          // Colour band widened from 0.72 to 0.35. In the prototype the
+          // panel was small; at hero scale a band confined to the outer
+          // quarter of a 100px bubble is a hairline you cannot read.
+          '    float rim  = smoothstep(0.35, 1.0, nrm);',
+          // Tint white toward the hue instead of painting the hue on dark.
+          // No flat neutral term is added anywhere: anything added equally
+          // to r, g and b only pushes the result back toward grey.
+          '    float tint = ' + (IRIDESCENCE*1.27).toFixed(3) + ' * (0.45 + rim*0.75);',
+          '    vec3 c = 1.0 - (1.0 - film) * tint;',
+          // Broad soft sheen, not the hard disc that was showing up as a
+          // dot in the top-left of every bubble. Wide radius, low gain.
+          '    float sd = length(d2 - vec2(-R*0.30, R*0.34)) / R;',
+          '    float sp = smoothstep(0.55, 0.0, sd) * 0.16;',
+          '    c += vec3(sp);',
+          '    float edge = smoothstep(1.0, 0.965, nrm);',
+          '    float a = (0.10 + fres*0.42 + rim*0.34 + sp*0.80) * edge * ph.y;',
+          // NOT premultiplied: the blend does the alpha multiply. Scaling
+          // the colour by `a` here as well squares it and the iridescence
+          // washes out to near-white, which is exactly what happened.
+          '    col += c;',
+          '    alpha = max(alpha, a);',
+          '  }',
+          '  gl_FragColor = vec4(col, clamp(alpha,0.0,1.0));',
+          '}'
+        ].join('\n');
+
+        // Diagnostic: says plainly in the console whether the GL path is
+        // live. If you ever see bubbles with no iridescence, check here
+        // first, since a silent fallback looks like a styling problem.
+        function compile(type, src, label){
+          const s = gl.createShader(type);
+          gl.shaderSource(s, src); gl.compileShader(s);
+          if(!gl.getShaderParameter(s, gl.COMPILE_STATUS)){
+            console.warn('[bubbles] ' + label + ' shader failed:\n' + gl.getShaderInfoLog(s));
+            return null;
+          }
+          return s;
+        }
+        const vs = compile(gl.VERTEX_SHADER, VS, 'vertex'),
+              fs = compile(gl.FRAGMENT_SHADER, FS, 'fragment');
+        if(!vs || !fs){ console.warn('[bubbles] falling back to the 2D renderer'); return null; }
+        const prog = gl.createProgram();
+        gl.attachShader(prog, vs); gl.attachShader(prog, fs); gl.linkProgram(prog);
+        if(!gl.getProgramParameter(prog, gl.LINK_STATUS)){
+          console.warn('[bubbles] program link failed: ' + gl.getProgramInfoLog(prog));
+          console.warn('[bubbles] falling back to the 2D renderer');
+          return null;
+        }
+        gl.useProgram(prog);
+        console.log('[bubbles] WebGL thin-film renderer active');
+
+        const buf = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);
+        const pa = gl.getAttribLocation(prog,'p');
+        gl.enableVertexAttribArray(pa);
+        gl.vertexAttribPointer(pa, 2, gl.FLOAT, false, 0, 0);
+
+        const U = {};
+        ['u_res','u_time','u_n','u_b','u_ph'].forEach(k => U[k] = gl.getUniformLocation(prog,k));
+        gl.enable(gl.BLEND);
+        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+        const arrB = new Float32Array(GL_MAX*4), arrP = new Float32Array(GL_MAX*2);
+
+        return {
+          resize(w,h,dpr){ canvas.width = w*dpr; canvas.height = h*dpr; },
+          render(bubbles, t, dpr, H){
+            gl.viewport(0,0,canvas.width,canvas.height);
+            gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT);
+            const n = Math.min(bubbles.length, GL_MAX);
+            for(let i=0;i<n;i++){
+              const b = bubbles[i];
+              const squash = 1 + Math.sin(b.squashPhase)*0.05;
+              const grow = b.pop ? 1 + b.pop*0.35 : 1;
+              arrB[i*4  ] = b.x*dpr;
+              arrB[i*4+1] = (H - b.y)*dpr;      // GL origin is bottom-left
+              arrB[i*4+2] = b.r*grow*dpr;
+              arrB[i*4+3] = squash;
+              arrP[i*2  ] = b.phase;
+              arrP[i*2+1] = b.pop ? (1 - b.pop) : 1;
+            }
+            gl.uniform2f(U.u_res, canvas.width, canvas.height);
+            gl.uniform1f(U.u_time, t);
+            gl.uniform1i(U.u_n, n);
+            gl.uniform4fv(U.u_b, arrB);
+            gl.uniform2fv(U.u_ph, arrP);
+            gl.drawArrays(gl.TRIANGLES, 0, 3);
+          }
+        };
+      }
+
       function createField(canvas, opts){
         opts = opts || {};
         const interactive = !!opts.interactive;
@@ -1359,11 +1621,18 @@
         const ctx = canvas.getContext('2d');
         let w, h, dpr, bubbles = [], pops = [], raf, running = false;
 
+        // Optional WebGL body renderer. Null on any failure, in which case
+        // everything below falls through to the original 2D path.
+        const glc = opts.glCanvas || null;
+        const glr = glc ? createGLRenderer(glc) : null;
+        if(glr) glc.classList.add('on');
+
         function size(){
           dpr = Math.min(window.devicePixelRatio||1, 2);
           w = box.clientWidth; h = box.clientHeight;
           canvas.width = w*dpr; canvas.height = h*dpr;
           ctx.setTransform(dpr,0,0,dpr,0,0);
+          if(glr) glr.resize(w,h,dpr);
         }
         function makeSheen(){
           const n = 2 + (Math.random()*2|0);
@@ -1538,8 +1807,9 @@
               if(b.x < -b.r-40) b.x = w + b.r + 20;
               if(b.x > w + b.r+40) b.x = -b.r - 20;
             }
-            drawBubble(b);
+            if(!glr) drawBubble(b);   // GL path paints the bodies instead
           }
+          if(glr) glr.render(bubbles, performance.now(), dpr, h);
           if(interactive) drawPops();
           raf = requestAnimationFrame(step);
         }
@@ -1573,8 +1843,16 @@
       }
 
       // hero: interactive & poppable
+      // Hero: interactive and poppable. The WebGL thin-film layer paints
+      // the bodies when available; `max` is capped at GL_MAX so the shader's
+      // uniform array can never overflow. Reduced motion keeps the 2D path,
+      // which renders a single static frame.
       const heroCanvas = document.getElementById('bubble-hero');
-      if(heroCanvas) createField(heroCanvas, { interactive:true, area:78000, max:22, maxR:104 });
+      const heroGL = (USE_GL_BUBBLES && !reduce) ? document.getElementById('bubble-hero-gl') : null;
+      if(heroCanvas) createField(heroCanvas, {
+        interactive:true, area:78000, max:Math.min(22, GL_MAX), maxR:104,
+        glCanvas: heroGL
+      });
 
       // other tabs: idle, quieter, fewer + smaller so they don't crowd the copy
       document.querySelectorAll('.bubble-idle').forEach(c=>{
