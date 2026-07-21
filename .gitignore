@@ -1,2 +1,6 @@
 _cand/
 .DS_Store
+
+# Local tooling scaffolding, not site content. Contains an absolute path
+# to a home directory, and this repo is public.
+cowork-project.md

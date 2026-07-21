@@ -11,11 +11,15 @@ This is Mary Clayton Soto's personal portfolio: a single-file site (`index.html`
 
 ## Theming — the only way to change colors
 
-One block at the top of the CSS defines the whole scheme: `--bg`, `--text`, `--text-muted`, `--c1`–`--c4`. Everything else derives via `color-mix()` — the derived mixes are currently tuned for a LIGHT background (see the note in the CSS if switching back to dark). Never hard-code hex colors anywhere else; the only exceptions are `--taupe`/`--rose` in the derived block, used solely inside the hero sketch. Current theme: warm cream bg, charcoal text, earthy accents (terracotta), with the bright pink→coral→orange ombre as the signature gradient. The hero visual is a hand-drawn SVG (architectural guides + flowing ombre ribbon); `design-options.html` holds the four explored directions.
+One block at the top of the CSS defines the whole scheme: `--bg`, `--text`, `--text-muted`, `--c1`–`--c4`. Everything else derives via `color-mix()` — the derived mixes are currently tuned for a LIGHT background (see the note in the CSS if switching back to dark). Never hard-code hex colors anywhere else. **Documented exception:** the bubble illustration colors (`FILM` and `SHEEN` arrays in the bubble script) — illustration-only, same pattern as the retired sketch `--taupe`/`--rose`. Current theme: warm cream bg, charcoal text, earthy accents (terracotta), with the bright pink→coral→orange ombre as the signature gradient.
+
+**Hero visual (v5.3, current):** a photoreal **soap-bubble field** on `<canvas>` behind the name — glassy body, faint interior sheen, a THIN iridescent thin-film rim, soft specular highlights, gentle rise and drift. Hero bubbles are poppable on click/tap; every other tab carries the same bubbles idling non-interactively behind the content. One shared engine: `createField(canvas, opts)`.
+
+**Retired — do not reintroduce:** the parametric mesh ribbon and all mesh flow waves (engine left dormant on purpose, no `addMesh` calls); any hazy iridescent gradient background behind the bubbles (rejected twice — real liquid iridescence needs a video or WebGL shader, not CSS blobs); a thick rainbow bubble rim (reads "kiddish" — keep it thin); grey hairline dividers sectioning the content.
 
 **Gradient rule:** never blend a cool color directly into pink — the midpoint renders purple, which Mary hates. Multi-color gradients use short blend zones between stops (see `--grad-strip`). The current palette is all-warm so it's safe, but the rule applies if a cool color ever returns.
 
-Fonts: Cormorant Garamond (headings/nav) + EB Garamond (body) via Google Fonts. Don't change without being asked. Playfair Display is approved as a reserve option.
+Fonts: **Cormorant Garamond** (display/headings) + **EB Garamond** (body, nav tabs, paragraphs) via Google Fonts. Inter is still loaded as a fallback but is no longer the body font. Don't change without being asked. Playfair Display is approved as a reserve option. ⚠️ EB Garamond was matched from a font sample Mary sent and is **unconfirmed** — if it's the wrong face it's a one-line swap in `--body`.
 
 ## Mary's working rules — strict
 
@@ -23,7 +27,9 @@ Fonts: Cormorant Garamond (headings/nav) + EB Garamond (body) via Google Fonts. 
 2. Report every placeholder replacement: what was replaced, and with what, so she can review.
 3. Flag anything that could break the 700px mobile breakpoint before doing it.
 4. Ask for real content (photos, links, publication details, resume PDF) — never invent final-sounding text. Her real info comes from her resume; her phone number is intentionally NOT on the public site.
-5. Draft text in her voice, plainly — no emojis, no AI filler.
+5. Draft text in her voice, plainly — first person, conversational, no emojis, no AI filler. Nothing that reads like a resume or a brochure. Avoid "curiosity," "passion," "thrive," "journey," and grand metaphors; Mary will call that cheesy and ingenuine.
+6. Never mention her AP Lang autoethnography essay in site copy — that example is specific to the paper and not relevant.
+7. She iterates fast and reacts to what she sees: make the change and show her rather than writing long explanations. If something genuinely can't be done well, say so plainly instead of shipping a weak approximation.
 
 ## Workflow
 

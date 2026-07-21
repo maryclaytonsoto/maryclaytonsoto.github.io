@@ -4,13 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mary Clayton Soto</title>
-  <meta name="description" content="Mary Clayton Soto — Duke biomedical engineering and mathematics student working at the intersection of medical device design, research, and visual art." />
+  <meta name="description" content="Mary Clayton Soto, Duke biomedical engineering and mathematics student working at the intersection of medical device design, research, and visual art." />
+  <!-- Favicon: the MC monogram, tiled on cream so it survives a dark tab
+       strip. favicon.svg is generated from mc-logo.svg; regenerate it if
+       the logo changes rather than editing it by hand. -->
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="mask-icon" href="mc-logo.svg" color="#2f2f2d" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     /* ============================================================
-       DESIGN TOKENS — web-design-system, "Sketchbook Sunset" palette
+       DESIGN TOKENS: web-design-system, "Sketchbook Sunset" palette
        Palette KEPT exactly (see redesign-keep.md). Everything else
        follows the editorial system: serif display + neutral sans
        body, near-square cards + pill controls, flat surfaces,
@@ -26,7 +31,7 @@
       --text:      #3a3a38;   /* charcoal body text */
       --muted:     #8b6d54;   /* earthy brown, secondary */
       --terracotta:#c9845f;   /* quiet warm accent */
-      /* ombre — the single expressive accent */
+      /* ombre: the single expressive accent */
       --pink:   #ff4f87;
       --coral:  #ff6f61;
       --orange: #e85d04;
@@ -37,9 +42,12 @@
       --ink-subtle: color-mix(in srgb, var(--muted) 80%, var(--bg));
       --ombre:  linear-gradient(90deg, var(--pink), var(--coral) 55%, var(--orange));
 
-      /* --- Type slots: serif display + neutral sans body --- */
+      /* --- Type slots: Cormorant display + EB Garamond body (serif) --- */
       --display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
-      --body:    "Inter", "Helvetica Neue", Arial, sans-serif;
+      --body:    "EB Garamond", Georgia, "Times New Roman", serif;
+      /* Mary's hand: the annotation voice. Personal asides, captions and
+         the footer sign-off only. Never headings, nav, or body copy. */
+      --hand:    "Handwriting MCS", "Cormorant Garamond", Georgia, serif;
 
       /* --- Two radii, held: near-square cards, full-pill controls --- */
       --r-card: 2px;
@@ -50,7 +58,7 @@
       --ease: cubic-bezier(.4,0,.2,1);
     }
 
-    /* Mary's handwriting — used only for the signature */
+    /* Mary's handwriting. Loaded once, used via --hand. */
     @font-face {
       font-family: "Handwriting MCS";
       src: url("fonts/Handwritingmcs-Regular.ttf") format("truetype");
@@ -87,7 +95,7 @@
     }
 
     /* ============================================================
-       HEADER + NAVIGATION — pill tabs, hairline bottom border,
+       HEADER + NAVIGATION: pill tabs, hairline bottom border,
        active tab filled with the signature ombre (rationed accent)
        ============================================================ */
     header {
@@ -111,7 +119,8 @@
       color: var(--ink);
       font-weight: 600;
       font-size: 1.35rem;
-      letter-spacing: 0.01em;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
       text-decoration: none;
     }
     nav ul {
@@ -151,7 +160,7 @@
     }
 
     /* ============================================================
-       LAYOUT / SECTION RHYTHM — whitespace, never bands
+       LAYOUT / SECTION RHYTHM: whitespace, never bands
        ============================================================ */
     main {
       max-width: var(--maxw);
@@ -165,14 +174,14 @@
       to   { opacity: 1; transform: none; }
     }
 
-    /* section heading — hierarchy from size + space */
+    /* section heading: hierarchy from size + space */
     .section-head { margin: 5.5rem 0 3rem; }
     .section-head .eyebrow { display: block; margin-bottom: 1rem; }
-    /* mesh family — static 2D "paint stroke" ribbons: one full-bleed
+    /* mesh family: static 2D "paint stroke" ribbons: one full-bleed
        canvas per tab, a flat mesh stroke (parallel hairlines, ombre
        across the stroke) following a unique route with loops kept in
        whitespace, never behind text. No animation on these. */
-    /* Mesh waves retired (2026-07-09) — holders hidden site-wide. */
+    /* Mesh waves retired (2026-07-09): holders hidden site-wide. */
     .mesh-flow, .mesh-footer { display: none !important; }
     .section-title {
       font-family: var(--display);
@@ -184,11 +193,9 @@
     }
 
     /* ============================================================
-       HOME — big name hero (KEPT), interwoven with the parametric
-       mesh ribbon: a generative Lissajous/spirograph wireframe
-       loop drawn on canvas in the ombre colors, cursor-reactive.
-       The ribbon IS the hero's ombre moment — it replaces the old
-       thin gradient rule. (Ombre nav pill untouched.)
+       HOME: big name hero on the plain cream ground, with the
+       photoreal bubble field floating above it (poppable).
+       Layer order: bubbles (0) < name/text (1).
        ============================================================ */
     .hero {
       position: relative;
@@ -197,36 +204,55 @@
       flex-direction: column;
       justify-content: center;
       padding: 4rem 0 4.5rem;
-      border-bottom: 1px solid var(--line-soft);
       overflow: hidden;      /* keep the floating bubbles inside the opening view */
     }
-    /* the bubble field — full-bleed behind the name; catches clicks so
+    /* the bubble field: full-bleed on the plain cream; catches clicks so
        bubbles can be popped anywhere in the opening view */
     .bubble-hero {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
-      z-index: 0;
+      z-index: 1;
       display: block;
       cursor: pointer;
     }
-    /* THE big name — one line, one style, large */
+    /* idle (non-interactive) bubble fields on the other tabs: waft
+       quietly behind the content */
+    .bubble-idle {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      display: block;
+      pointer-events: none;
+    }
+    /* lift each tab's content above its idle bubbles */
+    .tab-panel > *:not(.bubble-idle):not(.mesh-flow) { position: relative; z-index: 1; }
+    /* THE big name: one line, one style, large.
+       All caps. Title case was tried (July 2026) to show off Cormorant's
+       lowercase after Mary admired a paid display face on melinegobet.fr;
+       neither title case nor any free substitute measured up, so this is
+       back to the original treatment. If a licensed display face is ever
+       bought, revisit: title case is what makes those faces worth having,
+       and the size ramp below will need retuning for the longer line. */
     .hero h1 {
       position: relative;
-      z-index: 1;
+      z-index: 2;
       pointer-events: none;   /* let clicks fall through to pop bubbles */
       font-family: var(--display);
       color: var(--ink);
       font-weight: 500;
-      font-size: clamp(2.15rem, 8.4vw, 6.4rem);
+      font-size: clamp(1.9rem, 7.4vw, 5.6rem);
       line-height: 1.0;
-      letter-spacing: 0.005em;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
       white-space: nowrap;
     }
     .hero .disciplines {
       position: relative;
-      z-index: 1;
+      z-index: 2;
       pointer-events: none;
       margin-top: 2.5rem;
       font-family: var(--display);
@@ -240,16 +266,16 @@
     .hero .disciplines .dot { color: var(--terracotta); font-style: normal; padding: 0 0.2em; }
     .hero .tagline {
       position: relative;
-      z-index: 1;
+      z-index: 2;
       margin-top: 1.5rem;
       font-family: var(--body);
       font-size: 0.9375rem;
       color: var(--muted);
-      max-width: 46ch;
+      white-space: nowrap;
       letter-spacing: -0.01em;
     }
 
-    /* Home about — editorial two-column: heading rail + prose */
+    /* Home about: editorial two-column: heading rail + prose */
     .about-grid {
       display: grid;
       grid-template-columns: 240px 1fr;
@@ -285,16 +311,14 @@
     .prose a:hover, .entry p a:hover { text-decoration-color: var(--ink); }
 
     /* ============================================================
-       EDITORIAL ENTRY LIST — flat rows, hairlines + whitespace
+       EDITORIAL ENTRY LIST: flat rows, hairlines + whitespace
        ============================================================ */
     .entry {
       display: grid;
       grid-template-columns: 210px 1fr;
       gap: 3rem;
-      padding: 3rem 0;
-      border-top: 1px solid var(--line);
+      padding: 2.25rem 0;
     }
-    .entry:last-child { border-bottom: 1px solid var(--line); }
     .entry .meta { padding-top: 0.5rem; }
     .entry .meta .eyebrow { display: block; margin-bottom: 0.5rem; }
     .entry .meta .when {
@@ -337,8 +361,47 @@
     /* subtle inline placeholder note */
     .note { color: var(--ink-subtle); font-style: italic; }
 
+    /* skeleton idea list: terse fragments standing in for prose that
+       Mary is still workshopping. Marker is a middot, never a dash. */
+    .skel { list-style: none; margin: 0.35rem 0 0; max-width: 60ch; }
+    .skel li {
+      font-size: 0.9375rem;
+      line-height: 1.65;
+      color: var(--text);
+      padding-left: 1.1rem;
+      position: relative;
+      margin-bottom: 0.3rem;
+    }
+    .skel li::before {
+      content: "\00B7";
+      position: absolute;
+      left: 0.15rem;
+      color: var(--terracotta);
+      font-weight: 700;
+    }
+    .skel li.todo { color: var(--ink-subtle); font-style: italic; }
+
+    /* nested sub-part: a continuation of the entry above it, not a
+       peer. Rule is terracotta, never a grey sectioning hairline. */
+    .subentry {
+      margin-top: 1.75rem;
+      padding-left: 1.5rem;
+      max-width: 60ch;
+      border-left: 2px solid color-mix(in srgb, var(--terracotta) 45%, transparent);
+    }
+    .subentry .eyebrow { display: block; margin-bottom: 0.45rem; color: var(--terracotta); }
+    .subentry h4 {
+      font-family: var(--display);
+      font-size: 1.28rem;
+      font-weight: 500;
+      line-height: 1.18;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+    .subentry .org-link { margin-bottom: 0.6rem; }
+
     /* ============================================================
-       GALLERY WALL — shared by Projects and Art. Framed pieces on
+       GALLERY WALL: shared by Projects and Art. Framed pieces on
        a grid: flat frame on top, gallery-label text below.
        ============================================================ */
     .art-intro {
@@ -348,6 +411,9 @@
       color: var(--text);
       margin-bottom: 4rem;
     }
+    /* skeleton standing in for the art statement: keeps the intro's
+       breathing room below it while the prose is being reworked */
+    .art-intro-skel { margin-bottom: 4rem; }
     .gallery-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -372,7 +438,7 @@
       font-size: 0.875rem;
       padding: 1rem;
     }
-    /* images keep their own shape — portrait, landscape, or square */
+    /* images keep their own shape: portrait, landscape, or square */
     .piece img { width: 100%; height: auto; display: block; }
     /* gallery label: meta line, serif title, description */
     .piece .label { padding-top: 1.15rem; }
@@ -404,41 +470,105 @@
       font-size: 0.875rem;
       line-height: 1.65;
     }
+    /* captions carry the annotation voice: it reads as though Mary
+       labelled her own photographs. Sized up from the old 0.8125rem
+       because the marker face needs the room to stay legible. */
     .art-caption {
-      margin-top: 0.85rem;
+      margin-top: 0.8rem;
+      font-family: var(--hand);
       color: var(--muted);
-      font-size: 0.8125rem;
-      letter-spacing: -0.01em;
+      font-size: 1.05rem;
+      line-height: 1.3;
+      letter-spacing: 0.01em;
     }
 
     /* ============================================================
        CONTACT / RESUME
        ============================================================ */
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
+    /* Centred single measure. The size jump from the primary address to
+       everything below it does the organising, so the icon row only has
+       to distinguish link types, not carry hierarchy. */
+    .contact-block {
+      max-width: 30rem;
+      margin: 0 auto;
+      text-align: center;
       padding-top: 1rem;
     }
-    .contact-grid h3 {
+    .contact-block .primary {
       font-family: var(--display);
-      font-size: 1.6rem;
+      font-size: 2.1rem;
       font-weight: 500;
-      color: var(--ink);
-      margin-bottom: 1.1rem;
+      line-height: 1.15;
+      margin-bottom: 0.4rem;
     }
-    .contact-grid p { font-size: 0.9375rem; }
-    .contact-grid a {
+    .contact-block .primary a {
       color: var(--ink);
+      text-decoration: none;
+      border-bottom: 2px solid color-mix(in srgb, var(--terracotta) 55%, transparent);
+      transition: border-color 0.15s var(--ease);
+    }
+    .contact-block .primary a:hover { border-color: var(--ink); }
+    .contact-block .alt {
+      font-size: 0.875rem;
+      color: var(--ink-subtle);
+      margin-bottom: 2.25rem;
+    }
+    .contact-block .alt a {
+      color: var(--muted);
       text-decoration: underline;
       text-decoration-thickness: 1.5px;
       text-underline-offset: 3px;
-      text-decoration-color: color-mix(in srgb, var(--ink) 35%, transparent);
+      text-decoration-color: color-mix(in srgb, var(--muted) 35%, transparent);
       transition: text-decoration-color 0.15s var(--ease);
     }
-    .contact-grid a:hover { text-decoration-color: var(--ink); }
-    .contact-lines { line-height: 2.1; font-size: 0.9375rem; }
-    /* primary button — action color is the warm near-black, never the ombre */
+    .contact-block .alt a:hover { text-decoration-color: var(--muted); }
+
+    /* hand-drawn icons: sized in em so they track the label */
+    .ic {
+      width: 1.15em; height: 1.15em; flex: none;
+      stroke: currentColor; fill: none;
+      stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+      vertical-align: -0.2em; overflow: visible;
+    }
+
+    .icon-row {
+      display: flex;
+      justify-content: center;
+      gap: 2.25rem;
+      margin-bottom: 2.5rem;
+    }
+    .icon-row a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.45rem;
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .icon-row .ic {
+      width: 1.75em; height: 1.75em;
+      color: var(--terracotta);
+      transition: transform 0.15s var(--ease);
+    }
+    .icon-row a:hover .ic { transform: translateY(-2px); }
+    .icon-row a:hover { color: var(--muted); }
+
+    /* location closes the page in the annotation voice */
+    .contact-loc {
+      font-family: var(--hand);
+      font-size: 1.05rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .contact-loc .ic { color: var(--terracotta); }
+    /* primary button: action color is the warm near-black, never the ombre */
     .btn {
       display: inline-block;
       font-family: var(--body);
@@ -455,9 +585,15 @@
       transition: background-color 0.15s var(--ease), color 0.15s var(--ease);
     }
     .btn:hover { background: var(--text); }
+    /* .btn is currently unused: the Contact rebuild replaced the resume
+       button with the icon row. Kept for reuse. Note the trap that bit
+       us before: a descendant selector like `.contact-grid a` (0,1,1)
+       outranks `.btn` (0,1,0) and will repaint the label ink-on-ink.
+       If you reintroduce .btn inside a container that styles links,
+       match the specificity explicitly. */
 
     /* ============================================================
-       SCROLL REVEALS — subtle rise as rows enter the viewport
+       SCROLL REVEALS: subtle rise as rows enter the viewport
        ============================================================ */
     .reveal {
       opacity: 0;
@@ -472,7 +608,7 @@
     }
 
     /* ============================================================
-       CORNER WATERMARK — faint, fixed, non-interactive
+       CORNER WATERMARK: faint, fixed, non-interactive
        ============================================================ */
     .watermark {
       position: fixed;
@@ -491,7 +627,6 @@
        FOOTER
        ============================================================ */
     footer {
-      border-top: 1px solid var(--line-soft);
       color: var(--ink-subtle);
       font-size: 0.8125rem;
       padding: 2.5rem 1.5rem;
@@ -499,26 +634,15 @@
       max-width: var(--maxw);
       margin: 0 auto;
     }
-    /* sign-off — catchphrase over the footer ribbon, then Mary's
-       handwriting signature */
+    /* sign-off: the catchphrase in Mary's handwriting, over the footer */
     .signature-note {
       position: relative;
       z-index: 1;
-      font-family: "Handwriting MCS", var(--display);
+      font-family: var(--hand);
       font-size: 1.6rem;
       line-height: 1.25;
       color: var(--text);
-      margin: -3rem 0 0.25rem;
-    }
-    .signature {
-      position: relative;
-      z-index: 1;
-      font-family: "Handwriting MCS", var(--display);
-      font-size: 1.9rem;
-      color: var(--ink);
-      line-height: 1;
-      margin: 0 0 1.5rem;
-      padding-left: 2.5rem;
+      margin: -3rem 0 1.5rem;
     }
 
     /* ============================================================
@@ -544,17 +668,50 @@
       .entry { grid-template-columns: 1fr; gap: 0.85rem; padding: 2.25rem 0; }
       .entry .meta { padding-top: 0; }
       .gallery-grid { grid-template-columns: 1fr; gap: 3.25rem; }
-      .contact-grid { grid-template-columns: 1fr; gap: 2.75rem; }
+      .contact-block .primary { font-size: 1.5rem; word-break: break-word; }
+      .icon-row { gap: 1.5rem; }
       .hero { min-height: 78vh; padding: 3rem 0 3rem; }
+      .hero .tagline { white-space: normal; }   /* allow wrap on small phones */
       .about-grid { grid-template-columns: 1fr; gap: 1.5rem; margin-top: 3.5rem; }
       .section-head { margin: 3.5rem 0 2.25rem; }
       .signature-note { margin-top: -2.2rem; font-size: 1.25rem; }
-      .signature { font-size: 1.5rem; padding-left: 1.5rem; }
       .watermark { width: 36px; right: 1rem; bottom: 0.9rem; }
     }
   </style>
 </head>
 <body>
+
+  <!-- ==================== ICON SPRITE ====================
+       Hand-drawn line icons, drawn in-house to match the handwriting's
+       line quality. Deliberately imperfect paths, 24px box, round caps.
+       They inherit colour via currentColor, so they follow the theme
+       block like everything else. No third-party icon set, therefore no
+       attribution obligation. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-code" viewBox="0 0 24 24">
+        <path d="M8.7 7.6c-1.9 1.3-3.7 2.7-5.3 4.3-.2.2-.2.4 0 .6 1.7 1.5 3.4 2.9 5.3 4.2"/>
+        <path d="M15.4 7.5c1.9 1.4 3.7 2.8 5.3 4.4.2.2.2.4 0 .6-1.6 1.5-3.4 2.9-5.2 4.2"/>
+        <path d="M13.4 4.2c-.9 5.2-1.9 10.4-3 15.6"/>
+      </symbol>
+      <symbol id="i-in" viewBox="0 0 24 24">
+        <path d="M4.3 4.6c0-.4.3-.7.7-.8 4.7-.2 9.4-.2 14.1 0 .4 0 .7.3.7.8.2 4.9.2 9.8 0 14.7 0 .4-.3.7-.7.8-4.7.2-9.4.2-14.1 0-.4 0-.7-.4-.7-.8-.2-4.9-.2-9.8 0-14.7z"/>
+        <path d="M8 10.6c0 2.1 0 4.2-.1 6.3"/>
+        <path d="M7.9 7.4c0 .1 0 .2 0 .3"/>
+        <path d="M11.5 16.9c0-2.1 0-4.2-.1-6.3 1-.6 2.2-.9 3.3-.6 1 .3 1.5 1.3 1.5 2.3.1 1.5.1 3.1 0 4.6"/>
+      </symbol>
+      <symbol id="i-doc" viewBox="0 0 24 24">
+        <path d="M5.6 3.6c0-.4.3-.8.8-.8 2.8-.1 5.6-.1 8.4 0 .2 0 .4.1.5.2 1.1 1.1 2.2 2.2 3.2 3.4.1.2.2.4.2.6.1 4.6.1 9.2 0 13.8 0 .4-.4.8-.8.8-3.8.1-7.6.1-11.5 0-.4 0-.8-.4-.8-.8-.2-5.7-.2-11.4 0-17.2z"/>
+        <path d="M14.5 2.9c-.1 1.2-.1 2.4 0 3.6 0 .3.2.5.5.5 1.1.1 2.2.1 3.3 0"/>
+        <path d="M8.6 12.4c2.2-.1 4.4-.1 6.6 0"/>
+        <path d="M8.6 16c2.2-.1 4.4-.1 6.6 0"/>
+      </symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24">
+        <path d="M12 21.3c2.6-2.9 5-6 6.3-9.7.9-2.6.2-5.6-2.1-7.2-2.6-1.8-6.3-1.5-8.6.7-2 1.9-2.4 5-1.4 7.5 1.3 3.3 3.5 6.2 5.8 8.7z"/>
+        <path d="M12 12.6c1.6.1 2.9-1.3 2.8-2.9 0-1.5-1.3-2.7-2.8-2.7-1.6 0-2.9 1.3-2.8 2.9 0 1.5 1.3 2.7 2.8 2.7z"/>
+      </symbol>
+    </defs>
+  </svg>
 
   <!-- ==================== HEADER / NAV ==================== -->
   <header>
@@ -568,7 +725,7 @@
           <li><a href="#experience" data-tab-link="experience">Experience</a></li>
           <li><a href="#projects" data-tab-link="projects">Projects</a></li>
           <li><a href="#art" data-tab-link="art">Art</a></li>
-          <li><a href="#contact" data-tab-link="contact">Contact / Resume</a></li>
+          <li><a href="#contact" data-tab-link="contact">Contact</a></li>
         </ul>
       </nav>
     </div>
@@ -581,19 +738,28 @@
       <div class="hero">
         <canvas id="bubble-hero" class="bubble-hero" aria-hidden="true"></canvas>
         <h1 class="hero-name">Mary Clayton Soto</h1>
-        <p class="disciplines">Biomedical Engineering <span class="dot">/</span> Mathematics <span class="dot">/</span> Visual Arts</p>
+        <p class="disciplines">Biomedical Engineering <span class="dot">&times;</span> Mathematics <span class="dot">&times;</span> Visual Arts</p>
         <p class="tagline">Duke University, Pratt School of Engineering &middot; Class of 2028</p>
       </div>
 
       <div class="about-grid">
         <div class="rail">
           <span class="eyebrow">About</span>
-          <h2>Where fields overlap</h2>
+          <h2>Where Fields Overlap</h2>
         </div>
         <div class="prose">
-        <p>I'm a biomedical engineering and mathematics double major at Duke University's Pratt School of Engineering, with a minor in visual arts. I'm drawn to the places these fields overlap — medical device design, patent law, and the intersection of art and science.</p>
-        <p>Right now, I'm designing surgical education models with Duke's SEAL Lab through Bass Connections, coordinating cardiovascular device research at the Tallahassee Research Institute, teaching Python to first-year engineers as an EGR105 TA, and serving as Vice President of Professional Development for Theta Tau.</p>
-        <p>Visual art has always been more than a creative outlet for me — it shapes how I observe, question, and solve problems. Whether I'm drawing hands reaching toward bubbles or 3D-printing molds for hydrogel organ models, I'm driven by the same process: observing carefully, asking questions, and turning abstract ideas into tangible forms.</p>
+          <ul class="skel">
+            <li>BME and mathematics major, Duke Pratt, minor in visual arts</li>
+            <li>Picked the mix because I've never stayed in one lane</li>
+            <li>Drawn to problems sitting between fields</li>
+            <li>Now: surgical education models with Duke's SEAL Lab</li>
+            <li>Now: cardiovascular device research in Tallahassee</li>
+            <li>Now: TA-ing intro Python, professional development for Theta Tau</li>
+            <li>Art is how I think, not a side activity</li>
+            <li>It taught me to slow down and actually look</li>
+            <li>Same instinct as debugging code or prototyping a device</li>
+            <li class="todo">What I'm seeking next, e.g. Summer 2027 internships</li>
+          </ul>
         </div>
       </div>
 
@@ -611,7 +777,7 @@
 
     <!-- ==================== PROJECTS ==================== -->
     <section id="projects" class="tab-panel">
-      <div class="mesh-flow" aria-hidden="true"><canvas></canvas></div>
+      <canvas class="bubble-idle" aria-hidden="true"></canvas>
       <div class="section-head">
         <span class="eyebrow">Selected Work</span>
         <h2 class="section-title">Projects</h2>
@@ -626,7 +792,15 @@
               <span class="when">Aug 2024 – May 2025</span>
             </div>
             <h3>Rollator Oxygen-Canister Mount</h3>
-            <p>Designed and prototyped a device to secure an oxygen canister to Duke Hospital rollators, improving patient mobility, safety, and clinical workflow efficiency. Conducted user-centered design analysis within hospital constraints and evaluated safety factors to ensure reliable performance in a clinical environment.</p>
+            <ul class="skel">
+              <li>Secures an oxygen canister to Duke Hospital rollators</li>
+              <li>Designed and prototyped within real hospital constraints</li>
+              <li>Built around how patients actually use the walkers</li>
+              <li>Tested for reliability in a clinical setting</li>
+              <li class="todo">My role vs. the team's to be defined</li>
+              <li class="todo">Options weighed and why this design won to be added</li>
+              <li class="todo">Patients or units affected, any numbers</li>
+            </ul>
           </div>
         </div>
 
@@ -638,7 +812,13 @@
               <span class="when">Jan – May 2025</span>
             </div>
             <h3>Autonomous Arduino Robot</h3>
-            <p>Built and programmed an Arduino-based robot using TI path sensors and IR thermal sensing, integrating multiple hardware components and developing control logic for autonomous navigation and wireless communication.</p>
+            <ul class="skel">
+              <li>Built and programmed from scratch</li>
+              <li>TI path sensors plus IR thermal sensing</li>
+              <li>Logic for autonomous navigation and wireless control</li>
+              <li>The puzzle was getting the hardware to cooperate</li>
+              <li class="todo">Code repository link to be added</li>
+            </ul>
           </div>
         </div>
       </div>
@@ -646,44 +826,10 @@
 
     <!-- ==================== EXPERIENCE ==================== -->
     <section id="experience" class="tab-panel">
-      <div class="mesh-flow" aria-hidden="true"><canvas></canvas></div>
+      <canvas class="bubble-idle" aria-hidden="true"></canvas>
       <div class="section-head">
         <span class="eyebrow">Research &amp; Teaching</span>
         <h2 class="section-title">Experience</h2>
-      </div>
-
-      <div class="entry reveal">
-        <div class="meta">
-          <span class="eyebrow">Bass Connections</span>
-          <span class="when">Mar 2025 – Present</span>
-        </div>
-        <div class="body">
-          <h3>Team Member — Developing Surgical Education Models</h3>
-          <a class="org-link" href="https://bassconnections.duke.edu">bassconnections.duke.edu &#8599;</a>
-          <p>Collaborate with Duke's SEAL Lab to design surgical education models that improve efficiency, accessibility, and consistency in clinical training. Design and iterate hydrogel organ models using MRI-derived DICOM scans, 3D Slicer segmentation, and Fusion 360 molds, tuning materials to replicate human tissue mechanics. Contribute to a computer-vision knot-tying assessment system that quantifies performance for objective surgical skill evaluation.</p>
-        </div>
-      </div>
-
-      <div class="entry reveal">
-        <div class="meta">
-          <span class="eyebrow">Tallahassee Research Institute</span>
-          <span class="when">May 2026 – Present</span>
-        </div>
-        <div class="body">
-          <h3>Research Coordinator</h3>
-          <p>Manage clinical research workflows and patient data for cardiovascular studies involving novel medical devices and research protocols. Compile and analyze patient data into structured reports, translating complex findings into actionable insights for data-driven biomedical research.</p>
-        </div>
-      </div>
-
-      <div class="entry reveal">
-        <div class="meta">
-          <span class="eyebrow">FSU Microparticle Lab</span>
-          <span class="when">May – Aug 2025</span>
-        </div>
-        <div class="body">
-          <h3>Research Assistant</h3>
-          <p>Developed a MATLAB pipeline to segment and classify fluorescence cell images, analyzing ~20,000 cells and generating a standardized dataset supporting a manuscript published in <em>ACS Applied Materials &amp; Interfaces</em>. Improved classification accuracy by optimizing convolution-based segmentation and thresholding across heterogeneous fluorescence channels.</p>
-        </div>
       </div>
 
       <div class="entry reveal">
@@ -692,8 +838,13 @@
           <span class="when">Aug 2025 – Present</span>
         </div>
         <div class="body">
-          <h3>Teaching Assistant — EGR105: Coding for Engineers</h3>
-          <p>Mentor first-year engineering students in Python algorithm design, reinforcing debugging workflows and Git-based version control. Teach NumPy and Matplotlib for data analysis and visualization, emphasizing efficient data handling and interpretation.</p>
+          <h3>Teaching Assistant, EGR105: Coding for Engineers</h3>
+          <ul class="skel">
+            <li>Mentor first-year engineers learning Python</li>
+            <li>Algorithm design, debugging habits, version control with Git</li>
+            <li>Teach NumPy and Matplotlib for data analysis and visualization</li>
+            <li class="todo">Number of students taught</li>
+          </ul>
         </div>
       </div>
 
@@ -704,7 +855,12 @@
         </div>
         <div class="body">
           <h3>Vice President of Professional Development</h3>
-          <p>Execute events highlighting engineering research and innovation, expanding members' professional opportunities and skills. Created a centralized member resource database for academic planning, networking, and career development.</p>
+          <ul class="skel">
+            <li>Plan events centred on engineering research and innovation</li>
+            <li>Built a centralized resource database for the chapter</li>
+            <li>Covers academic planning, networking, career growth</li>
+            <li class="todo">Chapter size, event turnout</li>
+          </ul>
         </div>
       </div>
 
@@ -715,14 +871,18 @@
         </div>
         <div class="body">
           <h3>Intern</h3>
-          <p>Designed and fabricated custom prosthetics using 3D printing, iterating on form and functionality to meet individual clinical needs.</p>
+          <ul class="skel">
+            <li>Designed and 3D-printed custom prosthetics</li>
+            <li>Iterated shape and function per person and clinical need</li>
+            <li class="todo">How many fitted, any outcome</li>
+          </ul>
         </div>
       </div>
     </section>
 
     <!-- ==================== PUBLICATION ==================== -->
     <section id="publication" class="tab-panel">
-      <div class="mesh-flow" aria-hidden="true"><canvas></canvas></div>
+      <canvas class="bubble-idle" aria-hidden="true"></canvas>
       <div class="section-head">
         <span class="eyebrow">Peer-Reviewed &amp; Ongoing</span>
         <h2 class="section-title">Research</h2>
@@ -736,48 +896,105 @@
         <div class="body">
           <h3>Engineered Microparticles Suggest Proteolysis as a Critical Prerequisite for Chromatin Clearance in Macrophage Phagosomes</h3>
           <a class="org-link" href="https://pubs.acs.org/doi/10.1021/acsami.5c25569">View in ACS Applied Materials &amp; Interfaces &#8599;</a>
-          <p>Contributed image analysis to this manuscript — developed the MATLAB segmentation and classification pipeline that produced a standardized dataset of ~20,000 fluorescence cell images, improving classification accuracy across heterogeneous fluorescence channels. Published in the journal's Biological and Medical Applications of Materials and Interfaces section (March 10, 2026).</p>
-          <p class="note">Full author list to be added.</p>
+          <ul class="skel">
+            <li>My contribution: image analysis</li>
+            <li>MATLAB segmentation and classification pipeline</li>
+            <li>~20,000 fluorescence cell images, standardized dataset</li>
+            <li>Held accuracy across very different fluorescence channels</li>
+            <li>FSU Microparticle Lab, May to Aug 2025</li>
+            <li class="todo">Full author list to be added</li>
+          </ul>
+
+          <!-- continuation of the publication work, not a peer entry -->
+          <div class="subentry">
+            <span class="eyebrow">Continuation &middot; BME 271, Duke &middot; 2026</span>
+            <h4>Final Project</h4>
+            <a class="org-link" href="files/BME271_Final_Project.pdf">Read the project report (PDF) &#8599;</a>
+            <a class="org-link" href="https://gitlab.oit.duke.edu/mcs131/bme271-finalproject-soto">View the code repository &#8599;</a>
+            <ul class="skel">
+              <li>Extends the microparticle and image-analysis work</li>
+              <li class="todo">Project description to be added</li>
+            </ul>
+          </div>
         </div>
       </div>
 
       <div class="entry reveal">
         <div class="meta">
-          <span class="eyebrow">BME 271 &middot; Duke</span>
-          <span class="when">2026</span>
+          <span class="eyebrow">Bass Connections</span>
+          <span class="when">Mar 2025 &ndash; Present</span>
         </div>
         <div class="body">
-          <h3>Final Project — Continuation of the Microparticle Work</h3>
-          <a class="org-link" href="files/BME271_Final_Project.pdf">Read the project report (PDF) &#8599;</a>
-          <p>My BME 271 final project builds on the ideas explored in the publication above, extending the microparticle and image-analysis work into a new investigation.</p>
-          <p class="note">Project description and code repository link to be added.</p>
+          <h3>Team Member, Developing Surgical Education Models</h3>
+          <a class="org-link" href="https://bassconnections.duke.edu">bassconnections.duke.edu &#8599;</a>
+          <ul class="skel">
+            <li>Duke SEAL Lab, surgical training models</li>
+            <li>Hydrogel organ models from MRI-derived DICOM scans</li>
+            <li>3D Slicer segmentation, Fusion 360 molds, material tuning</li>
+            <li>Computer-vision system scoring knot-tying</li>
+            <li class="todo">My role vs. the team's to be defined</li>
+            <li class="todo">Measurable outcome to be added</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry reveal">
+        <div class="meta">
+          <span class="eyebrow">Tallahassee Research Institute</span>
+          <span class="when">May 2026 &ndash; Present</span>
+        </div>
+        <div class="body">
+          <h3>Research Coordinator</h3>
+          <ul class="skel">
+            <li>Clinical research workflows and patient data</li>
+            <li>Cardiovascular studies testing new devices and protocols</li>
+            <li>Messy patient data turned into structured reports</li>
+            <li class="todo">Scale and numbers to be added</li>
+          </ul>
         </div>
       </div>
     </section>
 
-    <!-- ==================== ART  (toggleable — see SHOW_ART_TAB) ==================== -->
+    <!-- ==================== ART  (toggleable: see SHOW_ART_TAB) ==================== -->
     <section id="art" class="tab-panel">
-      <div class="mesh-flow" aria-hidden="true"><canvas></canvas></div>
+      <canvas class="bubble-idle" aria-hidden="true"></canvas>
       <div class="section-head">
         <span class="eyebrow">Visual Arts</span>
         <h2 class="section-title">Art</h2>
       </div>
 
-      <p class="art-intro">Throughout my work, hands and bubbles appear again and again. The hands represent curiosity and the desire to interact with ideas beyond immediate understanding; the bubbles reflect the questions that captivate me — mathematically efficient yet visually unpredictable, governed by surface tension, pressure, and light while appearing almost magical. Existing somewhere between order and spontaneity, they embody the intersection of science and creativity that defines both my artistic practice and my engineering work.</p>
+      <ul class="skel art-intro-skel">
+        <li>Two recurring images: hands and bubbles</li>
+        <li>Hands = reaching for an idea just past my understanding</li>
+        <li>Bubbles = mathematically efficient, visually unpredictable</li>
+        <li>Surface tension, pressure and light, still looking like magic</li>
+        <li>A bubble as self-portrait: fluctuating, refusing a single state</li>
+        <li>Graphite, gold leaf, 3D-printed mold: same chase either way</li>
+        <li>Where order and spontaneity meet and something feels alive</li>
+      </ul>
 
       <div class="gallery-grid">
         <div class="piece reveal">
-          <div class="frame"><img src="images/art-boundless.jpg" alt="Boundless — grayscale hands reaching toward colorful floating bubbles" /></div>
+          <div class="frame"><img src="images/art-boundless.jpg" alt="Boundless, grayscale hands reaching toward colorful floating bubbles" /></div>
           <div class="label">
             <h3>Boundless</h3>
-            <p>Grayscale hands reach toward vibrant bubbles — observation meeting the boundless. A piece about duality: the coexistence of logic and imagination, stillness and motion, the rule-bound and the whimsical.</p>
+            <ul class="skel">
+              <li>Grayscale hands reaching toward vibrant bubbles</li>
+              <li>Observation meeting the boundless</li>
+              <li>Duality: logic and imagination, stillness and motion</li>
+              <li class="todo">Medium and dimensions</li>
+            </ul>
           </div>
         </div>
         <div class="piece reveal">
-          <div class="frame"><img src="images/art-owl.jpg" alt="Owl — a small gilded owl sculpture perched on a branch" /></div>
+          <div class="frame"><img src="images/art-owl.jpg" alt="Owl, a small gilded owl sculpture perched on a branch" /></div>
           <div class="label">
             <h3>Owl</h3>
-            <p>A mixed-media sculpture — a gilded owl perched on a branch.</p>
+            <ul class="skel">
+              <li>Mixed-media sculpture</li>
+              <li>Gilded owl perched on a branch</li>
+              <li class="todo">Materials and dimensions</li>
+            </ul>
           </div>
         </div>
         <div class="piece reveal">
@@ -797,29 +1014,36 @@
 
     <!-- ==================== CONTACT / RESUME ==================== -->
     <section id="contact" class="tab-panel">
-      <div class="mesh-flow" aria-hidden="true"><canvas></canvas></div>
+      <canvas class="bubble-idle" aria-hidden="true"></canvas>
       <div class="section-head">
         <span class="eyebrow">Get in Touch</span>
-        <h2 class="section-title">Contact / Resume</h2>
+        <h2 class="section-title">Contact</h2>
       </div>
 
-      <div class="contact-grid">
-        <div>
-          <h3>Reach me</h3>
-          <p class="contact-lines">
-            <a href="mailto:mary.soto@duke.edu">mary.soto@duke.edu</a><br />
-            <a href="mailto:maryclaytonsoto@gmail.com">maryclaytonsoto@gmail.com</a><br />
-            <a href="tel:+18505679336">(850) 567-9336</a><br />
-            <a href="https://github.com/maryclaytonsoto">github.com/maryclaytonsoto</a><br />
-            <a href="https://linkedin.com/in/maryclaytonsoto">linkedin.com/in/maryclaytonsoto</a><br />
-            <span style="font-style:normal; color:var(--muted);">Tallahassee, FL &middot; Durham, NC</span>
-          </p>
+      <div class="contact-block">
+        <p class="primary"><a href="mailto:mary.soto@duke.edu">mary.soto@duke.edu</a></p>
+        <p class="alt">
+          <a href="mailto:maryclaytonsoto@gmail.com">maryclaytonsoto@gmail.com</a>
+          &nbsp;&middot;&nbsp;
+          <a href="tel:+18505679336">(850) 567-9336</a>
+        </p>
+
+        <div class="icon-row">
+          <a href="https://github.com/maryclaytonsoto" target="_blank" rel="noopener">
+            <svg class="ic" aria-hidden="true"><use href="#i-code"/></svg>GitHub
+          </a>
+          <a href="https://linkedin.com/in/maryclaytonsoto" target="_blank" rel="noopener">
+            <svg class="ic" aria-hidden="true"><use href="#i-in"/></svg>LinkedIn
+          </a>
+          <a href="files/SotoResume.pdf" target="_blank" rel="noopener">
+            <svg class="ic" aria-hidden="true"><use href="#i-doc"/></svg>Resume
+          </a>
         </div>
-        <div>
-          <h3>Resume</h3>
-          <p>A one-page overview of my education, research, and experience.</p>
-          <a href="files/SotoResume.pdf" class="btn" target="_blank" rel="noopener">View resume (PDF) &#8599;</a>
-        </div>
+
+        <p class="contact-loc">
+          <svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg>
+          Tallahassee, FL &nbsp;&middot;&nbsp; Durham, NC
+        </p>
       </div>
     </section>
 
@@ -828,7 +1052,6 @@
   <footer>
     <div class="mesh-footer" aria-hidden="true"><canvas></canvas></div>
     <p class="signature-note">Building @ the intersection of science &amp; creativity.</p>
-    <p class="signature">xx, MC</p>
     <p>&copy; 2026 Mary Clayton Soto</p>
   </footer>
 
@@ -910,7 +1133,7 @@
     // reactive), small section-title accents (closed loops, varied
     // lobe counts so each tab has its own blob), and open horizontal
     // ribbon bands (Contact, footer). Colors are read from the theme
-    // block at runtime — no hard-coded hexes here. Secondary meshes
+    // block at runtime: no hard-coded hexes here. Secondary meshes
     // drift slowly and ignore the cursor; prefers-reduced-motion
     // renders everything as a single static frame.
     (function () {
@@ -1005,7 +1228,7 @@
 
       // 2D paint-stroke ribbon: parallel hairlines (a flat mesh, not
       // a woven tube). Two centerline sources: a smooth full-bleed
-      // sine wave (current sitewide language — enters off the left
+      // sine wave (current sitewide language: enters off the left
       // edge, exits off the right, no visible ends), or a Catmull-Rom
       // spline through per-tab waypoints (legacy). Static, drawn once.
       // A smooth sine centerline that runs OFF both screen edges, so
@@ -1098,7 +1321,7 @@
           meshes.forEach(m => {
             if (!m.holder.offsetParent) return;   // tab hidden
             if (!m.W) { size(m); if (m.W) draw(m, t || 0); return; } // first show
-            if (isFlat(m.o)) return;              // static stroke — drawn once
+            if (isFlat(m.o)) return;              // static stroke: drawn once
             if (!m.inView) return;                // off-screen
             draw(m, t || 0);
           });
@@ -1108,246 +1331,254 @@
   </script>
 
   <!-- ============================================================
-       HERO BUBBLE FIELD — photoreal soap bubbles floating behind the
-       name, poppable on click/tap. Illustration-only pastel thin-film
-       colours (the soap-film spectrum) live in this script as a
-       documented exception, exactly like the retired hero-sketch
-       --taupe/--rose colours were. No interface colour is hard-coded.
+       BUBBLE FIELDS: clear, realistic soap bubbles.
+       • Hero (#bubble-hero): interactive, poppable on click/tap.
+       • Other tabs (.bubble-idle): non-interactive, wafting idly behind
+         the content.
+       Bubbles read as clear glass: bright glassy edge + soft specular
+       highlights + faint interior sheen. NO loud rainbow rim.
+       The faint interior sheen uses illustration-only pastel colours
+       (documented exception, like the retired sketch --taupe/--rose).
        Reduced-motion: one static frame, no drift, no pop loop.
        ============================================================ -->
   <script>
     (function(){
-      const canvas = document.getElementById('bubble-hero');
-      if(!canvas) return;
-      const hero = canvas.parentElement;               // .hero box we fill
-      const ctx = canvas.getContext('2d');
       const TAU = Math.PI*2;
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const rand = (a,b)=> a + Math.random()*(b-a);
-      let w, h, dpr, bubbles = [], pops = [], raf;
+      // very soft interior tints: a whisper of colour
+      const SHEEN = [[255,158,203],[255,213,158],[182,245,200],[158,224,255],[201,169,255]];
+      // thin-film rim spectrum (pastel soap-film rainbow): drawn as a THIN ring
+      const FILM  = ['#ff9ecb','#ffd59e','#fff59e','#b6f5c8','#9ee0ff','#c9a9ff','#a0e0ab','#ffc36b','#ff9ecb'];
 
-      // Soap-film reflection spectrum (pastels) + interior colour pockets.
-      const FILM   = ['#ff9ecb','#ffd59e','#fff59e','#b6f5c8','#9ee0ff','#c9a9ff','#a0e0ab','#ffc36b','#ff9ecb'];
-      const POCKET = [[255,158,203],[255,213,158],[255,245,158],[182,245,200],[158,224,255],[201,169,255],[160,224,171]];
+      function createField(canvas, opts){
+        opts = opts || {};
+        const interactive = !!opts.interactive;
+        const area = opts.area || 78000;   // larger = fewer bubbles
+        const box = canvas.parentElement;
+        const ctx = canvas.getContext('2d');
+        let w, h, dpr, bubbles = [], pops = [], raf, running = false;
 
-      function size(){
-        dpr = Math.min(window.devicePixelRatio||1, 2);
-        w = hero.clientWidth; h = hero.clientHeight;
-        canvas.width = w*dpr; canvas.height = h*dpr;
-        ctx.setTransform(dpr,0,0,dpr,0,0);
-      }
-      function makePockets(){
-        const n = 3 + (Math.random()*2|0);
-        return Array.from({length:n}, ()=>({
-          a: rand(0,TAU), d: rand(0.12,0.5), s: rand(0.35,0.75),
-          c: POCKET[(Math.random()*POCKET.length)|0], spin: rand(-0.005,0.005)
-        }));
-      }
-      function make(fromBottom){
-        // a spread of sizes, with a few small ones for depth
-        const r = Math.random() < 0.28 ? rand(10,26) : rand(30,104);
-        return {
-          x: rand(0,w),
-          y: fromBottom ? h + r + rand(0,h*0.5) : rand(0,h),
-          r,
-          vx: rand(-0.22,0.22),
-          vy: -rand(0.12,0.42),
-          phase: rand(0,TAU),
-          wobble: rand(0.12,0.34),
-          squashPhase: rand(0,TAU),
-          rot: rand(0,TAU),
-          spin: rand(-0.0035,0.0035),
-          pockets: makePockets(),
-          pop: 0
-        };
-      }
-      function init(){
-        size();
-        const count = Math.max(7, Math.min(22, Math.round((w*h)/78000)));
-        bubbles = Array.from({length:count}, ()=> make(false));
-        pops = [];
-      }
-
-      function conicFilm(x,y,rot){
-        let g;
-        if(ctx.createConicGradient){ g = ctx.createConicGradient(rot, x, y); }
-        else { g = ctx.createLinearGradient(x-1,y-1,x+1,y+1); }
-        for(let i=0;i<FILM.length;i++) g.addColorStop(i/(FILM.length-1), FILM[i]);
-        return g;
-      }
-
-      function drawBubble(b){
-        const grow = b.pop ? 1 + b.pop*0.35 : 1;
-        const R = b.r*grow;
-        const a = b.pop ? (1 - b.pop) : 1;
-        // gentle organic squash (ellipse) as it floats
-        const sq = reduce ? 1 : 1 + Math.sin(b.squashPhase)*0.05;
-        const x = b.x, y = b.y;
-
-        ctx.save();
-        ctx.globalAlpha = a;
-        ctx.translate(x,y);
-        ctx.scale(1, sq);
-        ctx.translate(-x,-y);
-
-        // --- clip to the sphere for the body + iridescent interior ---
-        ctx.save();
-        ctx.beginPath(); ctx.arc(x,y,R,0,TAU); ctx.clip();
-
-        // 1) glassy body, Fresnel-bright at the rim
-        let body = ctx.createRadialGradient(x-R*0.25, y-R*0.30, R*0.05, x, y, R);
-        body.addColorStop(0,'rgba(255,255,255,0.16)');
-        body.addColorStop(0.72,'rgba(255,255,255,0.03)');
-        body.addColorStop(1,'rgba(255,255,255,0.22)');
-        ctx.fillStyle = body; ctx.fillRect(x-R,y-R,2*R,2*R);
-
-        // 2) drifting iridescent colour pockets (interference bands)
-        ctx.globalCompositeOperation = 'lighten';
-        for(const p of b.pockets){
-          const px = x + Math.cos(p.a)*R*p.d;
-          const py = y + Math.sin(p.a)*R*p.d;
-          const g = ctx.createRadialGradient(px,py,0,px,py,R*p.s);
-          g.addColorStop(0, `rgba(${p.c[0]},${p.c[1]},${p.c[2]},0.5)`);
-          g.addColorStop(1, `rgba(${p.c[0]},${p.c[1]},${p.c[2]},0)`);
-          ctx.fillStyle = g; ctx.fillRect(x-R,y-R,2*R,2*R);
+        function size(){
+          dpr = Math.min(window.devicePixelRatio||1, 2);
+          w = box.clientWidth; h = box.clientHeight;
+          canvas.width = w*dpr; canvas.height = h*dpr;
+          ctx.setTransform(dpr,0,0,dpr,0,0);
         }
-        ctx.globalCompositeOperation = 'source-over';
-
-        // 3) soft inner shading lower-right — gives the sphere volume
-        let shade = ctx.createRadialGradient(x+R*0.30, y+R*0.34, R*0.1, x+R*0.30, y+R*0.34, R*0.95);
-        shade.addColorStop(0,'rgba(47,47,45,0.10)');
-        shade.addColorStop(1,'rgba(47,47,45,0)');
-        ctx.fillStyle = shade; ctx.fillRect(x-R,y-R,2*R,2*R);
-        ctx.restore(); // drop clip
-
-        // 4) thin-film RIM — the bright rainbow edge
-        ctx.save();
-        ctx.beginPath(); ctx.arc(x,y,R*0.94,0,TAU);
-        ctx.lineWidth = Math.max(2, R*0.09);
-        ctx.strokeStyle = conicFilm(x,y,b.rot);
-        ctx.globalAlpha = a*0.85;
-        ctx.stroke();
-        ctx.restore();
-
-        // 5) second, offset film ring for the double-shimmer
-        ctx.save();
-        ctx.beginPath(); ctx.arc(x,y,R*0.80,0,TAU);
-        ctx.lineWidth = Math.max(1, R*0.035);
-        ctx.strokeStyle = conicFilm(x,y,b.rot + 1.4);
-        ctx.globalAlpha = a*0.5;
-        ctx.stroke();
-        ctx.restore();
-
-        // 6) crisp bright edge line
-        ctx.save();
-        ctx.beginPath(); ctx.arc(x,y,R*0.99,0,TAU);
-        ctx.lineWidth = Math.max(1, R*0.02);
-        ctx.strokeStyle = `rgba(255,255,255,${0.55*a})`;
-        ctx.stroke();
-        ctx.restore();
-
-        // 7) big soft specular highlight (upper-left window of light)
-        const hx = x - R*0.34, hy = y - R*0.40;
-        let hl = ctx.createRadialGradient(hx,hy,0,hx,hy,R*0.55);
-        hl.addColorStop(0,`rgba(255,255,255,${0.92*a})`);
-        hl.addColorStop(0.4,`rgba(255,255,255,${0.22*a})`);
-        hl.addColorStop(1,'rgba(255,255,255,0)');
-        ctx.fillStyle = hl;
-        ctx.beginPath(); ctx.arc(hx,hy,R*0.55,0,TAU); ctx.fill();
-
-        // 8) tiny sharp glint
-        ctx.beginPath(); ctx.arc(x-R*0.27, y-R*0.32, R*0.06, 0, TAU);
-        ctx.fillStyle = `rgba(255,255,255,${0.95*a})`; ctx.fill();
-
-        // 9) reflected rim-light crescent lower-right
-        ctx.save();
-        ctx.beginPath(); ctx.arc(x,y,R*0.86, 0.06*TAU, 0.34*TAU);
-        ctx.lineWidth = R*0.05; ctx.lineCap='round';
-        ctx.strokeStyle = `rgba(255,255,255,${0.28*a})`;
-        ctx.stroke();
-        ctx.restore();
-
-        ctx.restore();
-      }
-
-      function spawnPop(b){
-        const n = 8 + (Math.random()*5|0), drops = [];
-        for(let i=0;i<n;i++){
-          const ang = (i/n)*TAU + rand(-0.2,0.2), sp = rand(1.5,4.5);
-          drops.push({x:b.x, y:b.y, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp,
-                      r:rand(1.5,4), life:1, c:b.pockets[i%b.pockets.length].c});
+        function makeSheen(){
+          const n = 2 + (Math.random()*2|0);
+          return Array.from({length:n}, ()=>({
+            a: rand(0,TAU), d: rand(0.1,0.45), s: rand(0.35,0.7),
+            c: SHEEN[(Math.random()*SHEEN.length)|0], spin: rand(-0.004,0.004)
+          }));
         }
-        pops.push({x:b.x, y:b.y, r:b.r, ring:0, drops});
-      }
-      function drawPops(){
-        for(let i=pops.length-1;i>=0;i--){
-          const p = pops[i];
-          p.ring += 0.06;
-          const rr = p.r*(1+p.ring*1.4), alpha = Math.max(0,1-p.ring);
-          if(alpha>0){
-            ctx.save();
-            ctx.beginPath(); ctx.arc(p.x,p.y,rr,0,TAU);
-            ctx.lineWidth = Math.max(1, p.r*0.12*(1-p.ring));
-            ctx.strokeStyle = conicFilm(p.x,p.y,p.ring*3);
-            ctx.globalAlpha = alpha*0.8; ctx.stroke();
-            ctx.restore();
+        function make(fromBottom){
+          const big = opts.maxR || 104;
+          const r = Math.random() < 0.28 ? rand(10,24) : rand(28, big);
+          return {
+            x: rand(0,w),
+            y: fromBottom ? h + r + rand(0,h*0.5) : rand(0,h),
+            r,
+            vx: rand(-0.2,0.2),
+            vy: -rand(0.1,0.4)*(opts.speed||1),
+            phase: rand(0,TAU),
+            wobble: rand(0.1,0.3),
+            squashPhase: rand(0,TAU),
+            rot: rand(0,TAU),
+            spin: rand(-0.0035,0.0035),
+            sheen: makeSheen(),
+            pop: 0
+          };
+        }
+        function init(){
+          size();
+          const count = Math.max(opts.min||6, Math.min(opts.max||20, Math.round((w*h)/area)));
+          bubbles = Array.from({length:count}, ()=> make(false));
+          pops = [];
+        }
+        function conicFilm(x,y,rot){
+          let g;
+          if(ctx.createConicGradient){ g = ctx.createConicGradient(rot, x, y); }
+          else { g = ctx.createLinearGradient(x-1,y-1,x+1,y+1); }
+          for(let i=0;i<FILM.length;i++) g.addColorStop(i/(FILM.length-1), FILM[i]);
+          return g;
+        }
+
+        function drawBubble(b){
+          const grow = b.pop ? 1 + b.pop*0.35 : 1;
+          const R = b.r*grow;
+          const a = (b.pop ? (1 - b.pop) : 1) * (opts.opacity || 1);
+          const sq = reduce ? 1 : 1 + Math.sin(b.squashPhase)*0.05;
+          const x = b.x, y = b.y;
+
+          ctx.save();
+          ctx.globalAlpha = a;
+          ctx.translate(x,y); ctx.scale(1, sq); ctx.translate(-x,-y);
+
+          // clip to sphere for body + interior sheen
+          ctx.save();
+          ctx.beginPath(); ctx.arc(x,y,R,0,TAU); ctx.clip();
+
+          // 1) glassy body, Fresnel-bright toward the rim
+          let body = ctx.createRadialGradient(x-R*0.25, y-R*0.30, R*0.05, x, y, R);
+          body.addColorStop(0,'rgba(255,255,255,0.14)');
+          body.addColorStop(0.72,'rgba(255,255,255,0.03)');
+          body.addColorStop(1,'rgba(255,255,255,0.20)');
+          ctx.fillStyle = body; ctx.fillRect(x-R,y-R,2*R,2*R);
+
+          // 2) faint interior sheen: a whisper of iridescence, no rainbow ring
+          ctx.globalCompositeOperation = 'lighten';
+          for(const p of b.sheen){
+            const px = x + Math.cos(p.a)*R*p.d;
+            const py = y + Math.sin(p.a)*R*p.d;
+            const g = ctx.createRadialGradient(px,py,0,px,py,R*p.s);
+            g.addColorStop(0, `rgba(${p.c[0]},${p.c[1]},${p.c[2]},0.22)`);
+            g.addColorStop(1, `rgba(${p.c[0]},${p.c[1]},${p.c[2]},0)`);
+            ctx.fillStyle = g; ctx.fillRect(x-R,y-R,2*R,2*R);
           }
-          for(const d of p.drops){
-            d.x+=d.vx; d.y+=d.vy; d.vy+=0.08; d.life-=0.03;
-            if(d.life>0){
-              ctx.beginPath(); ctx.arc(d.x,d.y,Math.max(0.5,d.r*d.life),0,TAU);
-              ctx.fillStyle=`rgba(${d.c[0]},${d.c[1]},${d.c[2]},${0.7*d.life})`; ctx.fill();
+          ctx.globalCompositeOperation = 'source-over';
+
+          // 3) soft inner shading lower-right for volume
+          let shade = ctx.createRadialGradient(x+R*0.30, y+R*0.34, R*0.1, x+R*0.30, y+R*0.34, R*0.95);
+          shade.addColorStop(0,'rgba(47,47,45,0.09)');
+          shade.addColorStop(1,'rgba(47,47,45,0)');
+          ctx.fillStyle = shade; ctx.fillRect(x-R,y-R,2*R,2*R);
+          ctx.restore(); // drop clip
+
+          // 4) THIN iridescent thin-film rim: delicate pastel rainbow edge
+          ctx.save();
+          ctx.beginPath(); ctx.arc(x,y,R*0.965,0,TAU);
+          ctx.lineWidth = Math.max(1.2, R*0.032);
+          ctx.strokeStyle = conicFilm(x,y,b.rot);
+          ctx.globalAlpha = a*0.7;
+          ctx.stroke();
+          ctx.restore();
+
+          // 4b) crisp bright glass edge just outside the film
+          ctx.save();
+          ctx.beginPath(); ctx.arc(x,y,R*0.992,0,TAU);
+          ctx.lineWidth = Math.max(0.8, R*0.015);
+          ctx.strokeStyle = `rgba(255,255,255,${0.5*a})`;
+          ctx.stroke();
+          ctx.restore();
+
+          // 5) big soft specular highlight (upper-left window of light)
+          const hx = x - R*0.34, hy = y - R*0.40;
+          let hl = ctx.createRadialGradient(hx,hy,0,hx,hy,R*0.55);
+          hl.addColorStop(0,`rgba(255,255,255,${0.9*a})`);
+          hl.addColorStop(0.4,`rgba(255,255,255,${0.2*a})`);
+          hl.addColorStop(1,'rgba(255,255,255,0)');
+          ctx.fillStyle = hl;
+          ctx.beginPath(); ctx.arc(hx,hy,R*0.55,0,TAU); ctx.fill();
+
+          // 6) tiny sharp glint
+          ctx.beginPath(); ctx.arc(x-R*0.27, y-R*0.32, R*0.055, 0, TAU);
+          ctx.fillStyle = `rgba(255,255,255,${0.9*a})`; ctx.fill();
+
+          // 7) reflected rim-light crescent lower-right
+          ctx.save();
+          ctx.beginPath(); ctx.arc(x,y,R*0.86, 0.06*TAU, 0.34*TAU);
+          ctx.lineWidth = R*0.045; ctx.lineCap='round';
+          ctx.strokeStyle = `rgba(255,255,255,${0.24*a})`;
+          ctx.stroke();
+          ctx.restore();
+
+          ctx.restore();
+        }
+
+        // --- pop (interactive fields only) ---
+        function spawnPop(b){
+          const n = 8 + (Math.random()*5|0), drops = [];
+          for(let i=0;i<n;i++){
+            const ang = (i/n)*TAU + rand(-0.2,0.2), sp = rand(1.5,4.5);
+            drops.push({x:b.x, y:b.y, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp,
+                        r:rand(1.5,4), life:1, c:b.sheen[i%b.sheen.length].c});
+          }
+          pops.push({x:b.x, y:b.y, r:b.r, ring:0, drops});
+        }
+        function drawPops(){
+          for(let i=pops.length-1;i>=0;i--){
+            const p = pops[i];
+            p.ring += 0.06;
+            const rr = p.r*(1+p.ring*1.4), alpha = Math.max(0,1-p.ring);
+            if(alpha>0){
+              ctx.save();
+              ctx.beginPath(); ctx.arc(p.x,p.y,rr,0,TAU);
+              ctx.lineWidth = Math.max(1, p.r*0.10*(1-p.ring));
+              ctx.strokeStyle = `rgba(255,255,255,${alpha*0.6})`;
+              ctx.stroke();
+              ctx.restore();
+            }
+            for(const d of p.drops){
+              d.x+=d.vx; d.y+=d.vy; d.vy+=0.08; d.life-=0.03;
+              if(d.life>0){
+                ctx.beginPath(); ctx.arc(d.x,d.y,Math.max(0.5,d.r*d.life),0,TAU);
+                ctx.fillStyle=`rgba(${d.c[0]},${d.c[1]},${d.c[2]},${0.6*d.life})`; ctx.fill();
+              }
+            }
+            if(p.ring>1 && p.drops.every(d=>d.life<=0)) pops.splice(i,1);
+          }
+        }
+
+        function step(){
+          // pause work when this tab is hidden
+          if(canvas.offsetParent === null){ raf = requestAnimationFrame(step); return; }
+          ctx.clearRect(0,0,w,h);
+          for(let i=bubbles.length-1;i>=0;i--){
+            const b = bubbles[i];
+            if(b.pop){
+              b.pop += 0.10;
+              if(b.pop>=1){ bubbles.splice(i,1); bubbles.push(make(true)); continue; }
+            } else {
+              b.phase += 0.01; b.squashPhase += 0.02; b.rot += b.spin;
+              b.x += b.vx + Math.sin(b.phase)*b.wobble;
+              b.y += b.vy;
+              for(const p of b.sheen) p.a += p.spin;
+              if(b.y + b.r < -40){ Object.assign(b, make(true)); }
+              if(b.x < -b.r-40) b.x = w + b.r + 20;
+              if(b.x > w + b.r+40) b.x = -b.r - 20;
+            }
+            drawBubble(b);
+          }
+          if(interactive) drawPops();
+          raf = requestAnimationFrame(step);
+        }
+
+        if(interactive){
+          function hit(mx,my){
+            for(let i=bubbles.length-1;i>=0;i--){
+              const b = bubbles[i];
+              if(!b.pop && Math.hypot(mx-b.x,my-b.y) <= b.r){ b.pop = 0.001; spawnPop(b); return; }
             }
           }
-          if(p.ring>1 && p.drops.every(d=>d.life<=0)) pops.splice(i,1);
-        }
-      }
-
-      function step(){
-        ctx.clearRect(0,0,w,h);
-        for(let i=bubbles.length-1;i>=0;i--){
-          const b = bubbles[i];
-          if(b.pop){
-            b.pop += 0.10;
-            if(b.pop>=1){ bubbles.splice(i,1); bubbles.push(make(true)); continue; }
-          } else {
-            b.phase += 0.01; b.rot += b.spin; b.squashPhase += 0.02;
-            b.x += b.vx + Math.sin(b.phase)*b.wobble;
-            b.y += b.vy;
-            for(const p of b.pockets) p.a += p.spin;
-            if(b.y + b.r < -40){ Object.assign(b, make(true)); }
-            if(b.x < -b.r-40) b.x = w + b.r + 20;
-            if(b.x > w + b.r+40) b.x = -b.r - 20;
+          function pointer(e){
+            const rect = canvas.getBoundingClientRect();
+            const cx = e.clientX ?? (e.touches && e.touches[0] && e.touches[0].clientX);
+            const cy = e.clientY ?? (e.touches && e.touches[0] && e.touches[0].clientY);
+            if(cx==null) return;
+            hit(cx-rect.left, cy-rect.top);
           }
-          drawBubble(b);
+          canvas.addEventListener('click', pointer);
+          canvas.addEventListener('touchstart', pointer, {passive:true});
         }
-        drawPops();
-        raf = requestAnimationFrame(step);
+
+        init();
+        if(reduce){ ctx.clearRect(0,0,w,h); bubbles.forEach(drawBubble); }
+        else { running = true; step(); }
+        let rt; window.addEventListener('resize', ()=>{
+          clearTimeout(rt);
+          rt = setTimeout(()=>{ cancelAnimationFrame(raf); init();
+            if(reduce){ bubbles.forEach(drawBubble); } else step(); }, 150);
+        });
       }
 
-      function hit(mx,my){
-        for(let i=bubbles.length-1;i>=0;i--){
-          const b = bubbles[i];
-          if(!b.pop && Math.hypot(mx-b.x,my-b.y) <= b.r){ b.pop = 0.001; spawnPop(b); return; }
-        }
-      }
-      function pointer(e){
-        const rect = canvas.getBoundingClientRect();
-        const cx = e.clientX ?? (e.touches && e.touches[0] && e.touches[0].clientX);
-        const cy = e.clientY ?? (e.touches && e.touches[0] && e.touches[0].clientY);
-        if(cx==null) return;
-        hit(cx-rect.left, cy-rect.top);
-      }
-      canvas.addEventListener('click', pointer);
-      canvas.addEventListener('touchstart', pointer, {passive:true});
+      // hero: interactive & poppable
+      const heroCanvas = document.getElementById('bubble-hero');
+      if(heroCanvas) createField(heroCanvas, { interactive:true, area:78000, max:22, maxR:104 });
 
-      init();
-      if(reduce){ ctx.clearRect(0,0,w,h); bubbles.forEach(drawBubble); }
-      else step();
-      let rt; window.addEventListener('resize', ()=>{
-        clearTimeout(rt);
-        rt = setTimeout(()=>{ cancelAnimationFrame(raf); init();
-          if(reduce){ bubbles.forEach(drawBubble); } else step(); }, 150);
+      // other tabs: idle, quieter, fewer + smaller so they don't crowd the copy
+      document.querySelectorAll('.bubble-idle').forEach(c=>{
+        createField(c, { interactive:false, area:150000, min:4, max:11, maxR:78, speed:0.8, opacity:0.85 });
       });
     })();
   </script>

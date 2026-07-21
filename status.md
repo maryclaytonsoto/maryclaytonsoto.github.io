@@ -1,6 +1,53 @@
 # Project Status — Personal Portfolio Website
 
-Last updated: July 8, 2026 (end of session 4)
+Last updated: July 20, 2026 (end of session 5)
+
+## Session 5 (July 9–20, 2026) — v5 → v5.3 "Bubbles"
+
+Mary explored four layout directions from style references she supplied (dope.security
+boarding-pass, Integrated Biosciences lab, monopo saigon editorial, and an aurora-blob
+page she uploaded). Proof-of-concept pages were built in `Website/` — `poc-boardingpass.html`,
+`poc-lab.html`, `poc-editorial-bubbles.html`, `poc-aurora-blobs.html` — all in her existing
+palette. She chose the **bubble** direction and it was merged into the real site.
+
+**Landed:**
+
+- **Hero rebuilt.** Name is now ONE line, ALL CAPS, one uniform Cormorant style,
+  `clamp(1.9rem, 7.4vw, 5.6rem)`, `0.05em` tracking, `nowrap`, centered in a tall opening
+  view (`min-height: min(86vh, 780px)`). Two-line roman/italic-offset name retired.
+- **Bubble field** replaces the hero mesh ribbon: photoreal soap bubbles on `<canvas>` —
+  glassy Fresnel body, drifting interior sheen pockets, a THIN conic thin-film rim, thin
+  white glass edge, big soft specular + glint + lower-right crescent, gentle rise/drift/squash.
+  Hero bubbles are **poppable** (click/tap → expanding ring + droplets → respawn). All other
+  tabs got `.bubble-idle` canvases: same bubbles, non-interactive, fewer/smaller, wafting
+  behind content. One shared engine `createField(canvas, opts)`; hidden tabs skip work.
+- **Mesh waves killed** entirely (hero ribbon, per-tab flow waves, footer wave) at her request.
+  Engine left dormant (no `addMesh` calls); `.mesh-flow`/`.mesh-footer` set to `display:none`.
+- **Grey hairline dividers removed** (hero bottom, `.entry` rows, footer top) — she disliked
+  lines sectioning/interrupting content. Header + mobile-nav hairlines kept.
+- **Body font** switched Inter → **EB Garamond**, matched from a font sample she sent.
+  ⚠️ Unconfirmed — may be the wrong face; one-line swap in `--body` if so.
+- **Copy rewritten to first person**, conversational, across all project, experience, and
+  publication blurbs (was reading like a resume).
+- **About rewritten twice.** A multiplicity-themed draft (drawn from an old personal essay
+  about bubbles as a "bounded infinity" self-portrait) was rejected as "fake and cheesy and
+  ingenuine." Current version is plain and grounded. The multiplicity/bubble meaning now
+  lives on the **Art page** instead, tied to her recurring hands + bubbles imagery.
+  **Her AP Lang autoethnography must never be mentioned** — not relevant.
+- Small: nav wordmark ALL CAPS + `0.06em`; disciplines separator `/` → **×** (terracotta);
+  tagline forced to one line (wraps again below 760px); About heading kept as
+  "Where Fields Overlap."
+
+**Rejected — do not reintroduce:** the mesh waves; any hazy iridescent gradient background
+behind the bubbles (tried twice — real liquid iridescence needs a video or WebGL shader, not
+CSS blobs); a thick rainbow bubble rim ("kiddish"); grey sectioning hairlines.
+
+**Blocked:** a stale `.git/index.lock` prevented committing. Last commit is `094e106`
+("Hero: photoreal poppable bubble field, name on one line; retire mesh waves"); **everything
+after that is uncommitted.** Delete the lock locally, commit, and push.
+
+**Not eyeballed by the assistant:** no headless browser was available this session, so all
+work was verified by syntax/structure checks. Mary reviewed rendering in her own browser.
 
 ## Session 4, part 4 (July 8, 2026) — v4.5 "Paint Strokes" + final sign-off
 
@@ -109,6 +156,8 @@ Placeholders remaining (marked `.note` in the Publication tab): full author list
 
 ## Remaining to-do
 
+- **Clear the stale `.git/index.lock`, commit the session-5 work, and push** (last commit `094e106`).
+- **Confirm the body font** — verify EB Garamond is the face Mary meant, and whether the base size needs a bump (serif runs smaller/lighter than Inter at 16px).
 - Publication: add full author list and the BME 271 project description + repository link (marked as notes in the tab).
 - Decide whether to list phone number publicly (still intentionally omitted; it's on the resume).
 - Consider the hiring-manager review items still open: "my role" phrasing on team projects, measurable impact numbers, a "what I'm seeking next" line in the hero, favicon/OG tags.
