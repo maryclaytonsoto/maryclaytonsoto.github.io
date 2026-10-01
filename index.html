@@ -262,7 +262,7 @@
       font-family: var(--display);
       color: var(--ink);
       font-weight: 500;
-      font-size: clamp(1.9rem, 7.4vw, 5.6rem);
+      font-size: clamp(1.3rem, 7.4vw, 5.6rem);
       line-height: 1.0;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -288,6 +288,30 @@
       letter-spacing: 0.015em;
     }
     .hero .disciplines .dot { color: var(--terracotta); padding: 0 0.3em; }
+    /* "pop me" tag beside a still bubble parked in the hero's top-right
+       corner, so it is obvious the bubbles are clickable. Gone after the
+       first pop. Positioned by the bubble script. */
+    .pop-tag {
+      position: absolute;
+      left: 0; top: 0;
+      z-index: 2;
+      pointer-events: none;
+      display: inline-flex;
+      align-items: flex-end;
+      gap: 0.15rem;
+      white-space: nowrap;
+      font-family: var(--hand);
+      font-size: 1.65rem;
+      letter-spacing: 0.02em;
+      color: var(--muted);
+      opacity: 0;
+      transition: opacity 0.45s var(--ease);
+      will-change: transform;
+    }
+    .pop-tag svg { color: var(--terracotta); margin-bottom: 0.55rem; margin-left: 0.1rem; }
+    .pop-tag.show { opacity: 1; }
+    .pop-tag.done { opacity: 0; }
+    @media (prefers-reduced-motion: reduce) { .pop-tag { display: none; } }
     .hero .tagline {
       position: relative;
       z-index: 2;
@@ -300,12 +324,16 @@
     }
 
     /* Home about: editorial two-column: heading rail + prose */
+    /* About: heading sits above the prose as a section header */
     .about-grid {
       display: grid;
-      grid-template-columns: 240px 1fr;
-      gap: 3rem;
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
       margin-top: 5.5rem;
+      justify-items: center;
     }
+    .about-grid .rail { text-align: center; }
+    .about-grid .prose { max-width: 62ch; }
     .about-grid .rail .eyebrow { display: block; margin-bottom: 1rem; }
     .about-grid .rail h2 {
       font-family: var(--display);
@@ -314,6 +342,7 @@
       line-height: 1.1;
       color: var(--ink);
       letter-spacing: 0.005em;
+      white-space: nowrap;
     }
 
     /* prose */
@@ -423,13 +452,22 @@
       margin-bottom: 0.5rem;
     }
     .subentry .org-link { margin-bottom: 0.6rem; }
+    .proj-jump {
+      color: var(--ink); text-decoration: underline; text-underline-offset: 4px;
+      text-decoration-thickness: 1px;
+      text-decoration-color: color-mix(in srgb, var(--terracotta) 55%, transparent);
+    }
+    .proj-jump:hover { text-decoration-color: var(--ink); }
+    #proj-segmentation { scroll-margin-top: 6rem; }
+    .entry .authors { font-size: 0.875rem; line-height: 1.55; color: var(--ink-subtle); margin-top: 0.5rem; }
+    .entry .authors strong { color: var(--ink); font-weight: 500; }
 
     /* ============================================================
        GALLERY WALL: shared by Projects and Art. Framed pieces on
        a grid: flat frame on top, gallery-label text below.
        ============================================================ */
     .art-intro {
-      max-width: 60ch;
+      max-width: none;
       font-size: 1.0625rem;
       line-height: 1.7;
       color: var(--text);
@@ -506,6 +544,200 @@
     /* captions carry the annotation voice: it reads as though Mary
        labelled her own photographs. Sized up from the old 0.8125rem
        because the marker face needs the room to stay legible. */
+    /* ============================================================
+       ART: coverflow wall. All five works stay on screen; the focused
+       one grows and the rest shrink with distance from it. Widths are
+       percentages and images are width:100%/height:auto, so every piece
+       keeps its native proportion with no aspect-ratio or cropping.
+       ============================================================ */
+    .art-flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* tighter gap than before: six works in the row now, so the space
+         is better spent on the focused piece than between the others */
+      gap: clamp(0.5rem, 1.2vw, 1.25rem);
+      /* tall enough for a portrait at the new focused width: 44% of a
+         1160px row is ~510px wide, which at 3:4 is ~680px of image */
+      min-height: clamp(360px, 76vh, 780px);
+      touch-action: pan-y;
+      user-select: none;
+      margin-bottom: 2rem;
+    }
+    .art-work {
+      flex: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: width 0.55s var(--ease), opacity 0.55s var(--ease);
+    }
+    /* the frame is the flip container: no surface of its own, it only
+       supplies perspective. The two faces carry the border and radius. */
+    .art-work .frame {
+      width: 100%;
+      perspective: 1200px;
+      background: none;
+      border: 0;
+      overflow: visible;
+      cursor: pointer;
+    }
+    .flip-inner {
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.7s var(--ease);
+    }
+    .art-work.flipped .flip-inner { transform: rotateY(180deg); }
+    .flip-face {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border: 1px solid var(--line-soft);
+      border-radius: var(--r-media);
+      overflow: hidden;
+      background: var(--paper);
+      box-shadow: 0 8px 26px -14px rgba(47,47,45,0.35);
+      transition: box-shadow 0.55s var(--ease);
+    }
+    .art-work.is-active .flip-face { box-shadow: 0 22px 46px -18px rgba(47,47,45,0.42); }
+    .flip-front img { width: 100%; height: auto; display: block; }
+    /* the back is pinned over the front, so it inherits the front's
+       height and therefore the artwork's native proportion */
+    .flip-back {
+      position: absolute;
+      inset: 0;
+      transform: rotateY(180deg);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: clamp(0.9rem, 1.6vw, 1.6rem);
+      overflow: auto;
+      background: var(--bg);
+    }
+    .flip-back h3 {
+      font-family: var(--hand);
+      font-weight: 400;
+      font-size: clamp(1.1rem, 1.5vw, 1.45rem);
+      line-height: 1.25;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+    .flip-back .skel li { font-size: clamp(0.75rem, 0.95vw, 0.9375rem); line-height: 1.5; }
+    .flip-back p { font-size: clamp(0.75rem, 0.95vw, 0.9375rem); line-height: 1.5; color: var(--text); }
+    /* small hint that the card turns, only on the focused piece */
+    .flip-hint {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-subtle);
+      margin-top: 0.35rem;
+      opacity: 0;
+      transition: opacity 0.35s var(--ease);
+    }
+    .art-work.is-active .flip-hint { opacity: 1; }
+
+    /* PROJECTS: gallery grid. Every tile visible at once; the image
+       turns over to the write-up, the label underneath always shows. */
+    .proj-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3.5rem 2.25rem;
+      align-items: start;
+      margin-bottom: 3rem;
+    }
+    .proj-tile .frame { perspective: 1200px; cursor: pointer; border: 0; background: none; }
+    .proj-tile .flip-inner { aspect-ratio: 4 / 5; }
+    .proj-tile .flip-front { position: absolute; inset: 0; }
+    .proj-tile .flip-front img { width: 100%; height: 100%; object-fit: cover; }
+    .proj-tile .fit-contain .flip-front img { object-fit: contain; background: var(--paper); }
+    .proj-tile .flip-front svg.dg { width: 100%; height: 100%; }
+    .proj-tile.flipped .flip-inner { transform: rotateY(180deg); }
+    .proj-tile .frame:hover .flip-face { box-shadow: 0 18px 40px -18px rgba(47,47,45,0.42); }
+    .proj-tile .frame:focus-visible { outline: 2px solid var(--terracotta); outline-offset: 6px; border-radius: var(--r-media); }
+    .proj-tile .flip-back { justify-content: flex-start; padding: 1.25rem 1.3rem; }
+    .proj-tile .flip-back p { font-size: 0.9rem; line-height: 1.55; }
+    .proj-tile .label { margin-top: 0.9rem; }
+    /* Skills tab */
+    .skills-wrap { padding: 1rem 0 3rem; }
+    .skill-rows .gap-above { margin-top: 1.4rem; }
+    .skill-rows dt {
+      font-family: var(--body); font-size: 0.6875rem; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+    }
+    .skill-rows { display: grid; grid-template-columns: 8.5rem 1fr; gap: 1.1rem 1.5rem; align-items: baseline; }
+    .skill-rows dd { margin: 0; font-size: 1.0625rem; line-height: 1.6; color: var(--text); }
+    @media (max-width: 760px) { .skill-rows { grid-template-columns: 1fr; gap: 0.15rem; } .skill-rows dd { margin-bottom: 0.6rem; } }
+    /* paper-style figure caption directly under each image */
+    .fig-cap { margin-top: 0.75rem; font-size: 0.8125rem; line-height: 1.5; color: var(--ink-subtle); font-style: italic; }
+    .proj-tile .label-meta { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; }
+    .proj-tile .when { font-size: 0.8125rem; color: var(--ink-subtle); white-space: nowrap; }
+    .proj-tile h3 {
+      font-family: var(--display); font-weight: 500; font-size: 1.45rem;
+      line-height: 1.15; color: var(--ink); margin: 0 0 0.35rem;
+    }
+    .proj-summary { font-size: 0.975rem; line-height: 1.55; color: var(--text); }
+    .proj-result { font-size: 0.875rem; line-height: 1.5; color: var(--muted); font-style: italic; margin-top: 0.35rem; }
+    .proj-more {
+      display: inline; padding: 0; margin-left: 0.2rem; background: none; border: 0; cursor: pointer;
+      font: inherit; color: var(--terracotta);
+      text-decoration: underline; text-underline-offset: 3px;
+      text-decoration-color: color-mix(in srgb, var(--terracotta) 45%, transparent);
+    }
+    @media (max-width: 1000px) { .proj-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 760px) { .proj-grid { grid-template-columns: 1fr; gap: 3rem; } }
+    @media (prefers-reduced-motion: reduce) { .proj-tile .flip-inner { transition: none; } }
+    .flip-back .eyebrow { display: block; margin-bottom: 0.35rem; }
+    .flip-back .back-links { margin-top: 0.6rem; }
+    .flip-back .back-links a {
+      color: var(--ink); margin-right: 0.9rem;
+      text-decoration: underline; text-underline-offset: 3px;
+      text-decoration-color: color-mix(in srgb, var(--ink) 35%, transparent);
+    }
+    /* inline SVG diagrams: colours come from the theme block */
+    .flip-front svg.dg { width: 100%; height: auto; display: block; }
+    .dg text { font-family: var(--body); }
+    .dg-bg { fill: var(--paper); }
+    .dg-cap { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; fill: var(--muted); }
+    .dg-note { font-size: 14px; font-style: italic; fill: var(--text); }
+    .dg-thin, .dg-arrow { fill: none; stroke: color-mix(in srgb, var(--ink) 45%, transparent); stroke-width: 1.2; }
+    .dg-headpath { fill: none; stroke: color-mix(in srgb, var(--ink) 45%, transparent); stroke-width: 1.4; }
+    .dg-axis { fill: none; stroke: color-mix(in srgb, var(--ink) 30%, transparent); stroke-width: 1; }
+    .dg-base { fill: none; stroke: color-mix(in srgb, var(--ink) 30%, transparent); stroke-width: 1; stroke-dasharray: 4 5; }
+    .dg-curve { fill: none; stroke-width: 3; stroke-linecap: round; }
+    .dg-dot { fill: var(--terracotta); }
+    .dg-line-mute { fill: none; stroke: color-mix(in srgb, var(--ink) 35%, transparent); stroke-width: 1.6; stroke-linecap: round; }
+    .dg-line-mid { fill: none; stroke: color-mix(in srgb, var(--coral) 55%, transparent); stroke-width: 2; stroke-linecap: round; }
+    .dg-cell { fill: color-mix(in srgb, var(--terracotta) 12%, var(--paper)); stroke: var(--terracotta); stroke-width: 1.6; }
+    .dg-plastic { fill: color-mix(in srgb, var(--ink) 8%, var(--paper)); stroke: color-mix(in srgb, var(--ink) 55%, transparent); stroke-width: 1.4; stroke-linejoin: round; }
+    .dg-band { fill: color-mix(in srgb, var(--coral) 30%, transparent); stroke: var(--coral); stroke-width: 1; }
+
+    .art-nav {
+      display: flex; gap: 0.5rem; justify-content: center; align-items: center;
+      margin-bottom: 2.5rem;
+    }
+    .art-nav button {
+      font-family: var(--body); font-size: 0.9375rem; color: var(--ink);
+      background: none; border: 1px solid var(--line); border-radius: var(--r-ctrl);
+      padding: 0.4rem 1.1rem; cursor: pointer;
+      transition: background-color 0.15s var(--ease);
+    }
+    .art-nav button:hover { background: var(--line-soft); }
+    .art-dots { display: flex; gap: 0.5rem; margin: 0 0.75rem; }
+    .art-dots button {
+      width: 7px; height: 7px; padding: 0; border: none; border-radius: 50%;
+      background: color-mix(in srgb, var(--ink) 22%, transparent); cursor: pointer;
+      transition: background-color 0.3s var(--ease), transform 0.3s var(--ease);
+    }
+    .art-dots button[aria-current="true"] { background: var(--terracotta); transform: scale(1.35); }
+    .art-flow:focus-visible { outline: 2px solid var(--terracotta); outline-offset: 10px; }
+
+    @media (max-width: 760px) {
+      .art-flow { flex-wrap: wrap; min-height: auto; gap: 1.25rem; }
+      .art-work { width: 46% !important; opacity: 1 !important; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .art-work, .art-work .frame { transition: none; }
+    }
+
     /* ONE handwriting treatment for every line that sits under an image,
        whether it is an artwork title (#art .piece h3) or a photo caption
        (.art-caption). Change it here and all seven move together. */
@@ -525,45 +757,44 @@
        the headshot caption. Left-aligned to match the caption above it
        and the rest of Home; spacing is an even 1.5rem step between parts
        rather than the uneven gaps this had as a standalone tab. */
-    .home-contact { margin-top: 4rem; text-align: left; }
+    .home-contact { margin-top: 3rem; text-align: left; }
     /* One label, not two: the eyebrow "Get in touch" over a "Contact"
        heading said the same thing twice. The heading carries it alone. */
+    /* Home photo captions: a touch larger than the default .piece p size */
+    #home .piece .art-caption { font-size: 1.15rem; }
+    /* small-caps label, same treatment as the other eyebrows */
     .home-contact h2 {
-      font-family: var(--display);
-      font-size: 2.4rem;
-      font-weight: 500;
-      line-height: 1.05;
-      color: var(--ink);
-      margin-bottom: 1.5rem;
+      font-family: var(--body);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.1rem;
     }
-    .home-contact .home-mail {
-      font-family: var(--display);
-      font-size: clamp(1.5rem, 3.2vw, 2rem);
-      font-weight: 500;
-      line-height: 1.2;
-      margin-bottom: 0.5rem;
+    /* labeled rows: small-caps label left, address right, one size */
+    .contact-rows {
+      display: grid;
+      grid-template-columns: 7.5rem 1fr;
+      row-gap: 0.75rem;
+      align-items: baseline;
     }
-    .home-contact .home-mail a {
+    .contact-rows dt {
+      font-family: var(--body);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .contact-rows dd { margin: 0; font-size: 1.15rem; color: var(--ink); }
+    .contact-rows a {
       color: var(--ink);
       text-decoration: none;
-      border-bottom: 2px solid color-mix(in srgb, var(--terracotta) 55%, transparent);
+      border-bottom: 1px solid transparent;
       transition: border-color 0.15s var(--ease);
     }
-    .home-contact .home-mail a:hover { border-color: var(--ink); }
-    .home-contact .home-alt {
-      font-size: 1rem;
-      color: var(--ink-subtle);
-      line-height: 1.8;
-    }
-    .home-contact .home-alt a {
-      color: var(--muted);
-      text-decoration: underline;
-      text-decoration-thickness: 1.5px;
-      text-underline-offset: 3px;
-      text-decoration-color: color-mix(in srgb, var(--muted) 35%, transparent);
-      transition: text-decoration-color 0.15s var(--ease);
-    }
-    .home-contact .home-alt a:hover { text-decoration-color: var(--muted); }
+    .contact-rows a:hover { border-color: var(--terracotta); }
 
     /* ============================================================
        CONTACT / RESUME
@@ -664,8 +895,8 @@
 
        Four parts, in Mary's stated order:
          catchphrase --> email --> icons --> location
-       An even 1.6rem step between each. The gmail address and phone
-       number are deliberately NOT here: they live in the Home contact
+       An even 1.6rem step between each. The personal gmail address is
+       deliberately NOT here: it lives in the Home contact
        block, so the footer stays a compact repeating sign-off rather
        than a full contact card on every tab.
        ------------------------------------------------------------------ */
@@ -757,7 +988,7 @@
       /* single-column grid on mobile: the gap the contact block was
          filling no longer exists, so give it its own separation */
       .home-contact { margin-top: 3rem; }
-      .home-contact h2 { font-size: 2.1rem; }
+      .contact-rows { grid-template-columns: 6rem 1fr; }
       .hero { min-height: 78vh; padding: 3rem 0 3rem; }
       .hero .tagline { white-space: normal; }   /* allow wrap on small phones */
       .about-grid { grid-template-columns: 1fr; gap: 1.5rem; margin-top: 3.5rem; }
@@ -811,8 +1042,9 @@
         <ul>
           <li><a href="#home" data-tab-link="home" class="active">Home</a></li>
           <li><a href="#publication" data-tab-link="publication">Research</a></li>
-          <li><a href="#experience" data-tab-link="experience">Experience</a></li>
           <li><a href="#projects" data-tab-link="projects">Projects</a></li>
+          <li><a href="#experience" data-tab-link="experience">Experience</a></li>
+          <li><a href="#skills" data-tab-link="skills">Skills</a></li>
           <li><a href="#art" data-tab-link="art">Art</a></li>
         </ul>
       </nav>
@@ -829,6 +1061,7 @@
         <h1 class="hero-name">Mary Clayton Soto</h1>
         <p class="disciplines">Biomedical Engineering <span class="dot">&amp;</span> Mathematics <span class="dot">&amp;</span> Visual Arts</p>
         <p class="tagline">Duke University, Pratt School of Engineering &middot; Class of 2028</p>
+        <span class="pop-tag" aria-hidden="true">pop me<svg viewBox="0 0 26 22" width="22" height="19"><path d="M2 19 C10 18 17 14 22 4 M22 4 L16.4 7 M22 4 L22.8 10.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </div>
 
       <div class="about-grid">
@@ -837,18 +1070,10 @@
           <h2>Where Fields Overlap</h2>
         </div>
         <div class="prose">
-          <ul class="skel">
-            <li>BME and mathematics major, Duke Pratt, minor in visual arts</li>
-            <li>Picked the mix because I've never stayed in one lane</li>
-            <li>Drawn to problems sitting between fields</li>
-            <li>Now: surgical education models with Duke's SEAL Lab</li>
-            <li>Now: cardiovascular device research in Tallahassee</li>
-            <li>Now: TA-ing intro Python, professional development for Theta Tau</li>
-            <li>Art is how I think, not a side activity</li>
-            <li>It taught me to slow down and actually look</li>
-            <li>Same instinct as debugging code or prototyping a device</li>
-            <li class="todo">What I'm seeking next, e.g. Summer 2027 internships</li>
-          </ul>
+          <p>I'm a biomedical engineering and mathematics double major at Duke's Pratt School of Engineering, with a minor in visual arts. This combination reflects my interdisciplinary approach to problem solving: I like to approach challenges from both an analytical and a creative perspective.</p>
+          <p>Mathematics is the analytical side, and it has become a common language for everything else I study. It makes new subjects easier to pick up, and I use its notation in my notes for every class. Writing a proof is one of my favorite ways to think, building an argument from the ground up the way engineering builds a device, only on paper. Art is where I experiment in a different way, with color and form, to express something rather than prove it.</p>
+          <p>These sides blend across all my work, especially in my labs. Shaping an organ model at Duke's SEAL Lab takes an eye for form as much as technical understanding, and analyzing cell images at an FSU microparticle lab meant seeing a pattern before I could quantify it. Having these perspectives lets me be rigorous about a problem while staying open to more than one way of solving it.</p>
+          <p>For Summer 2027, I'm looking for opportunities in healthcare innovation where I can keep exploring the intersection of engineering, quantitative work, and design.</p>
         </div>
       </div>
 
@@ -862,12 +1087,14 @@
                here. Filling it with real content beats padding it out. -->
           <div class="home-contact">
             <h2>Get in touch</h2>
-            <p class="home-mail"><a href="mailto:mary.soto@duke.edu">mary.soto@duke.edu</a></p>
-            <p class="home-alt">
-              <a href="mailto:maryclaytonsoto@gmail.com">maryclaytonsoto@gmail.com</a>
-              &nbsp;&middot;&nbsp;
-              <a href="tel:+18505679336">(850) 567-9336</a>
-            </p>
+            <dl class="contact-rows">
+              <dt>Duke</dt>
+              <dd><a href="mailto:mary.soto@duke.edu">mary.soto@duke.edu</a></dd>
+              <dt>Personal</dt>
+              <dd><a href="mailto:sotomaryclayton@gmail.com">sotomaryclayton@gmail.com</a></dd>
+              <dt>Phone</dt>
+              <dd><a href="tel:+18505679336">(850) 567-9336</a></dd>
+            </dl>
           </div>
         </div>
         <div class="piece reveal">
@@ -881,97 +1108,294 @@
     <section id="projects" class="tab-panel">
       <canvas class="bubble-idle" aria-hidden="true"></canvas>
       <div class="section-head">
-        <span class="eyebrow">Selected Work</span>
         <h2 class="section-title">Projects</h2>
       </div>
 
-      <div class="gallery-grid">
-        <div class="piece reveal">
-          <div class="frame"><img src="images/rollator.jpg" alt="Rollator with a custom stainless oxygen-canister mount, on a turntable in the design lab" /></div>
-          <div class="label">
-            <div class="label-meta">
-              <span class="eyebrow">Medical Device Design</span>
-              <span class="when">Aug 2024 – May 2025</span>
+      <!-- Projects: gallery grid so every project reads at a glance.
+           The image turns over to the full write-up; the label below it
+           (category, dates, title, summary, key result) is always visible. -->
+      <div class="proj-grid">
+        <article class="proj-tile reveal">
+          <div class="frame" role="button" tabindex="0"
+               aria-label="Rollator Oxygen-Canister Mount. Activate to turn the card over for the full write-up."
+               aria-pressed="false">
+            <div class="flip-inner">
+              <div class="flip-face flip-front">
+                <img src="images/rollator.jpg" alt="Rollator with a custom stainless oxygen-canister mount, on a turntable in the design lab" />
+              </div>
+              <div class="flip-face flip-back">
+                <h3>Rollator Oxygen-Canister Mount</h3>
+                <p>At Duke Hospital, walking a patient on oxygen took a second staff member just to manage the canister. Our team designed and prototyped a wheeled cage that mounts the canister to the rollator itself, freeing that second person. We validated it against seven design criteria, reduced the tipping angle by 6&deg;, and earned a 4.3 out of 5 usability rating from 30 evaluators, then presented it at the Duke Foundry showcase.</p>
+              </div>
             </div>
+          </div>
+          <p class="fig-cap">The final prototype: a wheeled cage that holds the oxygen canister and attaches to a standard hospital rollator, shown on the test turntable.</p>
+          <div class="label">
             <h3>Rollator Oxygen-Canister Mount</h3>
-            <ul class="skel">
-              <li>Secures an oxygen canister to Duke Hospital rollators</li>
-              <li>Designed and prototyped within real hospital constraints</li>
-              <li>Built around how patients actually use the walkers</li>
-              <li>Tested for reliability in a clinical setting</li>
-              <li class="todo">My role vs. the team's to be defined</li>
-              <li class="todo">Options weighed and why this design won to be added</li>
-              <li class="todo">Patients or units affected, any numbers</li>
-            </ul>
+            <p class="proj-summary">A medical device project (Aug 2024 to May 2025) that secures oxygen canisters to Duke Hospital rollators. It earned a 4.3/5 usability rating from 30 evaluators and was shown at the Duke Foundry showcase. <button type="button" class="proj-more" aria-hidden="true" tabindex="-1">Read more</button></p>
           </div>
-        </div>
-
-        <div class="piece reveal">
-          <div class="frame"><img src="images/arduino-robot.jpg" alt="Arduino-based autonomous robot build with sensors and wiring" /></div>
-          <div class="label">
-            <div class="label-meta">
-              <span class="eyebrow">Robotics &amp; Embedded Systems</span>
-              <span class="when">Jan – May 2025</span>
+        </article>
+        <article class="proj-tile reveal" id="proj-segmentation">
+          <div class="frame fit-contain" role="button" tabindex="0"
+               aria-label="Cell Image Segmentation Pipelines. Activate to turn the card over for the full write-up."
+               aria-pressed="false">
+            <div class="flip-inner">
+              <div class="flip-face flip-front">
+                <img src="images/bme271-pipeline.jpg" alt="Four panels from the project: a microscopy image of cells, its frequency spectrum, an edge map, and the final segmented cells" />
+              </div>
+              <div class="flip-face flip-back">
+                <h3>Cell Image Segmentation Pipelines</h3>
+                <p>For my Signals and Systems final project, I came back to the segmentation problem from my publication to understand why it worked. In Python, I built three pipelines: frequency-domain enhancement with a high-pass filter, convolution-based edge segmentation, and a combination of the two. Combining them sharpened faint edges in low-contrast images, but the final segmentation barely changed, which showed me that convolution alone was already capturing the boundaries that mattered.</p><p class="back-links"><a href="files/BME271_Final_Project.pdf" target="_blank" rel="noopener">Report (PDF) &#8599;</a> <a href="https://gitlab.oit.duke.edu/mcs131/bme271-finalproject-soto" target="_blank" rel="noopener">Code &#8599;</a></p>
+              </div>
             </div>
-            <h3>Autonomous Arduino Robot</h3>
-            <ul class="skel">
-              <li>Built and programmed from scratch</li>
-              <li>TI path sensors plus IR thermal sensing</li>
-              <li>Logic for autonomous navigation and wireless control</li>
-              <li>The puzzle was getting the hardware to cooperate</li>
-              <li class="todo">Code repository link to be added</li>
-            </ul>
           </div>
-        </div>
+          <p class="fig-cap">A microscopy image of cells and its Fourier spectrum (top), then the edge map and segmented cells from the combined pipeline (bottom). Most of the image&rsquo;s energy sits at low frequencies, while cell boundaries live in the high-frequency content that edge detection picks up. Adding frequency enhancement strengthened faint edges but changed the final segmentation only slightly.</p>
+          <div class="label">
+            <h3>Cell Image Segmentation Pipelines</h3>
+            <p class="proj-summary">An image-processing project in Python for BME 271 (Spring 2026) that compares three pipelines for finding cells in microscopy images. Convolution alone captured most cell boundaries. <button type="button" class="proj-more" aria-hidden="true" tabindex="-1">Read more</button></p>
+          </div>
+        </article>
+        <article class="proj-tile reveal">
+          <div class="frame fit-contain" role="button" tabindex="0"
+               aria-label="Modeling an Engineered Probiotic. Activate to turn the card over for the full write-up."
+               aria-pressed="false">
+            <div class="flip-inner">
+              <div class="flip-face flip-front">
+                <img src="images/bme260-model.jpg" alt="Two figures from the team report: a diagram of the engineered yeast cell displaying PETase and MHETase as PET breaks down to MHET and then TPA and ethylene glycol, and a plot of PET concentration over 400 hours for IsPETase, FAST-PETase and QM-PETase" />
+              </div>
+              <div class="flip-face flip-back">
+                <h3>Modeling an Engineered Probiotic</h3>
+                <p>For BME 260, Modeling Molecular and Cellular Systems, our team of seven built a multi-scale model of the probiotic yeast <em>S. boulardii</em> engineered to break down PET microplastics in the gut. The cell displays PETase and MHETase, and a genetic circuit that senses TPA, one of PET&rsquo;s breakdown products, turns up enzyme production once degradation starts. Comparing three PETase variants with Michaelis-Menten kinetics in Python, we found QM-PETase removed about 24% of PET in two weeks, with byproducts staying well below toxic levels.</p>
+              </div>
+            </div>
+          </div>
+          <p class="fig-cap">Top: the engineered <em>S. boulardii</em> cell displays PETase and MHETase, which break PET into MHET and then TPA and ethylene glycol. Bottom: simulated gut PET over 400 hours from a 10&nbsp;&micro;M start. QM-PETase produced the largest drop (24.4% in two weeks), followed by FAST-PETase (20.7%), while wild-type IsPETase leveled off near 2.6%.</p>
+          <div class="label">
+            <h3>Modeling an Engineered Probiotic</h3>
+            <p class="proj-summary">A team computational model in Python for BME 260 (Spring 2026) of an engineered probiotic that breaks down microplastics in the gut. Our best proposed enzyme variant degraded about 24% of PET in two weeks. <button type="button" class="proj-more" aria-hidden="true" tabindex="-1">Read more</button></p>
+          </div>
+        </article>
+        <article class="proj-tile reveal">
+          <div class="frame" role="button" tabindex="0"
+               aria-label="Autonomous Arduino Robot. Activate to turn the card over for the full write-up."
+               aria-pressed="false">
+            <div class="flip-inner">
+              <div class="flip-face flip-front">
+                <img src="images/arduino-robot.jpg" alt="Arduino-based autonomous robot build with sensors and wiring" />
+              </div>
+              <div class="flip-face flip-back">
+                <h3>Autonomous Arduino Robot</h3>
+                <p>I built and programmed this robot from scratch in C++, using TI path sensors and an IR thermal sensor to make navigation decisions and XBee radios for wireless communication. Getting the RGB, RFID, and LCD components to work together in one system was the real challenge, which made it as much a debugging project as a building one.</p>
+              </div>
+            </div>
+          </div>
+          <p class="fig-cap">The finished robot, with its LCD display, sensor array, and wiring exposed.</p>
+          <div class="label">
+            <h3>Autonomous Arduino Robot</h3>
+            <p class="proj-summary">An autonomous robot I built and programmed from scratch in C++ (Spring 2025), using TI path and IR thermal sensors with XBee wireless communication. <button type="button" class="proj-more" aria-hidden="true" tabindex="-1">Read more</button></p>
+          </div>
+        </article>
+        <article class="proj-tile reveal">
+          <div class="frame" role="button" tabindex="0"
+               aria-label="SuperComp. Activate to turn the card over for the full write-up."
+               aria-pressed="false">
+            <div class="flip-inner">
+              <div class="flip-face flip-front">
+                <img src="images/supercomp.png" alt="Three charts from ten weeks of my own data: nightly HRV against my 28-day baseline, the model&rsquo;s readiness score from rest to hard, and daily heart-rate-based training load" />
+              </div>
+              <div class="flip-face flip-back">
+                <h3>SuperComp</h3>
+                <p>SuperComp pulls my own Oura, Peloton, and Apple Health data into one daily table, including over 1.19 million heart-rate samples and 3,151 workouts, and turns it into a readiness score and a recommended session. The model is rule-based on purpose: it weighs HRV against my personal baseline along with resting heart rate and sleep, and it scores training with heart-rate-based TRIMP so a run, a lift, and a ride compare fairly. When I backtested it on 386 training days, readiness didn&rsquo;t predict how much work I did, so I reframed it as a guardrail and started logging decisions to collect the right labels before adding machine learning.</p>
+              </div>
+            </div>
+          </div>
+          <p class="fig-cap">Ten weeks of my own data. Nightly HRV (top) is plotted against a 28-day personal baseline, with the shaded band marking my normal range. The model&rsquo;s readiness score (middle) dips and recovers with HRV, and daily training load (bottom) is heart-rate-based TRIMP. Across 386 backtested training days, readiness did not predict workout output (Spearman &rho; = &minus;0.002), which supports using it as a guardrail rather than a predictor.</p>
+          <div class="label">
+            <h3>SuperComp</h3>
+            <p class="proj-summary">A personal Python project from Summer 2026 that turns my wearable data into a daily training recommendation, validated on 386 training days with 55 automated tests. <button type="button" class="proj-more" aria-hidden="true" tabindex="-1">Read more</button></p>
+          </div>
+        </article>
       </div>
+    
     </section>
 
     <!-- ==================== ART  (toggleable: see SHOW_ART_TAB) ==================== -->
     <section id="art" class="tab-panel">
       <canvas class="bubble-idle" aria-hidden="true"></canvas>
       <div class="section-head">
-        <span class="eyebrow">Visual Arts</span>
         <h2 class="section-title">Art</h2>
       </div>
 
-      <p class="art-intro">Two common motifs run through my work: hands &amp; bubbles. The hands carry emotion, and they hold my fascination with the distortion of light into color, a property bubbles embody entirely.</p>
+      <p class="art-intro">Two common motifs run through my work: hands &amp; bubbles. The hands carry emotion, and they hold my fascination with the distortion of light into color, a property bubbles embody entirely. It&rsquo;s also why bubbles float across this site; they capture where my art and science meet.</p>
 
-      <div class="gallery-grid">
-        <div class="piece reveal">
-          <div class="frame"><img src="images/art-boundless.jpg" alt="Boundless, grayscale hands reaching toward colorful floating bubbles" /></div>
-          <div class="label">
-            <h3>Boundless</h3>
-            <ul class="skel">
-              <li>Grayscale hands reaching toward vibrant bubbles</li>
-              <li>Observation meeting the boundless</li>
-              <li>Duality: logic and imagination, stillness and motion</li>
-              <li class="todo">Medium and dimensions</li>
-            </ul>
+      <!-- Coverflow wall. Every piece stays visible; the focused one grows.
+           Clicking an unfocused piece brings it forward, clicking the
+           focused piece turns it over to show its notes. Labels stay on
+           the front at all times. Images are height:auto so each keeps its
+           native proportion, and the back is pinned over the front so it
+           inherits that same shape. -->
+      <div class="art-flow" id="art-flow" tabindex="0" role="group"
+           aria-roledescription="carousel"
+           aria-label="Artwork. Arrow keys change the focused piece, Enter turns it over.">
+
+        <div class="art-work" data-title="Boundless">
+          <div class="frame" role="button" tabindex="-1"
+               aria-label="Boundless. Activate to turn the card over."
+               aria-pressed="false">
+            <div class="flip-inner">
+              <div class="flip-face flip-front">
+                <img src="images/art-boundless.jpg" alt="Boundless, grayscale hands reaching toward colorful floating bubbles" />
+              </div>
+              <div class="flip-face flip-back">
+                <span class="eyebrow">Graphite Pencil, Watercolor</span>
+                <h3>Boundless</h3>
+                <p>Grayscale hands reach toward bubbles that are vibrant, fluid, and alive. The two aren&rsquo;t in opposition; they&rsquo;re in conversation. Bubbles follow scientific principles yet appear playful and unpredictable, rule-bound and whimsical at once. This blend mirrors how I see art and science: not as opposites, but as equally essential. The hands reach because I do, toward the uncertain, the beautiful, the not-quite-definable.</p>
+              </div>
+            </div>
           </div>
+          <p class="art-caption">Boundless</p>
+          <p class="flip-hint">Click to turn</p>
         </div>
-        <div class="piece reveal">
-          <div class="frame"><img src="images/art-owl.jpg" alt="Guardian Owl, a small gilded owl sculpture perched on a branch" /></div>
-          <div class="label">
-            <h3>Guardian Owl</h3>
-            <ul class="skel">
-              <li>Mixed-media sculpture</li>
-              <li>Gilded owl perched on a branch</li>
-              <li class="todo">Materials and dimensions</li>
-            </ul>
+
+                <div class="art-work" data-title="Curious">
+          <div class="frame" role="button" tabindex="-1"
+               aria-label="Curious. Activate to turn the card over."
+               aria-pressed="false">
+            <div class="flip-inner">
+              <div class="flip-face flip-front">
+                <img src="images/art-curious.jpg" alt="Curious, a hand reaching toward clear bubbles on a bright blue ground" />
+              </div>
+              <div class="flip-face flip-back">
+                <span class="eyebrow">Acrylic on Canvas</span>
+                <h3>Curious</h3>
+                <p>A hand reaches toward a drift of bubbles on a field of blue. I painted it out of a longing to understand how light moves across a bubble&rsquo;s surface and splits into so many colors at once.</p>
+              </div>
+            </div>
           </div>
+          <p class="art-caption">Curious</p>
+          <p class="flip-hint">Click to turn</p>
         </div>
-        <div class="piece reveal">
-          <div class="frame"><img src="images/art-hs-rainbow.jpg" alt="A hand reaching into a beam of rainbow light" /></div>
+
+        <!-- Chirality: awaiting the image file. Save it as
+             images/art-chirality.jpg and this entry works as-is. -->
+        <div class="art-work" data-title="Chirality">
+          <div class="frame" role="button" tabindex="-1"
+               aria-label="Chirality. Activate to turn the card over."
+               aria-pressed="false">
+            <div class="flip-inner">
+              <div class="flip-face flip-front">
+                <img src="images/art-chirality.jpg" alt="Chirality, mirrored hands cupped beneath a butterfly, surrounded by concentric contour lines in black ink" />
+              </div>
+              <div class="flip-face flip-back">
+                <span class="eyebrow">Ink on Paper</span>
+                <h3>Chirality</h3>
+                <p>Two mirrored hands cup a butterfly at the center fold, with contour lines radiating outward. In chemistry and biology, chirality describes shapes that are mirror images but can&rsquo;t be superimposed, like a left and right hand. I drew the two halves to work the same way: reflections that look alike at a glance but never quite match.</p>
+              </div>
+            </div>
+          </div>
+          <p class="art-caption">Chirality</p>
+          <p class="flip-hint">Click to turn</p>
+        </div>
+
+        <div class="art-work" data-title="Guardian Owl">
+          <div class="frame" role="button" tabindex="-1"
+               aria-label="Guardian Owl. Activate to turn the card over."
+               aria-pressed="false">
+            <div class="flip-inner">
+              <div class="flip-face flip-front">
+                <img src="images/art-owl.jpg" alt="Guardian Owl, a small gilded owl sculpture perched on a branch" />
+              </div>
+              <div class="flip-face flip-back">
+                <span class="eyebrow">Carved Wood, Wood Shavings, Acrylic, Branch</span>
+                <h3>Guardian Owl</h3>
+                <p>Growing up, the owls in my backyard felt like guardians watching over me. I carved this one from a single block of wood, layered shavings for its feathers, and painted it gold to give it an almost sacred presence. It perches on a branch from that same backyard, tying the guardian to the place it watched over.</p>
+              </div>
+            </div>
+          </div>
+          <p class="art-caption">Guardian Owl</p>
+          <p class="flip-hint">Click to turn</p>
+        </div>
+
+        <div class="art-work" data-title="Holding Rainbow">
+          <div class="frame" role="button" tabindex="-1"
+               aria-label="Holding Rainbow. Activate to turn the card over."
+               aria-pressed="false">
+            <div class="flip-inner">
+              <div class="flip-face flip-front">
+                <img src="images/art-hs-rainbow.jpg" alt="A hand reaching into a beam of rainbow light" />
+              </div>
+              <div class="flip-face flip-back">
+                <span class="eyebrow">Digital</span>
+                <h3>Holding Rainbow</h3>
+                <p>A hand reaches into a band of refracted light, and the spectrum spreads across the palm while its shadow stays gray. The piece brought together the two motifs I kept returning to, hands and light, to capture something intangible: white light bending as it refracts, each wavelength by a slightly different amount, until it fans into color I can see but never hold.</p>
+              </div>
+            </div>
+          </div>
           <p class="art-caption">Holding Rainbow</p>
+          <p class="flip-hint">Click to turn</p>
         </div>
-        <div class="piece reveal">
-          <div class="frame"><img src="images/art-hs-iridescent.jpg" alt="Study of iridescent draped fabric" /></div>
+
+        <div class="art-work" data-title="Iridescent Fabric">
+          <div class="frame" role="button" tabindex="-1"
+               aria-label="Iridescent Fabric. Activate to turn the card over."
+               aria-pressed="false">
+            <div class="flip-inner">
+              <div class="flip-face flip-front">
+                <img src="images/art-hs-iridescent.jpg" alt="Study of iridescent draped fabric" />
+              </div>
+              <div class="flip-face flip-back">
+                <span class="eyebrow">Digital</span>
+                <h3>Iridescent Fabric</h3>
+                <p>A study of light and iridescence through folds of cloth. Instead of shading with darker values, I let the full spectrum describe each fold, showing how light can turn an ordinary material into something that shifts as you look.</p>
+              </div>
+            </div>
+          </div>
           <p class="art-caption">Iridescent Fabric</p>
+          <p class="flip-hint">Click to turn</p>
         </div>
-        <div class="piece reveal">
-          <div class="frame"><img src="images/art-hs-flame.jpg" alt="Three hands gathered around a small candle flame on a black ground" /></div>
+
+        <div class="art-work" data-title="Tiny Flame">
+          <div class="frame" role="button" tabindex="-1"
+               aria-label="Tiny Flame. Activate to turn the card over."
+               aria-pressed="false">
+            <div class="flip-inner">
+              <div class="flip-face flip-front">
+                <img src="images/art-hs-flame.jpg" alt="Three hands gathered around a small candle flame on a black ground" />
+              </div>
+              <div class="flip-face flip-back">
+                <span class="eyebrow">Colored Pencil, Digitally Enhanced Background</span>
+                <h3>Tiny Flame</h3>
+                <p>Three hands gather around a candle, close but never touching. I wanted to capture a fascination with flame without contact, because its beauty is fleeting. The flame is the only light source, so each hand takes a different form but holds the same emotion.</p>
+              </div>
+            </div>
+          </div>
           <p class="art-caption">Tiny Flame</p>
+          <p class="flip-hint">Click to turn</p>
         </div>
+              <div class="art-work" data-title="Childhood Light">
+          <div class="frame" role="button" tabindex="-1"
+               aria-label="Childhood Light. Activate to turn the card over."
+               aria-pressed="false">
+            <div class="flip-inner">
+              <div class="flip-face flip-front">
+                <img src="images/art-childhood-light.jpg" alt="Childhood Light, a pencil portrait of a young girl in a chair wearing a rainbow-colored dress, with beads sewn onto the surface" />
+              </div>
+              <div class="flip-face flip-back">
+                <span class="eyebrow">Pencil, Colored Pencil, Beads, String</span>
+                <h3>Childhood Light</h3>
+                <p>A portrait of my younger self, drawn in black and white except for a dress that bursts into color, with beads sewn onto the surface. I wanted to embrace the colorful lens of childhood and celebrate the joy in color that has only grown since.</p>
+              </div>
+            </div>
+          </div>
+          <p class="art-caption">Childhood Light</p>
+          <p class="flip-hint">Click to turn</p>
+        </div>
+      </div>
+
+      <div class="art-nav">
+        <button type="button" id="art-prev" aria-label="Previous artwork">&larr;</button>
+        <div class="art-dots" id="art-dots"></div>
+        <button type="button" id="art-next" aria-label="Next artwork">&rarr;</button>
       </div>
     </section>
 
@@ -979,23 +1403,17 @@
     <section id="experience" class="tab-panel">
       <canvas class="bubble-idle" aria-hidden="true"></canvas>
       <div class="section-head">
-        <span class="eyebrow">Research &amp; Teaching</span>
         <h2 class="section-title">Experience</h2>
       </div>
 
       <div class="entry reveal">
         <div class="meta">
           <span class="eyebrow">Duke University</span>
-          <span class="when">Aug 2025 – Present</span>
+          <span class="when">Aug 2025 – May 2026</span>
         </div>
         <div class="body">
           <h3>Teaching Assistant, EGR105: Coding for Engineers</h3>
-          <ul class="skel">
-            <li>Mentor first-year engineers learning Python</li>
-            <li>Algorithm design, debugging habits, version control with Git</li>
-            <li>Teach NumPy and Matplotlib for data analysis and visualization</li>
-            <li class="todo">Number of students taught</li>
-          </ul>
+          <p>I mentored 50+ first-year engineering students in EGR105 as they learned Python, from designing algorithms to building good debugging habits and using Git for version control. I also taught NumPy and Matplotlib for data analysis and visualization, tools most of them will keep using well beyond the course.</p>
         </div>
       </div>
 
@@ -1006,12 +1424,7 @@
         </div>
         <div class="body">
           <h3>Vice President of Professional Development</h3>
-          <ul class="skel">
-            <li>Plan events centred on engineering research and innovation</li>
-            <li>Built a centralized resource database for the chapter</li>
-            <li>Covers academic planning, networking, career growth</li>
-            <li class="todo">Chapter size, event turnout</li>
-          </ul>
+          <p>As VP of Professional Development, I plan events focused on engineering research and innovation for our 100+ member chapter. I also built a centralized resource database for members, covering academic planning, networking, and career development.</p>
         </div>
       </div>
 
@@ -1022,12 +1435,46 @@
         </div>
         <div class="body">
           <h3>Intern</h3>
-          <ul class="skel">
-            <li>Designed and 3D-printed custom prosthetics</li>
-            <li>Iterated shape and function per person and clinical need</li>
-            <li class="todo">How many fitted, any outcome</li>
-          </ul>
+          <p>At Victor Tech, I designed and 3D-printed custom prosthetics, iterating on shape and function until each one fit the person it was made for and their clinical needs.</p>
         </div>
+      </div>
+
+      <div class="entry reveal">
+        <div class="meta">
+          <span class="eyebrow">City of Tallahassee</span>
+          <span class="when">Summers 2023, 2024, 2025</span>
+        </div>
+        <div class="body">
+          <h3>Lifeguard</h3>
+          <p>I supervised high-traffic pool operations, keeping safety standards high and staying ready to respond in emergencies where every second counts.</p>
+        </div>
+      </div>
+    
+    </section>
+
+    <!-- ==================== SKILLS ==================== -->
+    <section id="skills" class="tab-panel">
+      <canvas class="bubble-idle" aria-hidden="true"></canvas>
+      <div class="section-head">
+        <h2 class="section-title">Skills</h2>
+      </div>
+      <div class="skills-wrap reveal">
+          <dl class="skill-rows">
+            <dt>Code</dt>
+            <dd>Python (NumPy, pandas, SciPy, OpenCV, Matplotlib), MATLAB, R, C++, JavaScript</dd>
+            <dt>Tools</dt>
+            <dd>Git, VS Code, RStudio, Jupyter, Claude Code (AI-assisted development)</dd>
+            <dt>Design</dt>
+            <dd>SolidWorks, Fusion 360, 3D Slicer</dd>
+            <dt>Fabrication</dt>
+            <dd>3D printing, laser cutting, waterjet cutting, machining, mold-making, casting</dd>
+            <dt>Analysis</dt>
+            <dd>Image processing and segmentation, differential-equation modeling, statistical analysis (ANOVA, correlation)</dd>
+            <dt>Lab</dt>
+            <dd>PCR, gel electrophoresis, plasmid cloning, bacterial transformation, Sanger sequencing</dd>
+                      <dt class="gap-above">Interests</dt>
+            <dd class="gap-above">Hiking, running, skiing, rock climbing, whitewater kayaking, soccer, painting, whittling, and just about any outdoor adventure or craft!</dd>
+          </dl>
       </div>
     </section>
 
@@ -1035,7 +1482,6 @@
     <section id="publication" class="tab-panel">
       <canvas class="bubble-idle" aria-hidden="true"></canvas>
       <div class="section-head">
-        <span class="eyebrow">Peer-Reviewed &amp; Ongoing</span>
         <h2 class="section-title">Research</h2>
       </div>
 
@@ -1047,61 +1493,46 @@
         <div class="body">
           <h3>Engineered Microparticles Suggest Proteolysis as a Critical Prerequisite for Chromatin Clearance in Macrophage Phagosomes</h3>
           <a class="org-link" href="https://pubs.acs.org/doi/10.1021/acsami.5c25569">View in ACS Applied Materials &amp; Interfaces &#8599;</a>
-          <ul class="skel">
-            <li>My contribution: image analysis</li>
-            <li>MATLAB segmentation and classification pipeline</li>
-            <li>~20,000 fluorescence cell images, standardized dataset</li>
-            <li>Held accuracy across very different fluorescence channels</li>
-            <li>FSU Microparticle Lab, May to Aug 2025</li>
-            <li class="todo">Full author list to be added</li>
-          </ul>
+          <p class="authors">Masahiro Fukuda, <strong>Mary Clayton Soto</strong>, Jacob Perkins, Gabriela De Jesus, Sailesti Joshi, Zixiang Leonardo Liu, Tristan P. Driscoll, Yan Li, Yi Ren, Jingjiao Guan</p>
+          <p>My contribution to this paper was the image analysis. At an FSU microparticle lab, from May to August 2025, I developed a MATLAB pipeline to segment and classify fluorescence images of about 20,000 cells, producing a standardized dataset for the paper's analysis. The main challenge was keeping classification accurate across fluorescence channels that varied widely in intensity and contrast. I addressed it by tuning the convolution-based segmentation and making the thresholding respond dynamically to the properties of each image.</p>
 
           <!-- continuation of the publication work, not a peer entry -->
           <div class="subentry">
-            <span class="eyebrow">Continuation &middot; BME 271, Duke &middot; 2026</span>
-            <h4>Final Project</h4>
-            <a class="org-link" href="files/BME271_Final_Project.pdf">Read the project report (PDF) &#8599;</a>
-            <a class="org-link" href="https://gitlab.oit.duke.edu/mcs131/bme271-finalproject-soto">View the code repository &#8599;</a>
-            <ul class="skel">
-              <li>Extends the microparticle and image-analysis work</li>
-              <li class="todo">Project description to be added</li>
-            </ul>
+            <span class="eyebrow">Explorative Continuation &middot; BME 271, Duke &middot; 2026</span>
+            <h4><a class="proj-jump" href="#projects" data-tab-link="projects" data-scroll-to="proj-segmentation">Cell Image Segmentation Pipelines &rarr;</a></h4>
+            <p>I rebuilt this segmentation approach in Python to compare three image-processing pipelines.</p>
           </div>
         </div>
       </div>
 
       <div class="entry reveal">
         <div class="meta">
-          <span class="eyebrow">Bass Connections</span>
+          <span class="eyebrow">Duke Surgical Education &amp; Assessment Lab</span>
           <span class="when">Mar 2025 &ndash; Present</span>
         </div>
         <div class="body">
-          <h3>Team Member, Developing Surgical Education Models</h3>
+          <h3>Research Assistant</h3>
           <a class="org-link" href="https://bassconnections.duke.edu">bassconnections.duke.edu &#8599;</a>
-          <ul class="skel">
-            <li>Duke SEAL Lab, surgical training models</li>
-            <li>Hydrogel organ models from MRI-derived DICOM scans</li>
-            <li>3D Slicer segmentation, Fusion 360 molds, material tuning</li>
-            <li>Computer-vision system scoring knot-tying</li>
-            <li class="todo">My role vs. the team's to be defined</li>
-            <li class="todo">Measurable outcome to be added</li>
-          </ul>
+          <p>Through Bass Connections, I work with Duke's SEAL Lab on models for surgical training. I turn MRI-derived DICOM scans into hydrogel models of three organ types by segmenting them in 3D Slicer, designing molds in Fusion 360, and tuning materials to match the mechanics of real tissue. I also help develop and validate a computer-vision system that scores knot-tying from video, tested on more than 1,000 recordings, giving trainees an objective measure of their surgical skill.</p>
+
+          <!-- conference abstract from this team's work -->
+          <div class="subentry">
+            <span class="eyebrow">Conference Abstract &middot; ACS Surgical Simulation Summit &middot; Accepted, 2027</span>
+            <h4>Dissolvable Core Molding (DCM): A Gallbladder Model Toward Fluid-Bearing Organ Simulators</h4>
+            <p>We cast a gallbladder from a CT-derived silicone injection mold around a dissolvable PVA core, which leaves a hollow, anatomically accurate model that can be filled with fluid for laparoscopic training.</p>
+            <p class="authors">Sean Gao, Kent K. Yamamoto, <strong>Mary Clayton Soto</strong>, Lucas Alexis, Kerry Gao, Allan Chen, Sabino Zani, Louise K. Jackson</p>
+          </div>
         </div>
       </div>
 
       <div class="entry reveal">
         <div class="meta">
           <span class="eyebrow">Tallahassee Research Institute</span>
-          <span class="when">May 2026 &ndash; Present</span>
+          <span class="when">Summer 2026</span>
         </div>
         <div class="body">
           <h3>Research Coordinator</h3>
-          <ul class="skel">
-            <li>Clinical research workflows and patient data</li>
-            <li>Cardiovascular studies testing new devices and protocols</li>
-            <li>Messy patient data turned into structured reports</li>
-            <li class="todo">Scale and numbers to be added</li>
-          </ul>
+          <p>I managed clinical research workflows and patient data across 10+ cardiovascular studies testing new medical devices and research protocols. Much of the work was taking messy patient data and turning it into structured reports, so the findings were clear enough for the research team to act on.</p>
         </div>
       </div>
     </section>
@@ -1175,12 +1606,21 @@
         const id = link.dataset.tabLink;
         history.replaceState(null, "", "#" + id);
         showTab(id);
+        // optional: jump to a specific item on the new tab
+        if (link.dataset.scrollTo) {
+          const t = document.getElementById(link.dataset.scrollTo);
+          if (t) setTimeout(() => t.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
+        }
       });
     });
 
     // Open correct tab if page loads with a #hash (e.g., shared link)
     const initial = location.hash.replace("#", "");
-    if (initial && document.getElementById(initial)) showTab(initial);
+    // deferred: showTab() uses the reveal observer defined further down
+    if (initial && document.getElementById(initial)) queueMicrotask(() => showTab(initial));
+    // the browser's own jump to #section lands the tab title under the
+    // sticky header; start shared links at the top of the tab instead
+    window.addEventListener("load", () => { if (initial) window.scrollTo({ top: 0 }); });
 
     // ---------- Mobile menu toggle ----------
     toggle.addEventListener("click", () => {
@@ -1620,6 +2060,32 @@
         const box = canvas.parentElement;
         const ctx = canvas.getContext('2d');
         let w, h, dpr, bubbles = [], pops = [], raf, running = false;
+        // "pop me" tag beside one still bubble in the hero's top-right
+        // corner. The first pop anywhere retires the tag and lets that
+        // bubble float off like the rest.
+        const tag = interactive ? box.querySelector('.pop-tag') : null;
+        let stillB = null, tagDone = false;
+        if(tag && !reduce) setTimeout(() => { if(!tagDone) tag.classList.add('show'); }, 1800);
+        function addStill(){
+          const r = w < 760 ? 30 : 48;
+          const m = w < 760 ? 22 : Math.max(32, w*0.05);
+          const b = make(false);
+          Object.assign(b, { r, x: w - m - r, y: r + m + 8, vx: 0, still: true });
+          b.y0 = b.y;
+          bubbles.push(b);
+          stillB = b;
+        }
+        function releaseStill(){
+          tagDone = true;
+          if(tag){ tag.classList.remove('show'); tag.classList.add('done'); }
+          if(stillB){ stillB.still = false; stillB = null; }
+        }
+        function updateTag(){
+          if(!tag || tagDone || !stillB) return;
+          const x = stillB.x - stillB.r*0.95;
+          const y = stillB.y + stillB.r*0.35;
+          tag.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translateX(-100%)`;
+        }
 
         // Optional WebGL body renderer. Null on any failure, in which case
         // everything below falls through to the original 2D path.
@@ -1664,6 +2130,7 @@
           const count = Math.max(opts.min||6, Math.min(opts.max||20, Math.round((w*h)/area)));
           bubbles = Array.from({length:count}, ()=> make(false));
           pops = [];
+          if(interactive && !tagDone && tag) addStill();
         }
         function conicFilm(x,y,rot){
           let g;
@@ -1798,6 +2265,11 @@
             if(b.pop){
               b.pop += 0.10;
               if(b.pop>=1){ bubbles.splice(i,1); bubbles.push(make(true)); continue; }
+            } else if(b.still){
+              // parked: a slow bob and turning sheen, no drift
+              b.phase += 0.012; b.squashPhase += 0.02; b.rot += b.spin;
+              b.y = b.y0 + Math.sin(b.phase)*3;
+              for(const p of b.sheen) p.a += p.spin;
             } else {
               b.phase += 0.01; b.squashPhase += 0.02; b.rot += b.spin;
               b.x += b.vx + Math.sin(b.phase)*b.wobble;
@@ -1811,6 +2283,7 @@
           }
           if(glr) glr.render(bubbles, performance.now(), dpr, h);
           if(interactive) drawPops();
+          if(interactive) updateTag();
           raf = requestAnimationFrame(step);
         }
 
@@ -1818,7 +2291,11 @@
           function hit(mx,my){
             for(let i=bubbles.length-1;i>=0;i--){
               const b = bubbles[i];
-              if(!b.pop && Math.hypot(mx-b.x,my-b.y) <= b.r){ b.pop = 0.001; spawnPop(b); return; }
+              if(!b.pop && Math.hypot(mx-b.x,my-b.y) <= b.r){
+                b.pop = 0.001; spawnPop(b);
+                if(!tagDone) releaseStill();
+                return;
+              }
             }
           }
           function pointer(e){
@@ -1829,6 +2306,14 @@
             hit(cx-rect.left, cy-rect.top);
           }
           canvas.addEventListener('click', pointer);
+          // pointer cursor only while over a bubble, so the hero hints
+          // it is clickable without changing anything else
+          canvas.addEventListener('mousemove', e => {
+            const rect = canvas.getBoundingClientRect();
+            const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+            const over = bubbles.some(b => !b.pop && Math.hypot(mx-b.x, my-b.y) <= b.r);
+            canvas.style.cursor = over ? 'pointer' : '';
+          });
           canvas.addEventListener('touchstart', pointer, {passive:true});
         }
 
@@ -1843,6 +2328,116 @@
       }
 
       // hero: interactive & poppable
+      /* ----------------------------------------------------------------
+         ART coverflow. Width by distance from the focused piece, so the
+         row rebalances as focus moves. Images are height:auto, so native
+         proportions are preserved without any aspect-ratio declarations.
+         ---------------------------------------------------------------- */
+      function initFlow(flowId, dotsId, prevId, nextId){
+        const flow = document.getElementById(flowId);
+        if(!flow) return;
+        const works = Array.from(flow.querySelectorAll('.art-work'));
+        const dots  = document.getElementById(dotsId);
+        /* Percent of the row, by distance from the focused piece.
+           The row total has to stay under about 90% to leave space for five
+           gaps, so making the focus bigger means taking it from the
+           others rather than adding. Focused share has gone 25 -> 32 -> 44.
+           Worst case is the focus mid-row: 7.5 + 12 + 44 + 12 + 7.5 + 6
+           = 89%. The far pieces are now small enough to read as a filmstrip
+           of what else exists, which is the trade for a large subject. */
+        const WIDTH = { 0: 44, 1: 12, 2: 7.5, 3: 5 };   // 3 = everything farther; eight works now
+        let active = 0;
+
+        function setFlipped(el, on){
+          el.classList.toggle('flipped', on);
+          const fr = el.querySelector('.frame');
+          if(fr) fr.setAttribute('aria-pressed', on ? 'true' : 'false');
+        }
+
+        works.forEach((el, i) => {
+          const frame = el.querySelector('.frame');
+          frame.addEventListener('click', () => {
+            // clicking a piece that is not focused brings it forward;
+            // clicking the focused piece turns it over
+            if(i !== active){ focus(i); return; }
+            setFlipped(el, !el.classList.contains('flipped'));
+          });
+          frame.addEventListener('keydown', e => {
+            if(e.key === 'Enter' || e.key === ' '){
+              e.preventDefault();
+              if(i !== active) focus(i);
+              else setFlipped(el, !el.classList.contains('flipped'));
+            }
+          });
+          const d = document.createElement('button');
+          d.type = 'button';
+          d.setAttribute('aria-label', 'Show ' + el.dataset.title);
+          d.addEventListener('click', () => focus(i));
+          dots.appendChild(d);
+        });
+
+        function render(){
+          works.forEach((el, i) => {
+            const dist = Math.min(Math.abs(i - active), 3);
+            el.style.width   = (WIDTH[dist] !== undefined ? WIDTH[dist] : 10) + '%';
+            el.style.opacity = dist === 0 ? 1 : (dist === 1 ? 0.9 : 0.72);
+            el.classList.toggle('is-active', dist === 0);
+            // only the focused card is reachable by tab, and moving focus
+            // always turns any open card back to its front
+            const fr = el.querySelector('.frame');
+            fr.tabIndex = dist === 0 ? 0 : -1;
+            if(dist !== 0) setFlipped(el, false);
+          });
+          Array.from(dots.children).forEach((d, i) =>
+            d.setAttribute('aria-current', i === active ? 'true' : 'false'));
+        }
+        function focus(i){
+          if(works[active]) setFlipped(works[active], false);
+          active = Math.max(0, Math.min(works.length - 1, i));
+          render();
+        }
+        function stepBy(n){ focus((active + n + works.length) % works.length); }
+
+        document.getElementById(nextId).addEventListener('click', () => stepBy(1));
+        document.getElementById(prevId).addEventListener('click', () => stepBy(-1));
+        flow.addEventListener('keydown', e => {
+          if(e.key === 'ArrowRight'){ e.preventDefault(); stepBy(1); }
+          if(e.key === 'ArrowLeft'){  e.preventDefault(); stepBy(-1); }
+        });
+
+        let sx = 0, dragging = false;
+        flow.addEventListener('pointerdown', e => { dragging = true; sx = e.clientX; });
+        flow.addEventListener('pointerup', e => {
+          if(!dragging) return; dragging = false;
+          const dx = e.clientX - sx;
+          if(Math.abs(dx) > 45) stepBy(dx < 0 ? 1 : -1);
+        });
+        flow.addEventListener('pointercancel', () => { dragging = false; });
+
+        render();
+        // links on a card back open normally instead of turning the card
+        flow.querySelectorAll('.flip-back a').forEach(a =>
+          a.addEventListener('click', e => e.stopPropagation()));
+      }
+      initFlow('art-flow', 'art-dots', 'art-prev', 'art-next');
+      // project tiles: the image (or the Read more button) turns a tile over
+      document.querySelectorAll('.proj-tile').forEach(tile => {
+        const fr = tile.querySelector('.frame');
+        const toggle = () => {
+          const on = !tile.classList.contains('flipped');
+          tile.classList.toggle('flipped', on);
+          fr.setAttribute('aria-pressed', on ? 'true' : 'false');
+          tile.querySelector('.proj-more').textContent = on ? 'Close' : 'Read more';
+        };
+        fr.addEventListener('click', toggle);
+        fr.addEventListener('keydown', e => {
+          if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); }
+        });
+        tile.querySelector('.proj-more').addEventListener('click', toggle);
+        tile.querySelectorAll('.flip-back a').forEach(a =>
+          a.addEventListener('click', e => e.stopPropagation()));
+      });
+
       // Hero: interactive and poppable. The WebGL thin-film layer paints
       // the bodies when available; `max` is capped at GL_MAX so the shader's
       // uniform array can never overflow. Reduced motion keeps the 2D path,

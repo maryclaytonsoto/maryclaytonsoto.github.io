@@ -1,6 +1,12 @@
-_cand/
+# Publish only what the website needs. Everything else in this folder
+# (notes, handoff prompts, design explorations, originals, scratch) stays
+# on this computer and out of the public repo.
+/*
+!/.gitignore
+!/index.html
+!/favicon.svg
+!/mc-logo.svg
+!/images/
+!/files/
+!/fonts/
 .DS_Store
-
-# Local tooling scaffolding, not site content. Contains an absolute path
-# to a home directory, and this repo is public.
-cowork-project.md
