@@ -762,7 +762,13 @@
        heading said the same thing twice. The heading carries it alone. */
     /* Home photo captions: a touch larger than the default .piece p size */
     #home .piece .art-caption { font-size: 1.15rem; }
-    .home-game { margin-top: 3rem; }
+    /* Home photo pair: both columns stretch to the same height and the
+       basketball photo sinks to the bottom of the left one, so its
+       caption lines up with the end of the contact block on the right */
+    #home .gallery-grid { align-items: stretch; }
+    #home .gallery-grid .piece { display: flex; flex-direction: column; }
+    .home-game { margin-top: auto; padding-top: 2.5rem; }
+    #home .home-contact { margin-top: 2.5rem; }
     /* small-caps label, same treatment as the other eyebrows */
     .home-contact h2 {
       font-family: var(--body);
@@ -1084,11 +1090,11 @@
           <p class="art-caption">Duke University <span class="sep">&middot;</span> Pratt School of Engineering</p>
 
           <div class="frame home-game"><img src="images/cameron.jpg" alt="A Duke player going up for a dunk at Cameron Indoor Stadium, seen from the student section" /></div>
-          <p class="art-caption">I&rsquo;m a huge Duke Basketball fan and love tenting for games!</p>
+          <p class="art-caption">I&rsquo;m a huge Duke Basketball fan &amp; love tenting for games!</p>
         </div>
         <div class="piece reveal">
           <div class="frame"><img src="images/duke.jpg" alt="Mary Clayton Soto on Duke's campus" /></div>
-          <p class="art-caption">Outside of class, I love exploring Duke Gardens and giving tours to prospective Pratt students.</p>
+          <p class="art-caption">Outside of class, I love exploring Duke Gardens &amp; giving tours to prospective Pratt students.</p>
 
           <div class="home-contact">
             <h2>Get in touch</h2>
