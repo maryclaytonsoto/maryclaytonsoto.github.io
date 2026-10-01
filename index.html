@@ -767,7 +767,9 @@
        caption lines up with the end of the contact block on the right */
     #home .gallery-grid { align-items: stretch; }
     #home .gallery-grid .piece { display: flex; flex-direction: column; }
-    .home-game { margin-top: auto; padding-top: 2.5rem; }
+    .home-game { margin-top: auto; }
+    /* minimum breathing room above the basketball photo (matters on phones) */
+    #home .gallery-grid .piece:first-child > .art-caption:not(:last-child) { margin-bottom: 2.5rem; }
     #home .home-contact { margin-top: 2.5rem; }
     /* small-caps label, same treatment as the other eyebrows */
     .home-contact h2 {
