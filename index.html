@@ -333,7 +333,9 @@
       justify-items: center;
     }
     .about-grid .rail { text-align: center; }
-    .about-grid .prose { max-width: 62ch; }
+    /* one shared column width for the About text and the photo stack */
+    .about-grid .prose { max-width: 680px; width: 100%; }
+    .about-grid .prose p { max-width: none; }
     .about-grid .rail .eyebrow { display: block; margin-bottom: 1rem; }
     .about-grid .rail h2 {
       font-family: var(--display);
@@ -765,24 +767,25 @@
     /* Home stack: photos and contact follow the About text in one
        centered column at the same reading width */
     .home-stack {
-      max-width: 62ch;
-      margin: 4rem auto 0;
+      max-width: 680px;
+      margin: 2.15rem auto 0;   /* + the last paragraph's 1.35rem = the 3.5rem gap */
       display: flex;
       flex-direction: column;
       gap: 3.5rem;
     }
     .home-stack .home-contact { margin-top: 0; }
-    #home .home-contact { margin-top: 2.5rem; }
     /* small-caps label, same treatment as the other eyebrows */
     .home-contact h2 {
-      font-family: var(--body);
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 1.1rem;
+      font-family: var(--display);
+      font-size: clamp(1.9rem, 3vw, 2.5rem);
+      font-weight: 500;
+      line-height: 1.1;
+      color: var(--ink);
+      letter-spacing: 0.005em;
+      text-align: center;
+      margin-bottom: 1.5rem;
     }
+    .home-contact .contact-rows { width: fit-content; margin: 0 auto; }
     /* labeled rows: small-caps label left, address right, one size */
     .contact-rows {
       display: grid;
@@ -1095,7 +1098,7 @@
           <p class="art-caption">Duke University <span class="sep">&middot;</span> Pratt School of Engineering</p>
         </div>
         <div class="home-contact">
-            <h2>Get in touch</h2>
+            <h2>Get in Touch</h2>
             <dl class="contact-rows">
               <dt>Duke</dt>
               <dd><a href="mailto:mary.soto@duke.edu">mary.soto@duke.edu</a></dd>
