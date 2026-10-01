@@ -762,14 +762,16 @@
        heading said the same thing twice. The heading carries it alone. */
     /* Home photo captions: a touch larger than the default .piece p size */
     #home .piece .art-caption { font-size: 1.15rem; }
-    /* Home photo pair: both columns stretch to the same height and the
-       basketball photo sinks to the bottom of the left one, so its
-       caption lines up with the end of the contact block on the right */
-    #home .gallery-grid { align-items: stretch; }
-    #home .gallery-grid .piece { display: flex; flex-direction: column; }
-    .home-game { margin-top: auto; }
-    /* minimum breathing room above the basketball photo (matters on phones) */
-    #home .gallery-grid .piece:first-child > .art-caption:not(:last-child) { margin-bottom: 2.5rem; }
+    /* Home stack: photos and contact follow the About text in one
+       centered column at the same reading width */
+    .home-stack {
+      max-width: 62ch;
+      margin: 4rem auto 0;
+      display: flex;
+      flex-direction: column;
+      gap: 3.5rem;
+    }
+    .home-stack .home-contact { margin-top: 0; }
     #home .home-contact { margin-top: 2.5rem; }
     /* small-caps label, same treatment as the other eyebrows */
     .home-contact h2 {
@@ -1086,19 +1088,13 @@
         </div>
       </div>
 
-      <div class="gallery-grid" style="margin-top:4rem;">
+      <!-- Photos and contact continue the About column in one stack -->
+      <div class="home-stack">
         <div class="piece reveal">
           <div class="frame"><img src="images/headshot.jpg" alt="Portrait of Mary Clayton Soto in the Duke Chapel archway" /></div>
           <p class="art-caption">Duke University <span class="sep">&middot;</span> Pratt School of Engineering</p>
-
-          <div class="frame home-game"><img src="images/cameron.jpg" alt="A Duke player going up for a dunk at Cameron Indoor Stadium, seen from the student section" /></div>
-          <p class="art-caption">I&rsquo;m a huge Duke Basketball fan &amp; love tenting for games!</p>
         </div>
-        <div class="piece reveal">
-          <div class="frame"><img src="images/duke.jpg" alt="Mary Clayton Soto on Duke's campus" /></div>
-          <p class="art-caption">Outside of class, I love exploring Duke Gardens &amp; giving tours to prospective Pratt students.</p>
-
-          <div class="home-contact">
+        <div class="home-contact">
             <h2>Get in touch</h2>
             <dl class="contact-rows">
               <dt>Duke</dt>
@@ -1109,6 +1105,13 @@
               <dd><a href="tel:+18505679336">(850) 567-9336</a></dd>
             </dl>
           </div>
+        <div class="piece reveal">
+          <div class="frame"><img src="images/duke.jpg" alt="Mary Clayton Soto on Duke's campus" /></div>
+          <p class="art-caption">Outside of class, I love exploring Duke Gardens &amp; giving tours to prospective Pratt students.</p>
+        </div>
+        <div class="piece reveal">
+          <div class="frame"><img src="images/cameron.jpg" alt="A Duke player going up for a dunk at Cameron Indoor Stadium, seen from the student section" /></div>
+          <p class="art-caption">I&rsquo;m a huge Duke Basketball fan &amp; love tenting for games!</p>
         </div>
       </div>
     </section>
