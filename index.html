@@ -461,6 +461,13 @@
     }
     .proj-jump:hover { text-decoration-color: var(--ink); }
     #proj-segmentation { scroll-margin-top: 6rem; }
+    /* lab photo row inside a Research entry: three framed figures with captions */
+    .lab-figs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin: 1.6rem 0 0.4rem; max-width: 72ch; }
+    .lab-figs figure { margin: 0; }
+    .lab-figs .frame { background: var(--paper); border: 1px solid var(--line-soft); border-radius: var(--r-media); overflow: hidden; }
+    .lab-figs img { display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: calc(var(--r-media) - 1px); }
+    .lab-figs .fig-cap { margin-top: 0.6rem; }
+    @media (max-width: 560px) { .lab-figs { grid-template-columns: 1fr; gap: 1.75rem; } }
     .entry .authors { font-size: 0.875rem; line-height: 1.55; color: var(--ink-subtle); margin-top: 0.5rem; }
     .entry .authors strong { color: var(--ink); font-weight: 500; }
 
@@ -655,9 +662,12 @@
     .proj-tile.flipped .flip-inner { transform: rotateY(180deg); }
     .proj-tile .frame:hover .flip-face { box-shadow: 0 18px 40px -18px rgba(47,47,45,0.42); }
     .proj-tile .frame:focus-visible { outline: 2px solid var(--terracotta); outline-offset: 6px; border-radius: var(--r-media); }
-    .proj-tile .flip-back { justify-content: flex-start; padding: 1.25rem 1.3rem; }
-    .proj-tile .flip-back p { font-size: 0.9rem; line-height: 1.55; }
+    .proj-tile .flip-back { justify-content: flex-start; padding: 1.1rem 1.15rem; }
+    .proj-tile .flip-back p { font-size: 0.85rem; line-height: 1.5; }
     .proj-tile .label { margin-top: 0.9rem; }
+    /* figure description folded into the back of each project card */
+    .proj-tile .flip-back p.back-fig { margin-top: 0.65rem; padding-top: 0.55rem; border-top: 1px solid var(--line-soft); font-size: 0.75rem; line-height: 1.45; color: var(--ink-subtle); }
+    .back-fig-label { display: block; font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.25rem; }
     /* Skills tab */
     .skills-wrap { padding: 1rem 0 3rem; }
     .skill-rows .gap-above { margin-top: 1.4rem; }
@@ -684,8 +694,8 @@
       text-decoration: underline; text-underline-offset: 3px;
       text-decoration-color: color-mix(in srgb, var(--terracotta) 45%, transparent);
     }
-    @media (max-width: 1000px) { .proj-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 760px) { .proj-grid { grid-template-columns: 1fr; gap: 3rem; } }
+    @media (max-width: 1200px) { .proj-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 760px) { .proj-grid { grid-template-columns: 1fr; gap: 3rem; } .proj-tile .flip-back p { font-size: 0.8rem; } .proj-tile .flip-back p.back-fig { font-size: 0.72rem; } }
     @media (prefers-reduced-motion: reduce) { .proj-tile .flip-inner { transition: none; } }
     .flip-back .eyebrow { display: block; margin-bottom: 0.35rem; }
     .flip-back .back-links { margin-top: 0.6rem; }
@@ -1141,10 +1151,11 @@
               <div class="flip-face flip-back">
                 <h3>Rollator Oxygen-Canister Mount</h3>
                 <p>At Duke Hospital, walking a patient on oxygen took a second staff member just to manage the canister. Our team designed and prototyped a wheeled cage that mounts the canister to the rollator itself, freeing that second person. We validated it against seven design criteria, reduced the tipping angle by 6&deg;, and earned a 4.3 out of 5 usability rating from 30 evaluators, then presented it at the Duke Foundry showcase.</p>
+                <p class="back-fig"><span class="back-fig-label">Pictured</span>The final prototype: a wheeled cage that holds the oxygen canister and attaches to a standard hospital rollator, shown on the test turntable.</p>
               </div>
             </div>
           </div>
-          <p class="fig-cap">The final prototype: a wheeled cage that holds the oxygen canister and attaches to a standard hospital rollator, shown on the test turntable.</p>
+          <p class="fig-cap">The final prototype on the test turntable.</p>
           <div class="label">
             <h3>Rollator Oxygen-Canister Mount</h3>
             <p class="proj-summary">A medical device project (Aug 2024 to May 2025) that secures oxygen canisters to Duke Hospital rollators. It earned a 4.3/5 usability rating from 30 evaluators and was shown at the Duke Foundry showcase. <button type="button" class="proj-more" aria-hidden="true" tabindex="-1">Read more</button></p>
@@ -1160,11 +1171,11 @@
               </div>
               <div class="flip-face flip-back">
                 <h3>Cell Image Segmentation Pipelines</h3>
-                <p>For my Signals and Systems final project, I came back to the segmentation problem from my publication to understand why it worked. In Python, I built three pipelines: frequency-domain enhancement with a high-pass filter, convolution-based edge segmentation, and a combination of the two. Combining them sharpened faint edges in low-contrast images, but the final segmentation barely changed, which showed me that convolution alone was already capturing the boundaries that mattered.</p><p class="back-links"><a href="files/BME271_Final_Project.pdf" target="_blank" rel="noopener">Report (PDF) &#8599;</a> <a href="https://gitlab.oit.duke.edu/mcs131/bme271-finalproject-soto" target="_blank" rel="noopener">Code &#8599;</a></p>
+                <p>For my Signals and Systems final project, I came back to the segmentation problem from my publication to understand why it worked. In Python, I built three pipelines: frequency-domain enhancement with a high-pass filter, convolution-based edge segmentation, and a combination of the two. Combining them sharpened faint edges in low-contrast images, but the final segmentation barely changed, which showed me that convolution alone was already capturing the boundaries that mattered.</p><p class="back-fig"><span class="back-fig-label">Pictured</span>A microscopy image and its Fourier spectrum (top), then the edge map and segmented cells from the combined pipeline (bottom). Most of the energy sits at low frequencies, while cell boundaries live in the high-frequency content that edge detection picks up.</p><p class="back-links"><a href="files/BME271_Final_Project.pdf" target="_blank" rel="noopener">Report (PDF) &#8599;</a> <a href="https://gitlab.oit.duke.edu/mcs131/bme271-finalproject-soto" target="_blank" rel="noopener">Code &#8599;</a></p>
               </div>
             </div>
           </div>
-          <p class="fig-cap">A microscopy image of cells and its Fourier spectrum (top), then the edge map and segmented cells from the combined pipeline (bottom). Most of the image&rsquo;s energy sits at low frequencies, while cell boundaries live in the high-frequency content that edge detection picks up. Adding frequency enhancement strengthened faint edges but changed the final segmentation only slightly.</p>
+          <p class="fig-cap">From raw microscopy image to segmented cells.</p>
           <div class="label">
             <h3>Cell Image Segmentation Pipelines</h3>
             <p class="proj-summary">An image-processing project in Python for BME 271 (Spring 2026) that compares three pipelines for finding cells in microscopy images. Convolution alone captured most cell boundaries. <button type="button" class="proj-more" aria-hidden="true" tabindex="-1">Read more</button></p>
@@ -1181,10 +1192,11 @@
               <div class="flip-face flip-back">
                 <h3>Modeling an Engineered Probiotic</h3>
                 <p>For BME 260, Modeling Molecular and Cellular Systems, our team of seven built a multi-scale model of the probiotic yeast <em>S. boulardii</em> engineered to break down PET microplastics in the gut. The cell displays PETase and MHETase, and a genetic circuit that senses TPA, one of PET&rsquo;s breakdown products, turns up enzyme production once degradation starts. Comparing three PETase variants with Michaelis-Menten kinetics in Python, we found QM-PETase removed about 24% of PET in two weeks, with byproducts staying well below toxic levels.</p>
+                <p class="back-fig"><span class="back-fig-label">Pictured</span>The engineered cell, whose enzymes break PET down to MHET, TPA, and ethylene glycol (top), and gut PET over 400 hours from 10&nbsp;&micro;M (bottom). In two weeks, QM-PETase cut PET by 24.4%, FAST-PETase by 20.7%, and wild-type IsPETase by about 2.6%.</p>
               </div>
             </div>
           </div>
-          <p class="fig-cap">Top: the engineered <em>S. boulardii</em> cell displays PETase and MHETase, which break PET into MHET and then TPA and ethylene glycol. Bottom: simulated gut PET over 400 hours from a 10&nbsp;&micro;M start. QM-PETase produced the largest drop (24.4% in two weeks), followed by FAST-PETase (20.7%), while wild-type IsPETase leveled off near 2.6%.</p>
+          <p class="fig-cap">The engineered cell and 400 hours of simulated PET breakdown.</p>
           <div class="label">
             <h3>Modeling an Engineered Probiotic</h3>
             <p class="proj-summary">A team computational model in Python for BME 260 (Spring 2026) of an engineered probiotic that breaks down microplastics in the gut. Our best proposed enzyme variant degraded about 24% of PET in two weeks. <button type="button" class="proj-more" aria-hidden="true" tabindex="-1">Read more</button></p>
@@ -1201,10 +1213,11 @@
               <div class="flip-face flip-back">
                 <h3>Autonomous Arduino Robot</h3>
                 <p>I built and programmed this robot from scratch in C++, using TI path sensors and an IR thermal sensor to make navigation decisions and XBee radios for wireless communication. Getting the RGB, RFID, and LCD components to work together in one system was the real challenge, which made it as much a debugging project as a building one.</p>
+                <p class="back-fig"><span class="back-fig-label">Pictured</span>The finished robot, with its LCD display, sensor array, and wiring exposed.</p>
               </div>
             </div>
           </div>
-          <p class="fig-cap">The finished robot, with its LCD display, sensor array, and wiring exposed.</p>
+          <p class="fig-cap">The finished robot, wiring exposed.</p>
           <div class="label">
             <h3>Autonomous Arduino Robot</h3>
             <p class="proj-summary">An autonomous robot I built and programmed from scratch in C++ (Spring 2025), using TI path and IR thermal sensors with XBee wireless communication. <button type="button" class="proj-more" aria-hidden="true" tabindex="-1">Read more</button></p>
@@ -1221,10 +1234,11 @@
               <div class="flip-face flip-back">
                 <h3>SuperComp</h3>
                 <p>SuperComp pulls my own Oura, Peloton, and Apple Health data into one daily table, including over 1.19 million heart-rate samples and 3,151 workouts, and turns it into a readiness score and a recommended session. The model is rule-based on purpose: it weighs HRV against my personal baseline along with resting heart rate and sleep, and it scores training with heart-rate-based TRIMP so a run, a lift, and a ride compare fairly. When I backtested it on 386 training days, readiness didn&rsquo;t predict how much work I did, so I reframed it as a guardrail and started logging decisions to collect the right labels before adding machine learning.</p>
+                <p class="back-fig"><span class="back-fig-label">Pictured</span>Ten weeks of nightly HRV against my 28-day baseline, shaded for my normal range (top), the readiness score that tracks it (middle), and daily TRIMP training load (bottom). Readiness did not predict workout output (Spearman &rho; = &minus;0.002).</p>
               </div>
             </div>
           </div>
-          <p class="fig-cap">Ten weeks of my own data. Nightly HRV (top) is plotted against a 28-day personal baseline, with the shaded band marking my normal range. The model&rsquo;s readiness score (middle) dips and recovers with HRV, and daily training load (bottom) is heart-rate-based TRIMP. Across 386 backtested training days, readiness did not predict workout output (Spearman &rho; = &minus;0.002), which supports using it as a guardrail rather than a predictor.</p>
+          <p class="fig-cap">Ten weeks of my own HRV, readiness, and training load.</p>
           <div class="label">
             <h3>SuperComp</h3>
             <p class="proj-summary">A personal Python project from Summer 2026 that turns my wearable data into a daily training recommendation, validated on 386 training days with 55 automated tests. <button type="button" class="proj-more" aria-hidden="true" tabindex="-1">Read more</button></p>
@@ -1529,6 +1543,22 @@
           <h3>Research Assistant</h3>
           <a class="org-link" href="https://bassconnections.duke.edu">bassconnections.duke.edu &#8599;</a>
           <p>Through Bass Connections, I work with Duke's SEAL Lab on models for surgical training. I turn MRI-derived DICOM scans into hydrogel models of three organ types by segmenting them in 3D Slicer, designing molds in Fusion 360, and tuning materials to match the mechanics of real tissue. I also help develop and validate a computer-vision system that scores knot-tying from video, tested on more than 1,000 recordings, giving trainees an objective measure of their surgical skill.</p>
+
+          <!-- SEAL Lab fabrication photos -->
+          <div class="lab-figs">
+            <figure>
+              <div class="frame"><img src="images/seal-liver-mold.jpg" alt="A gray and white 3D-printed liver mold made of labeled sections, such as Front Top and Front Left Middle, bolted together" loading="lazy" /></div>
+              <figcaption class="fig-cap">A five-part liver mold designed in Fusion 360. Each labeled section bolts into place and comes apart around the finished cast.</figcaption>
+            </figure>
+            <figure>
+              <div class="frame"><img src="images/seal-liver-hydrogel.jpg" alt="A translucent pink hydrogel liver model held in a gloved hand" loading="lazy" /></div>
+              <figcaption class="fig-cap">The first iteration of the hydrogel liver cast from that mold.</figcaption>
+            </figure>
+            <figure>
+              <div class="frame"><img src="images/seal-gallbladder-core.jpg" alt="A pale dissolvable gallbladder core seated in one half of a 3D-printed mold" loading="lazy" /></div>
+              <figcaption class="fig-cap">A dissolvable PVA core in the gallbladder mold. After casting, the core dissolves and leaves a hollow model that can hold fluid.</figcaption>
+            </figure>
+          </div>
 
           <!-- conference abstract from this team's work -->
           <div class="subentry">
