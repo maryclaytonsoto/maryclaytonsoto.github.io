@@ -137,10 +137,12 @@
       font-family: var(--body);
       color: var(--text);
       text-decoration: none;
-      font-size: 0.875rem;
-      font-weight: 400;
-      letter-spacing: -0.01em;
-      padding: 0.45rem 1.05rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.17em;
+      text-transform: uppercase;
+      /* extra 0.17em on the left balances the tracking after the last letter */
+      padding: 0.5rem 0.95rem 0.45rem calc(0.95rem + 0.17em);
       border-radius: var(--r-ctrl);
       transition: color 0.15s var(--ease), background-color 0.15s var(--ease);
     }
@@ -148,7 +150,7 @@
     /* active state: the signature ombre-filled pill */
     nav a.active {
       color: var(--on-ombre);
-      font-weight: 500;
+      font-weight: 600;
       background: var(--ombre);
     }
     .menu-toggle {
@@ -662,11 +664,15 @@
     .proj-tile.flipped .flip-inner { transform: rotateY(180deg); }
     .proj-tile .frame:hover .flip-face { box-shadow: 0 18px 40px -18px rgba(47,47,45,0.42); }
     .proj-tile .frame:focus-visible { outline: 2px solid var(--terracotta); outline-offset: 6px; border-radius: var(--r-media); }
-    .proj-tile .flip-back { justify-content: flex-start; padding: 1.1rem 1.15rem; }
+    .proj-tile .flip-back { justify-content: flex-start; padding: 0.95rem 1.15rem; }
+    .proj-tile .flip-back h3 { margin-bottom: 0.35rem; }
     .proj-tile .flip-back p { font-size: 0.85rem; line-height: 1.5; }
     .proj-tile .label { margin-top: 0.9rem; }
+    .proj-tile .proj-course { display: block; color: var(--terracotta); font-size: 0.6875rem; line-height: 1.5; margin-bottom: 0.45rem; }
+    /* handwritten title on the back of an art card: larger than the medium line above it */
+    .art-work .flip-back h3 { font-size: clamp(1.75rem, 2.4vw, 2.4rem); line-height: 1.15; margin: 0.15rem 0 0.7rem; }
     /* figure description folded into the back of each project card */
-    .proj-tile .flip-back p.back-fig { margin-top: 0.65rem; padding-top: 0.55rem; border-top: 1px solid var(--line-soft); font-size: 0.75rem; line-height: 1.45; color: var(--ink-subtle); }
+    .proj-tile .flip-back p.back-fig { margin-top: 0.55rem; padding-top: 0.5rem; border-top: 1px solid var(--line-soft); font-size: 0.75rem; line-height: 1.45; color: var(--ink-subtle); }
     .back-fig-label { display: block; font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.25rem; }
     /* Skills tab */
     .skills-wrap { padding: 1rem 0 3rem; }
@@ -698,7 +704,7 @@
     @media (max-width: 760px) { .proj-grid { grid-template-columns: 1fr; gap: 3rem; } .proj-tile .flip-back p { font-size: 0.8rem; } .proj-tile .flip-back p.back-fig { font-size: 0.72rem; } }
     @media (prefers-reduced-motion: reduce) { .proj-tile .flip-inner { transition: none; } }
     .flip-back .eyebrow { display: block; margin-bottom: 0.35rem; }
-    .flip-back .back-links { margin-top: 0.6rem; }
+    .flip-back .back-links { margin-top: 0.35rem; }
     .flip-back .back-links a {
       color: var(--ink); margin-right: 0.9rem;
       text-decoration: underline; text-underline-offset: 3px;
@@ -1001,7 +1007,7 @@
       }
       nav.open { display: block; }
       nav ul { flex-direction: column; gap: 0; padding: 0.5rem 0 1rem; }
-      nav a { padding: 0.7rem 1.25rem; font-size: 0.9375rem; margin: 0.15rem 0.75rem; }
+      nav a { padding: 0.75rem 1.25rem; font-size: 0.8125rem; margin: 0.15rem 0.75rem; }
       /* vertical menu: same ombre pill, inset in the list */
       nav a.active { background: var(--ombre); color: var(--on-ombre); }
 
@@ -1149,16 +1155,17 @@
                 <img src="images/rollator.jpg" alt="Rollator with a custom stainless oxygen-canister mount, on a turntable in the design lab" />
               </div>
               <div class="flip-face flip-back">
+                <span class="eyebrow proj-course">EGR 101 &amp; 102 &middot; Engineering Design and Communication, Design to Deliver</span>
                 <h3>Rollator Oxygen-Canister Mount</h3>
-                <p>At Duke Hospital, walking a patient on oxygen took a second staff member just to manage the canister. Our team designed and prototyped a wheeled cage that mounts the canister to the rollator itself, freeing that second person. We validated it against seven design criteria, reduced the tipping angle by 6&deg;, and earned a 4.3 out of 5 usability rating from 30 evaluators, then presented it at the Duke Foundry showcase.</p>
-                <p class="back-fig"><span class="back-fig-label">Pictured</span>The final prototype: a wheeled cage that holds the oxygen canister and attaches to a standard hospital rollator, shown on the test turntable.</p>
+                <p>At Duke Hospital, patients recovering from heart surgery walk the halls with a rollator, and a second staff member has to follow behind with their oxygen. Our team of four designed a wheeled cage that clips to the rollator&rsquo;s front bar, so the canister rolls along with the patient. We narrowed more than 50 brainstormed ideas through Pugh screening and a weighted scoring matrix, tested a wooden prototype, and built the final version from waterjet-cut aluminum with 360&deg; wheels and a height-adjustable back support. In testing, it reduced the tipping angle by just 6&deg;, left the walking area untouched, and earned a 4.3 out of 5 from 30 testers for ease of exchanging canisters. It still extended 8 inches past the rollator, short of our 6-inch target.</p>
+                <p class="back-fig"><span class="back-fig-label">Pictured</span>The final aluminum cage on a hospital rollator.</p>
               </div>
             </div>
           </div>
           <p class="fig-cap">The final prototype on the test turntable.</p>
           <div class="label">
             <h3>Rollator Oxygen-Canister Mount</h3>
-            <p class="proj-summary">A medical device project (Aug 2024 to May 2025) that secures oxygen canisters to Duke Hospital rollators. It earned a 4.3/5 usability rating from 30 evaluators and was shown at the Duke Foundry showcase. <button type="button" class="proj-more" aria-hidden="true" tabindex="-1">Read more</button></p>
+            <p class="proj-summary">A medical device project (Aug 2024 to May 2025) that secures oxygen canisters to Duke Hospital rollators. Testers rated canister exchange 4.3/5, and it was shown at the Duke Foundry showcase. <button type="button" class="proj-more" aria-hidden="true" tabindex="-1">Read more</button></p>
           </div>
         </article>
         <article class="proj-tile reveal" id="proj-segmentation">
@@ -1170,6 +1177,7 @@
                 <img src="images/bme271-pipeline.jpg" alt="Four panels from the project: a microscopy image of cells, its frequency spectrum, an edge map, and the final segmented cells" />
               </div>
               <div class="flip-face flip-back">
+                <span class="eyebrow proj-course">BME 271 &middot; Signals and Systems</span>
                 <h3>Cell Image Segmentation Pipelines</h3>
                 <p>For my Signals and Systems final project, I came back to the segmentation problem from my publication to understand why it worked. In Python, I built three pipelines: frequency-domain enhancement with a high-pass filter, convolution-based edge segmentation, and a combination of the two. Combining them sharpened faint edges in low-contrast images, but the final segmentation barely changed, which showed me that convolution alone was already capturing the boundaries that mattered.</p><p class="back-fig"><span class="back-fig-label">Pictured</span>A microscopy image and its Fourier spectrum (top), then the edge map and segmented cells from the combined pipeline (bottom). Most of the energy sits at low frequencies, while cell boundaries live in the high-frequency content that edge detection picks up.</p><p class="back-links"><a href="files/BME271_Final_Project.pdf" target="_blank" rel="noopener">Report (PDF) &#8599;</a> <a href="https://gitlab.oit.duke.edu/mcs131/bme271-finalproject-soto" target="_blank" rel="noopener">Code &#8599;</a></p>
               </div>
@@ -1178,7 +1186,7 @@
           <p class="fig-cap">From raw microscopy image to segmented cells.</p>
           <div class="label">
             <h3>Cell Image Segmentation Pipelines</h3>
-            <p class="proj-summary">An image-processing project in Python for BME 271 (Spring 2026) that compares three pipelines for finding cells in microscopy images. Convolution alone captured most cell boundaries. <button type="button" class="proj-more" aria-hidden="true" tabindex="-1">Read more</button></p>
+            <p class="proj-summary">An image-processing project in Python (Spring 2026) that compares three pipelines for finding cells in microscopy images. Convolution alone captured most cell boundaries. <button type="button" class="proj-more" aria-hidden="true" tabindex="-1">Read more</button></p>
           </div>
         </article>
         <article class="proj-tile reveal">
@@ -1190,8 +1198,9 @@
                 <img src="images/bme260-model.jpg" alt="Two figures from the team report: a diagram of the engineered yeast cell displaying PETase and MHETase as PET breaks down to MHET and then TPA and ethylene glycol, and a plot of PET concentration over 400 hours for IsPETase, FAST-PETase and QM-PETase" />
               </div>
               <div class="flip-face flip-back">
+                <span class="eyebrow proj-course">BME 260 &middot; Modeling Cellular and Molecular Systems</span>
                 <h3>Modeling an Engineered Probiotic</h3>
-                <p>For BME 260, Modeling Molecular and Cellular Systems, our team of seven built a multi-scale model of the probiotic yeast <em>S. boulardii</em> engineered to break down PET microplastics in the gut. The cell displays PETase and MHETase, and a genetic circuit that senses TPA, one of PET&rsquo;s breakdown products, turns up enzyme production once degradation starts. Comparing three PETase variants with Michaelis-Menten kinetics in Python, we found QM-PETase removed about 24% of PET in two weeks, with byproducts staying well below toxic levels.</p>
+                <p>For BME 260, Modeling Cellular and Molecular Systems, our team of seven built a multi-scale model of the probiotic yeast <em>S. boulardii</em> engineered to break down PET microplastics in the gut. The cell displays PETase and MHETase, and a genetic circuit that senses TPA, one of PET&rsquo;s breakdown products, turns up enzyme production once degradation starts. Comparing three PETase variants with Michaelis-Menten kinetics in Python, we found QM-PETase removed about 24% of PET in two weeks, with byproducts staying well below toxic levels.</p>
                 <p class="back-fig"><span class="back-fig-label">Pictured</span>The engineered cell, whose enzymes break PET down to MHET, TPA, and ethylene glycol (top), and gut PET over 400 hours from 10&nbsp;&micro;M (bottom). In two weeks, QM-PETase cut PET by 24.4%, FAST-PETase by 20.7%, and wild-type IsPETase by about 2.6%.</p>
               </div>
             </div>
@@ -1199,7 +1208,7 @@
           <p class="fig-cap">The engineered cell and 400 hours of simulated PET breakdown.</p>
           <div class="label">
             <h3>Modeling an Engineered Probiotic</h3>
-            <p class="proj-summary">A team computational model in Python for BME 260 (Spring 2026) of an engineered probiotic that breaks down microplastics in the gut. Our best proposed enzyme variant degraded about 24% of PET in two weeks. <button type="button" class="proj-more" aria-hidden="true" tabindex="-1">Read more</button></p>
+            <p class="proj-summary">A team computational model in Python (Spring 2026) of an engineered probiotic that breaks down microplastics in the gut. Our best proposed enzyme variant degraded about 24% of PET in two weeks. <button type="button" class="proj-more" aria-hidden="true" tabindex="-1">Read more</button></p>
           </div>
         </article>
         <article class="proj-tile reveal">
@@ -1211,6 +1220,7 @@
                 <img src="images/arduino-robot.jpg" alt="Arduino-based autonomous robot build with sensors and wiring" />
               </div>
               <div class="flip-face flip-back">
+                <span class="eyebrow proj-course">ECE 110 &middot; Fundamentals of Electrical and Computer Engineering</span>
                 <h3>Autonomous Arduino Robot</h3>
                 <p>I built and programmed this robot from scratch in C++, using TI path sensors and an IR thermal sensor to make navigation decisions and XBee radios for wireless communication. Getting the RGB, RFID, and LCD components to work together in one system was the real challenge, which made it as much a debugging project as a building one.</p>
                 <p class="back-fig"><span class="back-fig-label">Pictured</span>The finished robot, with its LCD display, sensor array, and wiring exposed.</p>
@@ -1232,6 +1242,7 @@
                 <img src="images/supercomp.png" alt="Three charts from ten weeks of my own data: nightly HRV against my 28-day baseline, the model&rsquo;s readiness score from rest to hard, and daily heart-rate-based training load" />
               </div>
               <div class="flip-face flip-back">
+                <span class="eyebrow proj-course">Independent Project</span>
                 <h3>SuperComp</h3>
                 <p>SuperComp pulls my own Oura, Peloton, and Apple Health data into one daily table, including over 1.19 million heart-rate samples and 3,151 workouts, and turns it into a readiness score and a recommended session. The model is rule-based on purpose: it weighs HRV against my personal baseline along with resting heart rate and sleep, and it scores training with heart-rate-based TRIMP so a run, a lift, and a ride compare fairly. When I backtested it on 386 training days, readiness didn&rsquo;t predict how much work I did, so I reframed it as a guardrail and started logging decisions to collect the right labels before adding machine learning.</p>
                 <p class="back-fig"><span class="back-fig-label">Pictured</span>Ten weeks of nightly HRV against my 28-day baseline, shaded for my normal range (top), the readiness score that tracks it (middle), and daily TRIMP training load (bottom). Readiness did not predict workout output (Spearman &rho; = &minus;0.002).</p>
@@ -1434,6 +1445,28 @@
       <div class="section-head">
         <h2 class="section-title">Experience</h2>
       </div>
+      <div class="entry reveal">
+        <div class="meta">
+          <span class="eyebrow">Pratt School of Engineering</span>
+          <span class="when">Starting Spring 2027</span>
+        </div>
+        <div class="body">
+          <h3>Tour Guide</h3>
+          <p>Starting in Spring 2027, I&rsquo;ll lead tours of Duke&rsquo;s engineering campus for prospective students and their families, answering their questions about what studying engineering at Pratt is actually like.</p>
+        </div>
+      </div>
+
+      <div class="entry reveal">
+        <div class="meta">
+          <span class="eyebrow">Tallahassee Research Institute</span>
+          <span class="when">Summer 2026</span>
+        </div>
+        <div class="body">
+          <h3>Research Coordinator</h3>
+          <p>I managed clinical research workflows and patient data across 10+ cardiovascular studies testing new medical devices and research protocols. Much of the work was taking messy patient data and turning it into structured reports, so the findings were clear enough for the research team to act on.</p>
+        </div>
+      </div>
+
 
       <div class="entry reveal">
         <div class="meta">
@@ -1570,16 +1603,6 @@
         </div>
       </div>
 
-      <div class="entry reveal">
-        <div class="meta">
-          <span class="eyebrow">Tallahassee Research Institute</span>
-          <span class="when">Summer 2026</span>
-        </div>
-        <div class="body">
-          <h3>Research Coordinator</h3>
-          <p>I managed clinical research workflows and patient data across 10+ cardiovascular studies testing new medical devices and research protocols. Much of the work was taking messy patient data and turning it into structured reports, so the findings were clear enough for the research team to act on.</p>
-        </div>
-      </div>
     </section>
 
 
