@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oxygen-Canister Mount for Duke Hospital Rollators | Mary Clayton Soto</title>
+  <meta name="description" content="Case study: a wheeled aluminum cage that carries a heart-surgery patient's oxygen on their rollator, designed, built, and tested by a Duke engineering team." />
+  <!-- Favicon: the MC monogram, tiled on cream so it survives a dark tab
+       strip. favicon.svg is generated from mc-logo.svg; regenerate it if
+       the logo changes rather than editing it by hand. -->
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="mask-icon" href="mc-logo.svg" color="#2f2f2d" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ============================================================
+       DESIGN TOKENS: web-design-system, "Sketchbook Sunset" palette
+       Palette KEPT exactly (see redesign-keep.md). Everything else
+       follows the editorial system: serif display + neutral sans
+       body, near-square cards + pill controls, flat surfaces,
+       hairlines + whitespace, ombre rationed to two signature
+       moments (hero rule, active nav pill).
+       Expression color = the ombre. Action color = warm near-black.
+       ============================================================ */
+    :root {
+      /* --- Kept palette --- */
+      --bg:        #f5f0e8;   /* warm cream canvas */
+      --paper:     #faf7f1;   /* slightly lifted warm surface */
+      --ink:       #2f2f2d;   /* warm near-black, headings + actions */
+      --text:      #3a3a38;   /* charcoal body text */
+      --muted:     #8b6d54;   /* earthy brown, secondary */
+      --terracotta:#c9845f;   /* quiet warm accent */
+      /* ombre: the single expressive accent */
+      --pink:   #ff4f87;
+      --coral:  #ff6f61;
+      --orange: #e85d04;
+
+      /* --- Derived, warm-tinted neutrals --- */
+      --line:      color-mix(in srgb, var(--ink) 14%, transparent);
+      --line-soft: color-mix(in srgb, var(--ink) 7%, transparent);
+      --ink-subtle: color-mix(in srgb, var(--muted) 80%, var(--bg));
+      --ombre:  linear-gradient(90deg, var(--pink), var(--coral) 55%, var(--orange));
+
+      /* --- Type slots: Cormorant display + EB Garamond body (serif) --- */
+      --display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+      --body:    "EB Garamond", Georgia, "Times New Roman", serif;
+      /* Mary's hand: the annotation voice. Personal asides, captions and
+         the footer sign-off only. Never headings, nav, or body copy. */
+      --hand:    "Handwriting MCS", "Cormorant Garamond", Georgia, serif;
+
+      /* --- Radii: near-square cards, rounded media, full-pill controls ---
+         --r-media is the one dial for every image corner on the site.
+         Change it here, nowhere else. 12px reads rounded without going
+         bubbly; 6px is a hint, 20px is soft-app territory. */
+      --r-card: 2px;
+      --r-media: 12px;
+      --r-ctrl: 9999px;
+      --on-ombre: #ffffff;   /* text on the ombre fill */
+
+      --maxw: 1160px;
+      --ease: cubic-bezier(.4,0,.2,1);
+    }
+
+    /* Mary's handwriting. Loaded once, used via --hand. */
+    @font-face {
+      font-family: "Handwriting MCS";
+      src: url("fonts/Handwritingmcs-Regular.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+
+    body {
+      font-family: var(--body);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 16px;
+      letter-spacing: -0.011em;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    ::selection { background: color-mix(in srgb, var(--coral) 25%, transparent); }
+
+    /* small letterspaced label */
+    .eyebrow {
+      font-family: var(--body);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ============================================================
+       HEADER + NAVIGATION: pill tabs, hairline bottom border,
+       active tab filled with the signature ombre (rationed accent)
+       ============================================================ */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: color-mix(in srgb, var(--bg) 90%, transparent);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .nav-wrap {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.1rem 1.5rem;
+    }
+    .site-name {
+      font-family: var(--display);
+      color: var(--ink);
+      font-weight: 600;
+      font-size: 1.35rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 0.35rem;
+    }
+    nav a {
+      display: block;
+      font-family: var(--body);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.17em;
+      text-transform: uppercase;
+      /* extra 0.17em on the left balances the tracking after the last letter */
+      padding: 0.5rem 0.95rem 0.45rem calc(0.95rem + 0.17em);
+      border-radius: var(--r-ctrl);
+      transition: color 0.15s var(--ease), background-color 0.15s var(--ease);
+    }
+    nav a:hover { color: var(--ink); background: var(--line-soft); }
+    /* active state: the signature ombre-filled pill */
+    nav a.active {
+      color: var(--on-ombre);
+      font-weight: 600;
+      background: var(--ombre);
+    }
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: 1px solid var(--line);
+      border-radius: var(--r-ctrl);
+      color: var(--ink);
+      font-size: 1.2rem;
+      line-height: 1;
+      padding: 0.4rem 0.6rem;
+      cursor: pointer;
+    }
+
+    /* ============================================================
+       LAYOUT / SECTION RHYTHM: whitespace, never bands
+       ============================================================ */
+    main {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 0 1.5rem 8rem;
+    }
+    .tab-panel { display: none; position: relative; }
+    .tab-panel.active { display: block; animation: rise 0.4s var(--ease) both; }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* section heading: hierarchy from size + space */
+    .section-head { margin: 5.5rem 0 3rem; }
+    .section-head .eyebrow { display: block; margin-bottom: 1rem; }
+    /* mesh family: static 2D "paint stroke" ribbons: one full-bleed
+       canvas per tab, a flat mesh stroke (parallel hairlines, ombre
+       across the stroke) following a unique route with loops kept in
+       whitespace, never behind text. No animation on these. */
+    /* Mesh waves retired (2026-07-09): holders hidden site-wide. */
+    .mesh-flow, .mesh-footer { display: none !important; }
+    .section-title {
+      font-family: var(--display);
+      font-size: clamp(2.4rem, 4.5vw, 3.4rem);
+      font-weight: 500;
+      line-height: 1.05;
+      color: var(--ink);
+      letter-spacing: 0.005em;
+    }
+
+    /* ============================================================
+       HOME: big name hero on the plain cream ground, with the
+       photoreal bubble field floating above it (poppable).
+       Layer order: bubbles (0) < name/text (1).
+       ============================================================ */
+    .hero {
+      position: relative;
+      min-height: min(86vh, 780px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 4rem 0 4.5rem;
+      overflow: hidden;      /* keep the floating bubbles inside the opening view */
+    }
+    /* the bubble field: full-bleed on the plain cream; catches clicks so
+       bubbles can be popped anywhere in the opening view */
+    .bubble-hero {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      display: block;
+      cursor: pointer;
+    }
+    /* WebGL layer that paints the bubbles themselves, sitting UNDER the
+       2D canvas above (which now carries only the pop rings + droplets
+       and still catches the clicks). Hidden unless the GL context
+       initialises, so the 2D renderer remains a working fallback. */
+    .bubble-hero-gl {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      display: none;
+      pointer-events: none;
+    }
+    .bubble-hero-gl.on { display: block; }
+    /* idle (non-interactive) bubble fields on the other tabs: waft
+       quietly behind the content */
+    .bubble-idle {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      display: block;
+      pointer-events: none;
+    }
+    /* lift each tab's content above its idle bubbles */
+    .tab-panel > *:not(.bubble-idle):not(.mesh-flow) { position: relative; z-index: 1; }
+    /* THE big name: one line, one style, large.
+       All caps. Title case was tried (July 2026) to show off Cormorant's
+       lowercase after Mary admired a paid display face on melinegobet.fr;
+       neither title case nor any free substitute measured up, so this is
+       back to the original treatment. If a licensed display face is ever
+       bought, revisit: title case is what makes those faces worth having,
+       and the size ramp below will need retuning for the longer line. */
+    .hero h1 {
+      position: relative;
+      z-index: 2;
+      pointer-events: none;   /* let clicks fall through to pop bubbles */
+      font-family: var(--display);
+      color: var(--ink);
+      font-weight: 500;
+      font-size: clamp(1.3rem, 7.4vw, 5.6rem);
+      line-height: 1.0;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+    /* Disciplines line in Mary's hand. Note this stretches the --hand rule
+       stated at the token: the handwriting is otherwise the annotation
+       voice (captions, asides, sign-off) and not used in the hero. Her
+       call, and it works here because the line reads as a personal note
+       under the formal name rather than as a heading in its own right.
+       Sized up from the Cormorant version: the marker face has a much
+       smaller x-height, so matching point sizes would read smaller. */
+    .hero .disciplines {
+      position: relative;
+      z-index: 2;
+      pointer-events: none;
+      margin-top: 2.5rem;
+      font-family: var(--hand);
+      font-weight: 400;
+      font-size: clamp(1.6rem, 3.6vw, 2.3rem);
+      color: var(--text);
+      line-height: 1.35;
+      letter-spacing: 0.015em;
+    }
+    .hero .disciplines .dot { color: var(--terracotta); padding: 0 0.3em; }
+    /* "pop me" tag beside a still bubble parked in the hero's top-right
+       corner, so it is obvious the bubbles are clickable. Gone after the
+       first pop. Positioned by the bubble script. */
+    .pop-tag {
+      position: absolute;
+      left: 0; top: 0;
+      z-index: 2;
+      pointer-events: none;
+      display: inline-flex;
+      align-items: flex-end;
+      gap: 0.15rem;
+      white-space: nowrap;
+      font-family: var(--hand);
+      font-size: 1.65rem;
+      letter-spacing: 0.02em;
+      color: var(--muted);
+      opacity: 0;
+      transition: opacity 0.45s var(--ease);
+      will-change: transform;
+    }
+    .pop-tag svg { color: var(--terracotta); margin-bottom: 0.55rem; margin-left: 0.1rem; }
+    .pop-tag.show { opacity: 1; }
+    .pop-tag.done { opacity: 0; }
+    @media (prefers-reduced-motion: reduce) { .pop-tag { display: none; } }
+    .hero .tagline {
+      position: relative;
+      z-index: 2;
+      margin-top: 1.5rem;
+      font-family: var(--body);
+      font-size: 1.0625rem;
+      color: var(--muted);
+      white-space: nowrap;
+      letter-spacing: -0.01em;
+    }
+
+    /* Home about: editorial two-column: heading rail + prose */
+    /* About: heading sits above the prose as a section header */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+      margin-top: 5.5rem;
+      justify-items: center;
+    }
+    .about-grid .rail { text-align: center; }
+    /* one shared column width for the About text and the photo stack */
+    .about-grid .prose { max-width: 680px; width: 100%; }
+    .about-grid .prose p { max-width: none; }
+    .about-grid .rail .eyebrow { display: block; margin-bottom: 1rem; }
+    .about-grid .rail h2 {
+      font-family: var(--display);
+      font-size: clamp(1.9rem, 3vw, 2.5rem);
+      font-weight: 500;
+      line-height: 1.1;
+      color: var(--ink);
+      letter-spacing: 0.005em;
+      white-space: nowrap;
+    }
+
+    /* prose */
+    .prose p {
+      max-width: 62ch;
+      margin-bottom: 1.35rem;
+      font-size: 1.0625rem;
+      line-height: 1.7;
+      color: var(--text);
+    }
+    .prose a, .entry p a {
+      color: var(--ink);
+      text-decoration: underline;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 3px;
+      text-decoration-color: color-mix(in srgb, var(--ink) 35%, transparent);
+      transition: text-decoration-color 0.15s var(--ease), color 0.15s var(--ease);
+    }
+    .prose a:hover, .entry p a:hover { text-decoration-color: var(--ink); }
+
+    /* ============================================================
+       EDITORIAL ENTRY LIST: flat rows, hairlines + whitespace
+       ============================================================ */
+    .entry {
+      display: grid;
+      grid-template-columns: 210px 1fr;
+      gap: 3rem;
+      padding: 2.25rem 0;
+    }
+    .entry .meta { padding-top: 0.5rem; }
+    .entry .meta .eyebrow { display: block; margin-bottom: 0.5rem; }
+    .entry .meta .when {
+      font-family: var(--body);
+      font-size: 0.875rem;
+      color: var(--ink-subtle);
+      letter-spacing: -0.01em;
+    }
+    .entry h3 {
+      font-family: var(--display);
+      font-size: 1.9rem;
+      font-weight: 500;
+      line-height: 1.12;
+      color: var(--ink);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.005em;
+    }
+    .entry .org-link {
+      display: inline-block;
+      font-family: var(--body);
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--ink);
+      text-decoration: underline;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 3px;
+      text-decoration-color: color-mix(in srgb, var(--ink) 35%, transparent);
+      margin-bottom: 0.85rem;
+      transition: text-decoration-color 0.15s var(--ease);
+    }
+    .entry .org-link:hover { text-decoration-color: var(--ink); }
+    .entry p {
+      color: var(--text);
+      max-width: 60ch;
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    .entry em { color: var(--ink); font-style: italic; }
+
+    /* subtle inline placeholder note */
+    .note { color: var(--ink-subtle); font-style: italic; }
+
+    /* skeleton idea list: terse fragments standing in for prose that
+       Mary is still workshopping. Marker is a middot, never a dash. */
+    .skel { list-style: none; margin: 0.35rem 0 0; max-width: 60ch; }
+    .skel li {
+      font-size: 1rem;
+      line-height: 1.65;
+      color: var(--text);
+      padding-left: 1.1rem;
+      position: relative;
+      margin-bottom: 0.3rem;
+    }
+    .skel li::before {
+      content: "\00B7";
+      position: absolute;
+      left: 0.15rem;
+      color: var(--terracotta);
+      font-weight: 700;
+    }
+    .skel li.todo { color: var(--ink-subtle); font-style: italic; }
+
+    /* nested sub-part: a continuation of the entry above it, not a
+       peer. Rule is terracotta, never a grey sectioning hairline. */
+    .subentry {
+      margin-top: 1.75rem;
+      padding-left: 1.5rem;
+      max-width: 60ch;
+      border-left: 2px solid color-mix(in srgb, var(--terracotta) 45%, transparent);
+    }
+    .subentry .eyebrow { display: block; margin-bottom: 0.45rem; color: var(--terracotta); }
+    .subentry h4 {
+      font-family: var(--display);
+      font-size: 1.28rem;
+      font-weight: 500;
+      line-height: 1.18;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+    .subentry .org-link { margin-bottom: 0.6rem; }
+    .proj-jump {
+      color: var(--ink); text-decoration: underline; text-underline-offset: 4px;
+      text-decoration-thickness: 1px;
+      text-decoration-color: color-mix(in srgb, var(--terracotta) 55%, transparent);
+    }
+    .proj-jump:hover { text-decoration-color: var(--ink); }
+    #proj-segmentation { scroll-margin-top: 6rem; }
+    /* lab photo row inside a Research entry: three framed figures with captions */
+    .lab-figs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin: 1.6rem 0 0.4rem; max-width: 72ch; }
+    .lab-figs figure { margin: 0; }
+    .lab-figs .frame { background: var(--paper); border: 1px solid var(--line-soft); border-radius: var(--r-media); overflow: hidden; }
+    .lab-figs img { display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: calc(var(--r-media) - 1px); }
+    .lab-figs .fig-cap { margin-top: 0.6rem; }
+    @media (max-width: 560px) { .lab-figs { grid-template-columns: 1fr; gap: 1.75rem; } }
+    .entry .authors { font-size: 0.875rem; line-height: 1.55; color: var(--ink-subtle); margin-top: 0.5rem; }
+    .entry .authors strong { color: var(--ink); font-weight: 500; }
+
+    /* ============================================================
+       GALLERY WALL: shared by Projects and Art. Framed pieces on
+       a grid: flat frame on top, gallery-label text below.
+       ============================================================ */
+    .art-intro {
+      max-width: none;
+      font-size: 1.0625rem;
+      line-height: 1.7;
+      color: var(--text);
+      margin-bottom: 4rem;
+    }
+    /* skeleton standing in for the art statement: keeps the intro's
+       breathing room below it while the prose is being reworked */
+    .art-intro-skel { margin-bottom: 4rem; }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 4.5rem 3rem;
+      align-items: start;   /* mixed-height pieces align to the top, no stretching */
+    }
+    .piece .frame {
+      background: var(--paper);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--r-media);
+      overflow: hidden;   /* required: this is what clips the img to the radius */
+    }
+    /* Safari occasionally lets a child bleed past a rounded parent during
+       transforms (the reveal animation). Rounding the image itself too is
+       a belt-and-braces fix and costs nothing. */
+    .piece .frame img { border-radius: calc(var(--r-media) - 1px); }
+    /* empty / text-placeholder frames keep the 4:3 paper slot */
+    .piece .frame:not(:has(img)) {
+      aspect-ratio: 4 / 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--ink-subtle);
+      font-style: italic;
+      font-size: 0.9375rem;
+      padding: 1rem;
+    }
+    /* images keep their own shape: portrait, landscape, or square */
+    .piece img { width: 100%; height: auto; display: block; }
+    /* gallery label: meta line, serif title, description */
+    .piece .label { padding-top: 1.15rem; }
+    .piece .label-meta {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    .piece .when {
+      font-family: var(--body);
+      font-size: 0.8125rem;
+      color: var(--ink-subtle);
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+    .piece h3 {
+      font-family: var(--display);
+      font-size: 1.55rem;
+      font-weight: 500;
+      line-height: 1.15;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.005em;
+    }
+    /* Artwork titles in Mary's hand. Scoped to #art so project titles stay
+       in Cormorant: the handwriting is the personal voice, and the art is
+       where it belongs. Sized UP from 1.55rem because the marker face has
+       a much smaller x-height, so a matching point size reads noticeably
+       smaller than the serif beside it. */
+    .piece p {
+      color: var(--text);
+      font-size: 0.9375rem;
+      line-height: 1.65;
+    }
+    /* captions carry the annotation voice: it reads as though Mary
+       labelled her own photographs. Sized up from the old 0.8125rem
+       because the marker face needs the room to stay legible. */
+    /* ============================================================
+       ART: coverflow wall. All five works stay on screen; the focused
+       one grows and the rest shrink with distance from it. Widths are
+       percentages and images are width:100%/height:auto, so every piece
+       keeps its native proportion with no aspect-ratio or cropping.
+       ============================================================ */
+    .art-flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* tighter gap than before: six works in the row now, so the space
+         is better spent on the focused piece than between the others */
+      gap: clamp(0.5rem, 1.2vw, 1.25rem);
+      /* tall enough for a portrait at the new focused width: 44% of a
+         1160px row is ~510px wide, which at 3:4 is ~680px of image */
+      min-height: clamp(360px, 76vh, 780px);
+      touch-action: pan-y;
+      user-select: none;
+      margin-bottom: 2rem;
+    }
+    .art-work {
+      flex: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: width 0.55s var(--ease), opacity 0.55s var(--ease);
+    }
+    /* the frame is the flip container: no surface of its own, it only
+       supplies perspective. The two faces carry the border and radius. */
+    .art-work .frame {
+      width: 100%;
+      perspective: 1200px;
+      background: none;
+      border: 0;
+      overflow: visible;
+      cursor: pointer;
+    }
+    .flip-inner {
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.7s var(--ease);
+    }
+    .art-work.flipped .flip-inner { transform: rotateY(180deg); }
+    .flip-face {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border: 1px solid var(--line-soft);
+      border-radius: var(--r-media);
+      overflow: hidden;
+      background: var(--paper);
+      box-shadow: 0 8px 26px -14px rgba(47,47,45,0.35);
+      transition: box-shadow 0.55s var(--ease);
+    }
+    .art-work.is-active .flip-face { box-shadow: 0 22px 46px -18px rgba(47,47,45,0.42); }
+    .flip-front img { width: 100%; height: auto; display: block; }
+    /* the back is pinned over the front, so it inherits the front's
+       height and therefore the artwork's native proportion */
+    .flip-back {
+      position: absolute;
+      inset: 0;
+      transform: rotateY(180deg);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: clamp(0.9rem, 1.6vw, 1.6rem);
+      overflow: auto;
+      background: var(--bg);
+    }
+    .flip-back h3 {
+      font-family: var(--hand);
+      font-weight: 400;
+      font-size: clamp(1.1rem, 1.5vw, 1.45rem);
+      line-height: 1.25;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+    .flip-back .skel li { font-size: clamp(0.75rem, 0.95vw, 0.9375rem); line-height: 1.5; }
+    .flip-back p { font-size: clamp(0.75rem, 0.95vw, 0.9375rem); line-height: 1.5; color: var(--text); }
+    /* small hint that the card turns, only on the focused piece */
+    .flip-hint {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-subtle);
+      margin-top: 0.35rem;
+      opacity: 0;
+      transition: opacity 0.35s var(--ease);
+    }
+    .art-work.is-active .flip-hint { opacity: 1; }
+
+    /* PROJECTS: gallery grid. Every tile visible at once; the image
+       turns over to the write-up, the label underneath always shows. */
+    .proj-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3.5rem 2.25rem;
+      align-items: start;
+      margin-bottom: 3rem;
+    }
+    .proj-tile .frame { perspective: 1200px; cursor: pointer; border: 0; background: none; }
+    .proj-tile .flip-inner { aspect-ratio: 4 / 5; }
+    .proj-tile .flip-front { position: absolute; inset: 0; }
+    .proj-tile .flip-front img { width: 100%; height: 100%; object-fit: cover; }
+    .proj-tile .fit-contain .flip-front img { object-fit: contain; background: var(--paper); }
+    .proj-tile .flip-front svg.dg { width: 100%; height: 100%; }
+    .proj-tile.flipped .flip-inner { transform: rotateY(180deg); }
+    .proj-tile .frame:hover .flip-face { box-shadow: 0 18px 40px -18px rgba(47,47,45,0.42); }
+    .proj-tile .frame:focus-visible { outline: 2px solid var(--terracotta); outline-offset: 6px; border-radius: var(--r-media); }
+    .proj-tile .flip-back { justify-content: flex-start; padding: 0.95rem 1.15rem; }
+    .proj-tile .flip-back h3 { margin-bottom: 0.35rem; }
+    .proj-tile .flip-back p { font-size: 0.85rem; line-height: 1.5; }
+    .proj-tile .label { margin-top: 0.9rem; }
+    .proj-tile .proj-course { display: block; color: var(--terracotta); font-size: 0.6875rem; line-height: 1.5; margin-bottom: 0.45rem; }
+    /* handwritten title on the back of an art card: larger than the medium line above it */
+    .art-work .flip-back h3 { font-size: clamp(1.75rem, 2.4vw, 2.4rem); line-height: 1.15; margin: 0.15rem 0 0.7rem; }
+    /* figure description folded into the back of each project card */
+    .proj-tile .flip-back p.back-fig { margin-top: 0.55rem; padding-top: 0.5rem; border-top: 1px solid var(--line-soft); font-size: 0.75rem; line-height: 1.45; color: var(--ink-subtle); }
+    .back-fig-label { display: block; font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.25rem; }
+    /* Skills tab */
+    .skills-wrap { padding: 1rem 0 3rem; }
+    .skill-rows .gap-above { margin-top: 1.4rem; }
+    .skill-rows dt {
+      font-family: var(--body); font-size: 0.6875rem; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+    }
+    .skill-rows { display: grid; grid-template-columns: 8.5rem 1fr; gap: 1.1rem 1.5rem; align-items: baseline; }
+    .skill-rows dd { margin: 0; font-size: 1.0625rem; line-height: 1.6; color: var(--text); }
+    @media (max-width: 760px) { .skill-rows { grid-template-columns: 1fr; gap: 0.15rem; } .skill-rows dd { margin-bottom: 0.6rem; } }
+    /* paper-style figure caption directly under each image */
+    .fig-cap { margin-top: 0.75rem; font-size: 0.8125rem; line-height: 1.5; color: var(--ink-subtle); font-style: italic; }
+    .proj-tile .label-meta { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; }
+    .proj-tile .when { font-size: 0.8125rem; color: var(--ink-subtle); white-space: nowrap; }
+    .proj-tile h3 {
+      font-family: var(--display); font-weight: 500; font-size: 1.45rem;
+      line-height: 1.15; color: var(--ink); margin: 0 0 0.35rem;
+    }
+    .proj-summary { font-size: 0.975rem; line-height: 1.55; color: var(--text); }
+    .proj-result { font-size: 0.875rem; line-height: 1.5; color: var(--muted); font-style: italic; margin-top: 0.35rem; }
+    .proj-more {
+      display: inline; padding: 0; margin-left: 0.2rem; background: none; border: 0; cursor: pointer;
+      font: inherit; color: var(--terracotta);
+      text-decoration: underline; text-underline-offset: 3px;
+      text-decoration-color: color-mix(in srgb, var(--terracotta) 45%, transparent);
+    }
+    @media (max-width: 1200px) { .proj-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 760px) { .proj-grid { grid-template-columns: 1fr; gap: 3rem; } .proj-tile .flip-back p { font-size: 0.8rem; } .proj-tile .flip-back p.back-fig { font-size: 0.72rem; } }
+    @media (prefers-reduced-motion: reduce) { .proj-tile .flip-inner { transition: none; } }
+    .flip-back .eyebrow { display: block; margin-bottom: 0.35rem; }
+    .flip-back .back-links { margin-top: 0.35rem; }
+    .flip-back .back-links a {
+      color: var(--ink); margin-right: 0.9rem;
+      text-decoration: underline; text-underline-offset: 3px;
+      text-decoration-color: color-mix(in srgb, var(--ink) 35%, transparent);
+    }
+    /* inline SVG diagrams: colours come from the theme block */
+    .flip-front svg.dg { width: 100%; height: auto; display: block; }
+    .dg text { font-family: var(--body); }
+    .dg-bg { fill: var(--paper); }
+    .dg-cap { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; fill: var(--muted); }
+    .dg-note { font-size: 14px; font-style: italic; fill: var(--text); }
+    .dg-thin, .dg-arrow { fill: none; stroke: color-mix(in srgb, var(--ink) 45%, transparent); stroke-width: 1.2; }
+    .dg-headpath { fill: none; stroke: color-mix(in srgb, var(--ink) 45%, transparent); stroke-width: 1.4; }
+    .dg-axis { fill: none; stroke: color-mix(in srgb, var(--ink) 30%, transparent); stroke-width: 1; }
+    .dg-base { fill: none; stroke: color-mix(in srgb, var(--ink) 30%, transparent); stroke-width: 1; stroke-dasharray: 4 5; }
+    .dg-curve { fill: none; stroke-width: 3; stroke-linecap: round; }
+    .dg-dot { fill: var(--terracotta); }
+    .dg-line-mute { fill: none; stroke: color-mix(in srgb, var(--ink) 35%, transparent); stroke-width: 1.6; stroke-linecap: round; }
+    .dg-line-mid { fill: none; stroke: color-mix(in srgb, var(--coral) 55%, transparent); stroke-width: 2; stroke-linecap: round; }
+    .dg-cell { fill: color-mix(in srgb, var(--terracotta) 12%, var(--paper)); stroke: var(--terracotta); stroke-width: 1.6; }
+    .dg-plastic { fill: color-mix(in srgb, var(--ink) 8%, var(--paper)); stroke: color-mix(in srgb, var(--ink) 55%, transparent); stroke-width: 1.4; stroke-linejoin: round; }
+    .dg-band { fill: color-mix(in srgb, var(--coral) 30%, transparent); stroke: var(--coral); stroke-width: 1; }
+
+    .art-nav {
+      display: flex; gap: 0.5rem; justify-content: center; align-items: center;
+      margin-bottom: 2.5rem;
+    }
+    .art-nav button {
+      font-family: var(--body); font-size: 0.9375rem; color: var(--ink);
+      background: none; border: 1px solid var(--line); border-radius: var(--r-ctrl);
+      padding: 0.4rem 1.1rem; cursor: pointer;
+      transition: background-color 0.15s var(--ease);
+    }
+    .art-nav button:hover { background: var(--line-soft); }
+    .art-dots { display: flex; gap: 0.5rem; margin: 0 0.75rem; }
+    .art-dots button {
+      width: 7px; height: 7px; padding: 0; border: none; border-radius: 50%;
+      background: color-mix(in srgb, var(--ink) 22%, transparent); cursor: pointer;
+      transition: background-color 0.3s var(--ease), transform 0.3s var(--ease);
+    }
+    .art-dots button[aria-current="true"] { background: var(--terracotta); transform: scale(1.35); }
+    .art-flow:focus-visible { outline: 2px solid var(--terracotta); outline-offset: 10px; }
+
+    @media (max-width: 760px) {
+      .art-flow { flex-wrap: wrap; min-height: auto; gap: 1.25rem; }
+      .art-work { width: 46% !important; opacity: 1 !important; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .art-work, .art-work .frame { transition: none; }
+    }
+
+    /* ONE handwriting treatment for every line that sits under an image,
+       whether it is an artwork title (#art .piece h3) or a photo caption
+       (.art-caption). Change it here and all seven move together. */
+    .art-caption,
+    #art .piece h3 {
+      font-family: var(--hand);
+      font-weight: 400;
+      font-size: 1.5rem;
+      line-height: 1.3;
+      letter-spacing: 0.012em;
+      color: var(--ink);
+      margin-top: 0.85rem;
+      margin-bottom: 0;
+    }
+
+    /* Contact block parked in the Home photo grid's left column, under
+       the headshot caption. Left-aligned to match the caption above it
+       and the rest of Home; spacing is an even 1.5rem step between parts
+       rather than the uneven gaps this had as a standalone tab. */
+    .home-contact { margin-top: 3rem; text-align: left; }
+    /* One label, not two: the eyebrow "Get in touch" over a "Contact"
+       heading said the same thing twice. The heading carries it alone. */
+    /* Home photo captions: a touch larger than the default .piece p size */
+    #home .piece .art-caption { font-size: 1.15rem; }
+    /* Home stack: photos and contact follow the About text in one
+       centered column at the same reading width */
+    .home-stack {
+      max-width: 680px;
+      margin: 2.15rem auto 0;   /* + the last paragraph's 1.35rem = the 3.5rem gap */
+      display: flex;
+      flex-direction: column;
+      gap: 3.5rem;
+    }
+    .home-stack .home-contact { margin-top: 0; }
+    /* small-caps label, same treatment as the other eyebrows */
+    .home-contact h2 {
+      font-family: var(--display);
+      font-size: clamp(1.9rem, 3vw, 2.5rem);
+      font-weight: 500;
+      line-height: 1.1;
+      color: var(--ink);
+      letter-spacing: 0.005em;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .home-contact .contact-rows { width: fit-content; margin: 0 auto; }
+    /* labeled rows: small-caps label left, address right, one size */
+    .contact-rows {
+      display: grid;
+      grid-template-columns: 7.5rem 1fr;
+      row-gap: 0.75rem;
+      align-items: baseline;
+    }
+    .contact-rows dt {
+      font-family: var(--body);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .contact-rows dd { margin: 0; font-size: 1.15rem; color: var(--ink); }
+    .contact-rows a {
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.15s var(--ease);
+    }
+    .contact-rows a:hover { border-color: var(--terracotta); }
+
+    /* ============================================================
+       CONTACT / RESUME
+       ============================================================ */
+    /* hand-drawn icons: sized in em so they track the label */
+    .ic {
+      width: 1.15em; height: 1.15em; flex: none;
+      stroke: currentColor; fill: none;
+      stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+      vertical-align: -0.2em; overflow: visible;
+    }
+
+    .icon-row {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+    }
+    .icon-row a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.15s var(--ease);
+    }
+    .icon-row .ic {
+      width: 1.6em; height: 1.6em;
+      color: var(--terracotta);
+      transition: transform 0.15s var(--ease);
+    }
+    .icon-row a:hover .ic { transform: translateY(-2px); }
+    .icon-row a:hover { color: var(--muted); }
+    /* primary button: action color is the warm near-black, never the ombre */
+    .btn {
+      display: inline-block;
+      font-family: var(--body);
+      font-weight: 500;
+      font-size: 0.9375rem;
+      letter-spacing: -0.01em;
+      color: var(--bg);
+      background: var(--ink);
+      text-decoration: none;
+      padding: 0.75rem 1.5rem;
+      border: 1px solid var(--ink);
+      border-radius: var(--r-ctrl);
+      margin-top: 1.25rem;
+      transition: background-color 0.15s var(--ease), color 0.15s var(--ease);
+    }
+    .btn:hover { background: var(--text); }
+    /* .btn is currently unused: the Contact rebuild replaced the resume
+       button with the icon row. Kept for reuse. Note the trap that bit
+       us before: a descendant selector like `.contact-grid a` (0,1,1)
+       outranks `.btn` (0,1,0) and will repaint the label ink-on-ink.
+       If you reintroduce .btn inside a container that styles links,
+       match the specificity explicitly. */
+
+    /* ============================================================
+       SCROLL REVEALS: subtle rise as rows enter the viewport
+       ============================================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+    }
+    .reveal.is-visible { opacity: 1; transform: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+
+    /* ============================================================
+       CORNER WATERMARK: faint, fixed, non-interactive
+       ============================================================ */
+    .watermark {
+      position: fixed;
+      right: 1.4rem;
+      bottom: 1.2rem;
+      width: 46px;
+      height: auto;
+      color: var(--ink);
+      opacity: 0.22;
+      pointer-events: none;
+      z-index: 90;
+    }
+    .watermark img { display: block; width: 100%; height: auto; }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    /* ------------------------------------------------------------------
+       FOOTER = the contact block, on every tab.
+
+       Four parts, in Mary's stated order:
+         catchphrase --> email --> icons --> location
+       An even 1.6rem step between each. The personal gmail address is
+       deliberately NOT here: it lives in the Home contact
+       block, so the footer stays a compact repeating sign-off rather
+       than a full contact card on every tab.
+       ------------------------------------------------------------------ */
+    footer {
+      color: var(--ink-subtle);
+      font-size: 0.875rem;
+      text-align: center;
+      max-width: 34rem;
+      margin: 0 auto;
+      padding: 1rem 1.5rem 3.25rem;
+    }
+    /* sign-off: the catchphrase in Mary's handwriting */
+    .signature-note {
+      position: relative;
+      z-index: 1;
+      font-family: var(--hand);
+      font-size: 1.35rem;
+      line-height: 1.3;
+      color: var(--text);
+      margin: 0 0 1.6rem;
+    }
+    /* primary address: levelled with the location line so the four parts
+       read as one sign-off rather than a heading with satellites. The
+       terracotta underline, not size, is what marks it as the action. */
+    .footer-mail {
+      font-family: var(--display);
+      font-size: 1.15rem;
+      font-weight: 500;
+      line-height: 1.3;
+      margin: 0 0 1.6rem;
+    }
+    .footer-mail a {
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 2px solid color-mix(in srgb, var(--terracotta) 55%, transparent);
+      transition: border-color 0.15s var(--ease);
+    }
+    .footer-mail a:hover { border-color: var(--ink); }
+    footer .icon-row { margin: 0 0 1.6rem; }
+    /* location closes the page in the annotation voice */
+    .contact-loc {
+      font-family: var(--hand);
+      font-size: 1.15rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin: 0;
+    }
+    .contact-loc .ic { color: var(--terracotta); }
+
+    /* Separator for text set in --hand. The handwriting font has 85
+       glyphs and does NOT include U+00B7, so a bare middot silently fell
+       back to Cormorant mid-line. This makes the fallback deliberate:
+       body face, terracotta, matching the hero's separator. Verified
+       present in the hand font: & @ , . and the full Latin alphabet.
+       U+00D7 is also absent, which is why the hero uses & now. */
+    .sep {
+      font-family: var(--body);
+      color: var(--terracotta);
+      padding: 0 0.35em;
+    }
+
+    /* ============================================================
+       MOBILE
+       ============================================================ */
+    @media (max-width: 760px) {
+      .menu-toggle { display: block; }
+      nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--bg);
+        border-bottom: 1px solid var(--line);
+        display: none;
+      }
+      nav.open { display: block; }
+      nav ul { flex-direction: column; gap: 0; padding: 0.5rem 0 1rem; }
+      nav a { padding: 0.75rem 1.25rem; font-size: 0.8125rem; margin: 0.15rem 0.75rem; }
+      /* vertical menu: same ombre pill, inset in the list */
+      nav a.active { background: var(--ombre); color: var(--on-ombre); }
+
+      .entry { grid-template-columns: 1fr; gap: 0.85rem; padding: 2.25rem 0; }
+      .entry .meta { padding-top: 0; }
+      .gallery-grid { grid-template-columns: 1fr; gap: 3.25rem; }
+      .icon-row { gap: 1.75rem; }
+      /* single-column grid on mobile: the gap the contact block was
+         filling no longer exists, so give it its own separation */
+      .home-contact { margin-top: 3rem; }
+      .contact-rows { grid-template-columns: 6rem 1fr; }
+      .hero { min-height: 78vh; padding: 3rem 0 3rem; }
+      .hero .tagline { white-space: normal; }   /* allow wrap on small phones */
+      .about-grid { grid-template-columns: 1fr; gap: 1.5rem; margin-top: 3.5rem; }
+      .section-head { margin: 3.5rem 0 2.25rem; }
+      .signature-note { font-size: 1.2rem; margin-bottom: 1.4rem; }
+      footer { padding-bottom: 2.75rem; }
+      .watermark { width: 36px; right: 1rem; bottom: 0.9rem; }
+    }
+  .pw{max-width:1120px;margin:0 auto;padding:2.5rem 1.5rem 5rem}
+.tmeta{display:block;font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--terracotta);margin-bottom:.4rem}
+.tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.75rem}
+.tag{font-size:.7rem;padding:.18rem .55rem;border:1px solid var(--line);border-radius:999px;color:var(--muted)}
+.go{display:inline-block;margin-top:.7rem;font-size:.85rem;color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.back{display:inline-block;font-size:.85rem;color:var(--ink);margin-bottom:1.5rem;text-decoration:none}
+.phead h1{font-family:var(--display);font-weight:500;font-size:3rem;line-height:1.05;color:var(--ink);margin:.3rem 0 1rem;max-width:22ch}
+.lede{font-size:1.12rem;line-height:1.55;max-width:46rem;color:var(--text)}
+.hero{margin:2rem 0 0}
+.hero img{width:100%;max-height:640px;object-fit:cover;border-radius:var(--r-media)}
+figcaption{font-size:.8rem;color:var(--ink-subtle);margin-top:.45rem;line-height:1.4}
+figcaption b{display:block;color:var(--ink);font-weight:600;font-size:.88rem}
+figure{margin:0}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin:2rem 0}
+.stats div{background:var(--paper);border:1px solid var(--line-soft);border-radius:12px;padding:1.1rem 1.2rem}
+.stats b{display:block;font-family:var(--display);font-size:2.3rem;font-weight:500;color:var(--ink);line-height:1}
+.stats span{font-size:.82rem;line-height:1.4;display:block;margin-top:.4rem}
+.stats .miss b{color:var(--terracotta)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;margin:1.5rem 0}
+h4{font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
+.ph{background:#fff6d6;border:1px dashed #d8b44a;border-radius:8px;padding:.8rem 1rem;font-size:.92rem}
+.sk{padding-left:1.1rem;margin:0}
+.sk li{margin-bottom:.35rem;font-size:.95rem}
+.sh{font-family:var(--display);font-weight:500;font-size:2rem;color:var(--ink);margin:3.5rem 0 1.2rem;padding-top:2rem;border-top:1px solid var(--line-soft)}
+.sys{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:2.5rem;align-items:center}
+.sys img{width:100%;border-radius:12px}
+.klist{list-style:none;padding:0;margin:0}
+.klist li{display:flex;gap:.75rem;align-items:center;padding:.55rem 0;border-bottom:1px solid var(--line-soft);font-size:1rem}
+.kn{flex:none;width:1.7rem;height:1.7rem;display:inline-flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--ink);border-radius:4px;font-size:.85rem;font-weight:600;color:var(--ink)}
+.close4,.evo{display:grid;gap:1.25rem;margin-top:1.75rem}
+.close4{grid-template-columns:repeat(4,1fr)}
+.evo{grid-template-columns:repeat(3,1fr)}
+.close4 img,.evo img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:12px;border:1px solid var(--line-soft)}
+.test{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:2rem;align-items:start}
+.test img{width:100%;border-radius:12px}
+table{width:100%;border-collapse:collapse;font-size:.9rem;background:var(--paper);border-radius:12px;overflow:hidden}
+th{text-align:left;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--bg);background:var(--ink);padding:.7rem .9rem}
+td{padding:.75rem .9rem;border-bottom:1px solid var(--line-soft);vertical-align:top;line-height:1.45}
+td.ok{color:#2f5d8a;font-weight:600;white-space:nowrap}
+td.no{color:var(--terracotta);font-weight:600;white-space:nowrap}
+.fine{font-size:.75rem;color:var(--ink-subtle);margin-top:3rem}
+.cap{font-size:.8rem;color:var(--ink-subtle);margin-top:1rem}
+[hidden]{display:none!important}
+.case-wrap{max-width:1120px;margin:0 auto;padding:3rem 1.5rem 5rem}
+.phead h1{max-width:none;font-size:clamp(1.9rem,3.3vw,2.6rem);white-space:nowrap}
+.hero{display:flex;flex-direction:column;align-items:center}
+.hero img{width:min(100%,460px);height:auto;max-height:none;object-fit:contain}
+.hero figcaption{text-align:center}
+.close4.c3{grid-template-columns:repeat(3,1fr)}
+.two.pb{margin:1.6rem 0 0}
+.skfull{margin:1.5rem 0}.skfull .sk{columns:2;column-gap:2.5rem}.skfull .sk li{break-inside:avoid}
+@media(max-width:860px){.phead h1{white-space:normal}.stats{grid-template-columns:1fr 1fr}.two,.sys,.test{grid-template-columns:1fr}.close4.c3{grid-template-columns:1fr 1fr}.evo{grid-template-columns:1fr}.skfull .sk{columns:1}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-code" viewBox="0 0 24 24">
+        <path d="M8.7 7.6c-1.9 1.3-3.7 2.7-5.3 4.3-.2.2-.2.4 0 .6 1.7 1.5 3.4 2.9 5.3 4.2"/>
+        <path d="M15.4 7.5c1.9 1.4 3.7 2.8 5.3 4.4.2.2.2.4 0 .6-1.6 1.5-3.4 2.9-5.2 4.2"/>
+        <path d="M13.4 4.2c-.9 5.2-1.9 10.4-3 15.6"/>
+      </symbol>
+      <symbol id="i-in" viewBox="0 0 24 24">
+        <path d="M4.3 4.6c0-.4.3-.7.7-.8 4.7-.2 9.4-.2 14.1 0 .4 0 .7.3.7.8.2 4.9.2 9.8 0 14.7 0 .4-.3.7-.7.8-4.7.2-9.4.2-14.1 0-.4 0-.7-.4-.7-.8-.2-4.9-.2-9.8 0-14.7z"/>
+        <path d="M8 10.6c0 2.1 0 4.2-.1 6.3"/>
+        <path d="M7.9 7.4c0 .1 0 .2 0 .3"/>
+        <path d="M11.5 16.9c0-2.1 0-4.2-.1-6.3 1-.6 2.2-.9 3.3-.6 1 .3 1.5 1.3 1.5 2.3.1 1.5.1 3.1 0 4.6"/>
+      </symbol>
+      <symbol id="i-doc" viewBox="0 0 24 24">
+        <path d="M5.6 3.6c0-.4.3-.8.8-.8 2.8-.1 5.6-.1 8.4 0 .2 0 .4.1.5.2 1.1 1.1 2.2 2.2 3.2 3.4.1.2.2.4.2.6.1 4.6.1 9.2 0 13.8 0 .4-.4.8-.8.8-3.8.1-7.6.1-11.5 0-.4 0-.8-.4-.8-.8-.2-5.7-.2-11.4 0-17.2z"/>
+        <path d="M14.5 2.9c-.1 1.2-.1 2.4 0 3.6 0 .3.2.5.5.5 1.1.1 2.2.1 3.3 0"/>
+        <path d="M8.6 12.4c2.2-.1 4.4-.1 6.6 0"/>
+        <path d="M8.6 16c2.2-.1 4.4-.1 6.6 0"/>
+      </symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24">
+        <path d="M12 21.3c2.6-2.9 5-6 6.3-9.7.9-2.6.2-5.6-2.1-7.2-2.6-1.8-6.3-1.5-8.6.7-2 1.9-2.4 5-1.4 7.5 1.3 3.3 3.5 6.2 5.8 8.7z"/>
+        <path d="M12 12.6c1.6.1 2.9-1.3 2.8-2.9 0-1.5-1.3-2.7-2.8-2.7-1.6 0-2.9 1.3-2.8 2.9 0 1.5 1.3 2.7 2.8 2.7z"/>
+      </symbol>
+    </defs>
+  </svg>
+<header>
+    <div class="nav-wrap">
+      <a href="index.html#home" class="site-name">Mary Clayton Soto</a>
+      <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+      <nav id="site-nav">
+        <ul>
+          <li><a href="index.html#home">Home</a></li>
+          <li><a href="index.html#publication">Research</a></li>
+          <li><a href="index.html#projects" class="active">Projects</a></li>
+          <li><a href="index.html#experience">Experience</a></li>
+          <li><a href="index.html#skills">Skills</a></li>
+          <li><a href="index.html#art">Art</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+<main class="case-wrap">
+<section class="case"><a class="back" href="index.html#projects">&larr; All projects</a>
+<header class="phead"><span class="tmeta">Medical device &middot; EGR 101 &amp; 102, Duke &middot; Team of 4 &middot; Aug 2024 to May 2025</span>
+<h1>Oxygen-Canister Mount for Duke Hospital Rollators</h1>
+<p class="lede">My team developed a wheeled aluminum cage that carries a heart-surgery patient&rsquo;s oxygen on their rollator, so a second staff member no longer has to follow behind.</p><div class="two pb"><div><h4>The problem</h4><p>Patients recovering from heart surgery at Duke Hospital walk the halls with a rollator during recovery. The existing setup needed two staff members, one to guide the patient and one to roll the oxygen, which limited patient independence and strained staff time.</p></div>
+<div><h4>Our approach</h4><p>We followed the engineering design process: defined seven criteria with measurable targets, narrowed 50+ ideas with Pugh screening and a weighted scoring matrix, and built three rounds of prototypes before final testing.</p></div></div></header>
+<figure class="hero"><img src="images/rollator.jpg" alt="Final mount on a rollator"><figcaption>Final aluminum build, shown at the Duke Foundry showcase.</figcaption></figure>
+<div class="stats"><div><b>6&deg;</b><span>tipping-angle change, within our 10&deg; limit (20 trials)</span></div><div><b>0%</b><span>walking area lost; seat still folds</span></div><div><b>4.3/5</b><span>ease of tank exchange, 30 testers</span></div><div><b>Removable</b><span>detaches from the rollator and stands upright on its own legs for storage</span></div></div>
+<div class="skfull"><h4>Skills applied</h4><ul class="sk"><li>Meeting with the client to discuss their needs and determine the optimal solution</li><li>Matrix evaluation to determine the best solution to the problem</li><li>CAD modeling in SolidWorks</li><li>Waterjet cutting and machining</li><li>Part sourcing and assembly</li><li>Test plan design and user testing</li></ul></div>
+<h3 class="sh">The system</h3>
+<div class="sys"><figure><img src="images/rollator/side-labeled.jpg" alt="Labeled side view"><figcaption>Side view with the tank attached.</figcaption></figure><ol class="klist"><li><span class="kn">1</span>Aluminum back support with height selector</li><li><span class="kn">2</span>PVC attachment to rollator</li><li><span class="kn">3</span>Waterjet-cut aluminum rings</li><li><span class="kn">4</span>Aluminum threaded dowels</li><li><span class="kn">5</span>PVC cannula holder</li><li><span class="kn">6</span>PVC second point of attachment</li><li><span class="kn">7</span>Waterjet-cut aluminum base</li><li><span class="kn">8</span>Aluminum legs for upright storage</li><li><span class="kn">9</span>Rubber 360&deg; wheels</li></ol></div>
+<div class="close4 c3"><figure><img src="images/rollator/upper-attachment.jpg" alt="Upper attachment with components 1 and 2 labeled"><figcaption>Upper attachment (1, 2)</figcaption></figure><figure><img src="images/rollator/cannula-holder.jpg" alt="PVC cannula holder, component 5"><figcaption>Cannula holder (5)</figcaption></figure><figure><img src="images/rollator/base-legs.jpg" alt="Base, storage legs, and lower attachment"><figcaption>Lower attachment, base, and storage legs (6, 7, 8)</figcaption></figure></div>
+<h3 class="sh">Iterations</h3>
+<div class="evo"><figure><img src="images/rollator/low-fidelity-mockup.jpg" alt="Dowel-and-cardboard mockup held against a rollator"><figcaption><b>Low-Fidelity Mockup</b>Dowels and cardboard, shown to our clients as a proof of concept and checked against a rollator on the hospital floor.</figcaption></figure><figure><img src="images/rollator/wooden-prototype.jpg" alt="Wooden prototype holding an oxygen tank on a rollator"><figcaption><b>Medium-Fidelity Wooden Prototype</b>Full-size cage tested with a real tank.</figcaption></figure><figure><img src="images/rollator.jpg" alt="Final aluminum mount on a rollator"><figcaption><b>High-Fidelity Final Build</b>Waterjet-cut aluminum, threaded dowels, 360&deg; wheels.</figcaption></figure></div>
+<h3 class="sh">Testing</h3>
+<div class="test"><figure><img src="images/rollator/tipping-test.jpg" alt="Tipping-test board"><figcaption>Tilt board for the center-of-mass test.</figcaption></figure>
+<table><tr><th>Criterion</th><th>Test</th><th>Result</th></tr>
+<tr><td><b>Center of mass</b><br>reduce tipping angle &lt;10&deg;</td><td>Lift the board until the rollator tips; protractor angle, 20 trials with and without the device</td><td class="ok">6&deg; &check;</td></tr>
+<tr><td><b>Rollator function</b><br>walking area &lt;10% lost; seat folds</td><td>Ruler measurement and fold check, 2 trials</td><td class="ok">0%, folds &check;</td></tr>
+<tr><td><b>Tank exchange</b><br>Likert &ge;3.5</td><td>30 testers of varying ages and fitness</td><td class="ok">4.3/5 &check;</td></tr>
+<tr><td><b>Dimensions</b><br>&le;6 in past rollator</td><td>Measuring tape, device and tank attached, 2 trials (6 in is door-frame clearance)</td><td class="no">8 in &cross;</td></tr></table></div>
+
+<p class="fine">Some photo backgrounds have been digitally cleaned up.</p></section>
+</main>
+<footer>
+    <p class="signature-note">Building @ the intersection of science &amp; creativity.</p>
+
+    <p class="footer-mail"><a href="mailto:mary.soto@duke.edu">mary.soto@duke.edu</a></p>
+
+    <div class="icon-row">
+      <a href="https://github.com/maryclaytonsoto" target="_blank" rel="noopener">
+        <svg class="ic" aria-hidden="true"><use href="#i-code"/></svg>GitHub
+      </a>
+      <a href="https://linkedin.com/in/maryclaytonsoto" target="_blank" rel="noopener">
+        <svg class="ic" aria-hidden="true"><use href="#i-in"/></svg>LinkedIn
+      </a>
+      <a href="files/SotoResume.pdf" target="_blank" rel="noopener">
+        <svg class="ic" aria-hidden="true"><use href="#i-doc"/></svg>Resume
+      </a>
+    </div>
+
+    <p class="contact-loc">
+      <svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg>
+      Tallahassee, FL <span class="sep">&middot;</span> Durham, NC
+    </p>
+  </footer>
+<script>
+const t=document.querySelector('.menu-toggle'),n=document.getElementById('site-nav');
+if(t&&n)t.addEventListener('click',()=>{const o=n.classList.toggle('open');t.setAttribute('aria-expanded',o)});
+</script>
+</body>
+</html>
