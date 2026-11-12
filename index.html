@@ -1265,14 +1265,14 @@
               <div class="flip-face flip-back">
                 <span class="eyebrow proj-course">Independent Project</span>
                 <h3>SuperComp</h3>
-                <p>SuperComp is a training recommender built on my own Oura, Peloton, and Apple Health data, combining over 1.19 million heart-rate samples and 3,151 workouts into one daily table. It standardizes effort with heart-rate-based TRIMP scoring, so a run, a lift, and a ride compare fairly, and it weighs HRV against my personal baseline along with resting heart rate and sleep. When I backtested it on 386 training days, readiness didn&rsquo;t predict how much work I did, so I shifted its recommendations to duration-independent intensity targets.</p>
+                <p>SuperComp is a training recommender built on my own Oura, Peloton, and Apple Health data, merging over 1.19 million heart-rate samples and 3,151 workouts into one daily table. Peloton and Apple Health measure effort differently, and my Peloton rides were duplicated in Apple Health, so I removed the duplicates and standardized effort with TRIMP, a heart-rate-based score calibrated to my own resting and max heart rate. That way a run, a lift, and a ride compare fairly. Each morning, a rule-based readiness score weighs HRV against my 28-day baseline along with Oura&rsquo;s recovery index, resting heart rate, and sleep. When I backtested it on 386 training days, readiness didn&rsquo;t predict how much work I did, so it now works as a guardrail that picks the type of day, and the recommendation targets duration-independent intensity.</p>
                 <p class="back-fig"><span class="back-fig-label">Pictured</span>Ten weeks of nightly HRV against my 28-day baseline, shaded for my normal range (top), the readiness score that tracks it (middle), and daily TRIMP training load (bottom). Readiness did not predict workout output (Spearman &rho; = &minus;0.002).</p>
               </div>
             </div>
           </div>
           <div class="label">
             <h3>SuperComp</h3>
-            <p class="proj-summary">A personal Python project from Summer 2026 that turns my wearable data into a daily training recommendation, validated on 386 training days with 55 automated tests. <button type="button" class="proj-more" aria-hidden="true" tabindex="-1">Read more</button></p>
+            <p class="proj-summary">A personal Python project from Summer 2026 that turns my wearable data into a daily training recommendation, backtested on 386 training days and covered by 55 automated tests. <button type="button" class="proj-more" aria-hidden="true" tabindex="-1">Read more</button></p>
           </div>
         </article>
       </div>
