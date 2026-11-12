@@ -1028,6 +1028,28 @@
       .watermark { width: 36px; right: 1rem; bottom: 0.9rem; }
     }
       .proj-tile .case-link{display:inline-block;margin-top:.55rem;font-size:.9rem;font-weight:500;color:var(--ink);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--terracotta)}
+
+    /* SEAL lab photo carousel (Research tab) */
+    .lab-carousel { margin: 2rem auto 0; max-width: 520px; }
+    .lab-stage { position: relative; }
+    .lab-slide { display: none; }
+    .lab-slide.active { display: block; animation: labIn 0.45s var(--ease); }
+    @keyframes labIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    .lab-slide .frame { width: 100%; perspective: 1200px; background: none; border: 0; overflow: visible; cursor: pointer; }
+    .lab-slide .flip-inner { position: relative; transform-style: preserve-3d; transition: transform 0.7s var(--ease); }
+    .lab-slide.flipped .flip-inner { transform: rotateY(180deg); }
+    .lab-slide .flip-front { position: relative; inset: auto; }
+    .lab-slide .flip-front img { width: 100%; height: auto; display: block; }
+    .lab-slide .flip-back { justify-content: center; text-align: center; padding: 2rem 2.25rem; }
+    .lab-slide .flip-back h3 { font-family: var(--display); font-weight: 500; font-size: 1.9rem; margin: 0.2rem 0 0.7rem; }
+    .lab-slide .flip-back p { font-size: 1rem; line-height: 1.6; max-width: 34ch; margin: 0 auto; }
+    .lab-nav { display: flex; gap: 0.5rem; justify-content: center; align-items: center; margin-top: 1.1rem; }
+    .lab-nav > button { font-family: var(--body); font-size: 0.9375rem; color: var(--ink); background: none; border: 1px solid var(--line); border-radius: var(--r-ctrl); padding: 0.4rem 1.1rem; cursor: pointer; transition: background-color 0.15s var(--ease); }
+    .lab-nav > button:hover { background: var(--line-soft); }
+    .lab-dots { display: flex; gap: 0.5rem; margin: 0 0.75rem; }
+    .lab-dots button { width: 7px; height: 7px; padding: 0; border: none; border-radius: 50%; background: color-mix(in srgb, var(--ink) 22%, transparent); cursor: pointer; transition: background-color 0.3s var(--ease), transform 0.3s var(--ease); }
+    .lab-dots button.on { background: var(--ink); transform: scale(1.25); }
+    .lab-hint { text-align: center; font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-subtle); margin-top: 0.6rem; }
   </style>
 </head>
 <body>
@@ -1572,22 +1594,43 @@
         <div class="body">
           <h3>Research Assistant</h3>
           <a class="org-link" href="https://bassconnections.duke.edu">bassconnections.duke.edu &#8599;</a>
-          <p>Through Bass Connections, I work with Duke's SEAL Lab on models for surgical training. I turn MRI-derived DICOM scans into hydrogel models of three organ types by segmenting them in 3D Slicer, designing molds in Fusion 360, and tuning materials to match the mechanics of real tissue. I also help develop and validate a computer-vision system that scores knot-tying from video, tested on more than 1,000 recordings, giving trainees an objective measure of their surgical skill.</p>
+          <p>Through Bass Connections, I work with Duke's SEAL Lab on models for surgical training. I turn MRI-derived DICOM scans into hydrogel models of three organ types by segmenting them in 3D Slicer, designing molds in Fusion 360, and tuning materials to match the mechanics of real tissue. I also contribute to a computer-vision system that scores knot-tying from video, adapting how recordings are captured and processed and grading videos across more than 1,000 recordings, giving trainees an objective measure of their surgical skill.</p>
 
-          <!-- SEAL Lab fabrication photos -->
-          <div class="lab-figs">
-            <figure>
-              <div class="frame"><img src="images/seal-liver-mold.jpg" alt="A gray and white 3D-printed liver mold made of labeled sections, such as Front Top and Front Left Middle, bolted together" loading="lazy" /></div>
-              <figcaption class="fig-cap">A five-part liver mold designed in Fusion 360. Each labeled section bolts into place and comes apart around the finished cast.</figcaption>
-            </figure>
-            <figure>
-              <div class="frame"><img src="images/seal-liver-hydrogel.jpg" alt="A translucent pink hydrogel liver model held in a gloved hand" loading="lazy" /></div>
-              <figcaption class="fig-cap">The first iteration of the hydrogel liver cast from that mold.</figcaption>
-            </figure>
-            <figure>
-              <div class="frame"><img src="images/seal-gallbladder-core.jpg" alt="A pale dissolvable gallbladder core seated in one half of a 3D-printed mold" loading="lazy" /></div>
-              <figcaption class="fig-cap">A dissolvable PVA core in the gallbladder mold. After casting, the core dissolves and leaves a hollow model that can hold fluid.</figcaption>
-            </figure>
+          <!-- SEAL Lab fabrication photos: one large flip card at a time.
+               Click the photo to turn it over; arrows and dots rotate. -->
+          <div class="lab-carousel">
+            <div class="lab-stage">
+              <div class="lab-slide active" aria-hidden="false">
+                <div class="frame" role="button" tabindex="0" aria-label="Five-Part Liver Mold. Activate to turn the photo over for its description." aria-pressed="false">
+                  <div class="flip-inner">
+                    <div class="flip-face flip-front"><img src="images/seal-liver-mold.jpg" alt="A gray and white 3D-printed liver mold made of labeled sections, such as Front Top and Front Left Middle, bolted together" loading="lazy" /></div>
+                    <div class="flip-face flip-back"><span class="eyebrow">1 of 3</span><h3>Five-Part Liver Mold</h3><p>A five-part liver mold designed in Fusion 360. Each labeled section bolts into place and comes apart around the finished cast.</p></div>
+                  </div>
+                </div>
+              </div>
+              <div class="lab-slide" aria-hidden="true">
+                <div class="frame" role="button" tabindex="-1" aria-label="Hydrogel Liver. Activate to turn the photo over for its description." aria-pressed="false">
+                  <div class="flip-inner">
+                    <div class="flip-face flip-front"><img src="images/seal-liver-hydrogel.jpg" alt="A translucent pink hydrogel liver model held in a gloved hand" loading="lazy" /></div>
+                    <div class="flip-face flip-back"><span class="eyebrow">2 of 3</span><h3>Hydrogel Liver</h3><p>The first iteration of the hydrogel liver cast from that mold.</p></div>
+                  </div>
+                </div>
+              </div>
+              <div class="lab-slide" aria-hidden="true">
+                <div class="frame" role="button" tabindex="-1" aria-label="Dissolvable Gallbladder Core. Activate to turn the photo over for its description." aria-pressed="false">
+                  <div class="flip-inner">
+                    <div class="flip-face flip-front"><img src="images/seal-gallbladder-core.jpg" alt="A pale dissolvable gallbladder core seated in one half of a 3D-printed mold" loading="lazy" /></div>
+                    <div class="flip-face flip-back"><span class="eyebrow">3 of 3</span><h3>Dissolvable Gallbladder Core</h3><p>A dissolvable PVA core in the gallbladder mold. After casting, the core dissolves and leaves a hollow model that can hold fluid.</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="lab-nav">
+              <button type="button" class="lab-prev" aria-label="Previous photo">&larr;</button>
+              <div class="lab-dots"><button type="button" class="on" aria-label="Photo 1"></button><button type="button" aria-label="Photo 2"></button><button type="button" aria-label="Photo 3"></button></div>
+              <button type="button" class="lab-next" aria-label="Next photo">&rarr;</button>
+            </div>
+            <p class="lab-hint">Click to read more</p>
           </div>
 
           <!-- conference abstract from this team's work -->
@@ -2518,6 +2561,37 @@
       document.querySelectorAll('.bubble-idle').forEach(c=>{
         createField(c, { interactive:false, area:150000, min:4, max:11, maxR:78, speed:0.8, opacity:0.85 });
       });
+    })();
+  </script>
+  <script>
+    // SEAL lab carousel: rotate between photos, click to flip for the description
+    (function () {
+      const root = document.querySelector('.lab-carousel');
+      if (!root) return;
+      const slides = [...root.querySelectorAll('.lab-slide')];
+      const dots = [...root.querySelectorAll('.lab-dots button')];
+      let cur = 0;
+      function go(i) {
+        slides[cur].classList.remove('active', 'flipped');
+        slides[cur].setAttribute('aria-hidden', 'true');
+        slides[cur].querySelector('.frame').setAttribute('tabindex', '-1');
+        slides[cur].querySelector('.frame').setAttribute('aria-pressed', 'false');
+        dots[cur].classList.remove('on');
+        cur = (i + slides.length) % slides.length;
+        slides[cur].classList.add('active');
+        slides[cur].setAttribute('aria-hidden', 'false');
+        slides[cur].querySelector('.frame').setAttribute('tabindex', '0');
+        dots[cur].classList.add('on');
+      }
+      slides.forEach(sl => {
+        const f = sl.querySelector('.frame');
+        const flip = () => { const on = sl.classList.toggle('flipped'); f.setAttribute('aria-pressed', on ? 'true' : 'false'); };
+        f.addEventListener('click', flip);
+        f.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); } });
+      });
+      root.querySelector('.lab-prev').addEventListener('click', () => go(cur - 1));
+      root.querySelector('.lab-next').addEventListener('click', () => go(cur + 1));
+      dots.forEach((d, i) => d.addEventListener('click', () => go(i)));
     })();
   </script>
 </body>
